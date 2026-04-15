@@ -1,0 +1,11 @@
+Model Information:
+* title:	Nw Project
+* source:	https://sketchfab.com/3d-models/nw-project-f80582fba119465180e4bc102b2a9a7c
+* author:	bhavmanthak (https://sketchfab.com/bhavmanthak)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Nw Project" (https://sketchfab.com/3d-models/nw-project-f80582fba119465180e4bc102b2a9a7c) by bhavmanthak (https://sketchfab.com/bhavmanthak) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
