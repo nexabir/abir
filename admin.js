@@ -1,7 +1,12 @@
-let config = {
+// Initialize Supabase
+const supabaseUrl = 'https://pchkfdqimrinaeznqmnl.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjaGtmZHFpbXJpbmFlem5xbW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NjIyOTEsImV4cCI6MjA4OTAzODI5MX0.CR2PLFeOVdHxSKiedsXmyo9Z1mzwvkevBhAFOJAdaB8';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let githubConfig = {
     token: localStorage.getItem('gh_token') || '',
-    user: localStorage.getItem('gh_user') || '',
-    repo: localStorage.getItem('gh_repo') || ''
+    user: 'nexabir',
+    repo: 'abir'
 };
 
 let currentData = null;
@@ -15,76 +20,83 @@ const actionBar = document.getElementById('action-bar');
 const statusBadge = document.getElementById('status-badge');
 
 // -----------------------------------------------------
-// 1. Authentication & Startup
+// 1. Supabase Authentication
 // -----------------------------------------------------
 
-if (config.token && config.user && config.repo) {
-    document.getElementById('github-token').value = config.token;
-    document.getElementById('github-user').value = config.user;
-    document.getElementById('github-repo').value = config.repo;
-    autoLogin();
-}
-
-async function autoLogin() {
-    statusBadge.innerText = "Connecting...";
-    statusBadge.className = "status-badge saving";
-    const success = await fetchData();
-    if (success) {
-        showAdmin();
-    } else {
-        localStorage.clear();
-        alert("Authentication failed. Please check your token and repo details.");
+// Session Check on Load
+async function checkSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        showDashboard();
     }
 }
+checkSession();
 
-document.getElementById('auth-btn').addEventListener('click', async () => {
-    config.token = document.getElementById('github-token').value.trim();
-    config.user = document.getElementById('github-user').value.trim();
-    config.repo = document.getElementById('github-repo').value.trim();
-
-    if (!config.token || !config.user || !config.repo) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    const success = await fetchData();
-    if (success) {
-        localStorage.setItem('gh_token', config.token);
-        localStorage.setItem('gh_user', config.user);
-        localStorage.setItem('gh_repo', config.repo);
-        showAdmin();
+// Login
+document.getElementById('login-btn').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-pass').value;
+    
+    showStatus("Logging in...", "saving");
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    
+    if (error) {
+        alert("Login Error: " + error.message);
+        hideStatus();
     } else {
-        alert("Could not connect to GitHub. Verify your Repo Owner, Repo Name, and Token (with 'repo' scope).");
+        showDashboard();
     }
 });
 
-function showAdmin() {
+// Signup (Temporary for initial user creation)
+document.getElementById('signup-btn').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-pass').value;
+    
+    if (confirm("Create a new admin account?")) {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) alert(error.message);
+        else alert("Signup successful! Please confirm your email if necessary, then login.");
+    }
+});
+
+async function showDashboard() {
     authOverlay.style.display = 'none';
     adminMain.style.display = 'block';
     sidebar.style.display = 'flex';
     actionBar.style.display = 'flex';
-    populateForms();
+    
+    // Check if GitHub token is present
+    if (!githubConfig.token) {
+        const token = prompt("GitHub Token Required. Please enter your PAT to enable 'Save' functionality:");
+        if (token) {
+            githubConfig.token = token.trim();
+            localStorage.setItem('gh_token', githubConfig.token);
+        }
+    }
+
+    const success = await fetchData();
+    if (success) {
+        populateForms();
+    } else {
+        showStatus("GitHub Sync Error. Check your Token/Repo in Settings.", "error");
+    }
 }
 
 // -----------------------------------------------------
-// 2. Data Sync
+// 2. Data Sync (GitHub API)
 // -----------------------------------------------------
 
 async function fetchData() {
-    const url = `https://api.github.com/repos/${config.user}/${config.repo}/contents/content.json`;
+    if (!githubConfig.token) return false;
+    const url = `https://api.github.com/repos/${githubConfig.user}/${githubConfig.repo}/contents/content.json`;
     try {
         const response = await fetch(url, {
-            headers: { 'Authorization': `Bearer ${config.token}` }
+            headers: { 'Authorization': `Bearer ${githubConfig.token}` }
         });
         
         if (response.status === 401 || response.status === 403) {
             console.error("Auth Error:", response.status);
-            alert("GitHub says: Unauthorized. Check if your token is correct and has 'repo' scope.");
-            return false;
-        }
-        if (response.status === 404) {
-            console.error("Not Found:", response.status);
-            alert(`GitHub says: Not Found. Verify your Username (${config.user}) and Repo Name (${config.repo}) are exact (case-sensitive).`);
             return false;
         }
         if (!response.ok) return false;
@@ -94,29 +106,30 @@ async function fetchData() {
         currentData = JSON.parse(atob(json.content));
         return true;
     } catch (e) {
-        console.error("Connection Error:", e);
         return false;
     }
 }
 
 async function saveToGithub() {
+    if (!githubConfig.token) {
+        alert("GitHub Token missing. Setup in Settings.");
+        return;
+    }
     showStatus("Saving...", "saving");
     
-    // 1. Prepare Content
     const updatedData = collectFormData();
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(updatedData, null, 2))));
     
-    // 2. Push content.json
-    const url = `https://api.github.com/repos/${config.user}/${config.repo}/contents/content.json`;
+    const url = `https://api.github.com/repos/${githubConfig.user}/${githubConfig.repo}/contents/content.json`;
     try {
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 
-                'Authorization': `Bearer ${config.token}`,
+                'Authorization': `Bearer ${githubConfig.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: "Update website content via Admin Panel",
+                message: "Update website content via Supabase Admin",
                 content: content,
                 sha: currentSha
             })
@@ -124,13 +137,10 @@ async function saveToGithub() {
 
         if (response.ok) {
             const resJson = await response.json();
-            currentSha = resJson.content.sha; // Update SHA for next save
+            currentSha = resJson.content.sha;
             
-            // 3. Handle CV Upload if exists
             const cvFile = document.getElementById('cv-upload').files[0];
-            if (cvFile) {
-                await uploadCV(cvFile);
-            }
+            if (cvFile) await uploadCV(cvFile);
 
             showStatus("Changes pushed to GitHub!", "success");
             setTimeout(() => hideStatus(), 3000);
@@ -143,26 +153,23 @@ async function saveToGithub() {
 }
 
 async function uploadCV(file) {
-    showStatus("Uploading CV...", "saving");
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise((resolve) => {
         reader.onload = async () => {
             const base64Content = reader.result.split(',')[1];
-            
-            // Get SHA of existing CV (to overwrite)
             let cvSha = null;
-            const getUrl = `https://api.github.com/repos/${config.user}/${config.repo}/contents/${file.name}`;
-            const getRes = await fetch(getUrl, { headers: { 'Authorization': `Bearer ${config.token}` } });
+            const getUrl = `https://api.github.com/repos/${githubConfig.user}/${githubConfig.repo}/contents/${file.name}`;
+            const getRes = await fetch(getUrl, { headers: { 'Authorization': `Bearer ${githubConfig.token}` } });
             if (getRes.ok) {
                 const getJson = await getRes.json();
                 cvSha = getJson.sha;
             }
 
-            const putUrl = `https://api.github.com/repos/${config.user}/${config.repo}/contents/${file.name}`;
+            const putUrl = `https://api.github.com/repos/${githubConfig.user}/${githubConfig.repo}/contents/${file.name}`;
             await fetch(putUrl, {
                 method: 'PUT',
-                headers: { 'Authorization': `Bearer ${config.token}` },
+                headers: { 'Authorization': `Bearer ${githubConfig.token}` },
                 body: JSON.stringify({
                     message: "Update CV via Admin Panel",
                     content: base64Content,
@@ -267,33 +274,21 @@ function renderProjectsList() {
 }
 
 function collectFormData() {
-    const data = JSON.parse(JSON.stringify(currentData)); // Deep copy
-
-    // Hero
+    const data = JSON.parse(JSON.stringify(currentData));
     data.hero.name = document.getElementById('hero-name-input').value;
     data.hero.title = document.getElementById('hero-title-input').value;
     data.hero.intro = document.getElementById('hero-intro-input').value;
     data.hero.linkedin_url = document.getElementById('hero-linkedin-input').value;
-
-    // Experience Header
     data.sections.foundation.title = document.getElementById('exp-section-title').value;
     data.sections.foundation.subtitle = document.getElementById('exp-section-subtitle').value;
-
-    // Strategy
     data.sections.strategy.title = document.getElementById('strategy-section-title').value;
     data.sections.strategy.insights = document.getElementById('strategy-insights-input').value.split('\n').filter(l => l.trim() !== '');
     data.sections.strategy.toolkit = document.getElementById('strategy-toolkit-input').value.split(',').map(s => s.trim()).filter(s => s !== '');
-
-    // Delivery
     data.sections.delivery.points = document.getElementById('delivery-points-input').value.split('\n').filter(l => l.trim() !== '');
-
-    // Contact
     data.sections.contact.title = document.getElementById('contact-title-input').value;
     data.sections.contact.email = document.getElementById('contact-email-input').value;
     data.sections.contact.phone = document.getElementById('contact-phone-input').value;
     data.sections.contact.academics = document.getElementById('contact-academics-input').value.split('\n').filter(l => l.trim() !== '');
-
-    // Graphics
     data.graphics.theme.daySky = document.getElementById('color-daySky').value;
     data.graphics.theme.nightSky = document.getElementById('color-nightSky').value;
     data.graphics.environment.characterShirt = document.getElementById('color-shirt').value;
@@ -301,17 +296,11 @@ function collectFormData() {
     data.graphics.environment.marketBars = document.getElementById('color-bars').value;
     data.graphics.particles.type = document.getElementById('particle-type').value;
     data.graphics.particles.count = parseInt(document.getElementById('particle-count').value);
-    
-    // Asset Check
     const cvFile = document.getElementById('cv-upload').files[0];
-    if (cvFile) {
-        data.hero.cv_url = cvFile.name;
-    }
-
+    if (cvFile) data.hero.cv_url = cvFile.name;
     return data;
 }
 
-// Global scope functions for inline events
 window.removeItem = (type, index) => {
     if (type === 'exp') currentData.sections.foundation.experience.splice(index, 1);
     if (type === 'proj') currentData.sections.projects.items.splice(index, 1);
@@ -337,12 +326,10 @@ document.getElementById('add-project-btn').addEventListener('click', () => {
     renderProjectsList();
 });
 
-// Sidebar Navigation
 document.querySelectorAll('.sidebar-item').forEach(item => {
     item.addEventListener('click', () => {
         document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
         document.querySelectorAll('.editor-section').forEach(s => s.classList.remove('active'));
-        
         item.classList.add('active');
         document.getElementById(item.dataset.target).classList.add('active');
     });
@@ -350,14 +337,15 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 
 document.getElementById('save-btn').addEventListener('click', saveToGithub);
 
-document.getElementById('logout-btn').addEventListener('click', () => {
-    localStorage.clear();
+document.getElementById('logout-btn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
     location.reload();
 });
 
 function showStatus(text, type) {
     statusBadge.innerText = text;
     statusBadge.className = `status-badge ${type}`;
+    statusBadge.style.display = 'block';
 }
 
 function hideStatus() {

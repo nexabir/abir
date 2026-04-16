@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --sidebar-width: 250px;
@@ -219,13 +220,15 @@
     <!-- Auth Overlay -->
     <div id="auth-overlay">
         <div class="glass-card auth-card">
-            <h2 class="gradient-text">Admin Access</h2>
-            <p>Enter your GitHub details to manage your website.</p>
-            <input type="text" id="github-user" placeholder="GitHub Username">
-            <input type="text" id="github-repo" placeholder="Repository Name">
-            <input type="password" id="github-token" placeholder="Personal Access Token (PAT)">
-            <button id="auth-btn" class="btn primary-btn" style="width:100%">Verify & Login</button>
-            <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Token and repo info are stored locally in your browser.</p>
+            <h2 class="gradient-text">Admin Login</h2>
+            <p>Access your dashboard with your professional credentials.</p>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-pass" placeholder="Password">
+            <div style="display:flex; gap: 10px;">
+                <button id="login-btn" class="btn primary-btn" style="flex:1">Login</button>
+                <button id="signup-btn" class="btn secondary-btn" style="flex:1">Sign Up</button>
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">Securely powered by Supabase Auth.</p>
         </div>
     </div>
 
