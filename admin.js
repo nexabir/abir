@@ -74,14 +74,27 @@ async function fetchData() {
     const url = `https://api.github.com/repos/${config.user}/${config.repo}/contents/content.json`;
     try {
         const response = await fetch(url, {
-            headers: { 'Authorization': `token ${config.token}` }
+            headers: { 'Authorization': `Bearer ${config.token}` }
         });
+        
+        if (response.status === 401 || response.status === 403) {
+            console.error("Auth Error:", response.status);
+            alert("GitHub says: Unauthorized. Check if your token is correct and has 'repo' scope.");
+            return false;
+        }
+        if (response.status === 404) {
+            console.error("Not Found:", response.status);
+            alert(`GitHub says: Not Found. Verify your Username (${config.user}) and Repo Name (${config.repo}) are exact (case-sensitive).`);
+            return false;
+        }
         if (!response.ok) return false;
+
         const json = await response.json();
         currentSha = json.sha;
         currentData = JSON.parse(atob(json.content));
         return true;
     } catch (e) {
+        console.error("Connection Error:", e);
         return false;
     }
 }
@@ -99,7 +112,7 @@ async function saveToGithub() {
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 
-                'Authorization': `token ${config.token}`,
+                'Authorization': `Bearer ${config.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -140,7 +153,7 @@ async function uploadCV(file) {
             // Get SHA of existing CV (to overwrite)
             let cvSha = null;
             const getUrl = `https://api.github.com/repos/${config.user}/${config.repo}/contents/${file.name}`;
-            const getRes = await fetch(getUrl, { headers: { 'Authorization': `token ${config.token}` } });
+            const getRes = await fetch(getUrl, { headers: { 'Authorization': `Bearer ${config.token}` } });
             if (getRes.ok) {
                 const getJson = await getRes.json();
                 cvSha = getJson.sha;
@@ -149,7 +162,7 @@ async function uploadCV(file) {
             const putUrl = `https://api.github.com/repos/${config.user}/${config.repo}/contents/${file.name}`;
             await fetch(putUrl, {
                 method: 'PUT',
-                headers: { 'Authorization': `token ${config.token}` },
+                headers: { 'Authorization': `Bearer ${config.token}` },
                 body: JSON.stringify({
                     message: "Update CV via Admin Panel",
                     content: base64Content,
