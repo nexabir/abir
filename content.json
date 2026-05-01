@@ -7,6 +7,12 @@
     "linkedin_url": "https://www.linkedin.com/in/md-abir-ul-islam/"
   },
   "sections": {
+    "visibility": {
+      "foundation": true,
+      "strategy": true,
+      "projects": true,
+      "delivery": true
+    },
     "foundation": {
       "title": "The Foundation",
       "subtitle": "Process Automation",
@@ -117,6 +123,12 @@
       "marketBars": "#10b981",
       "projectNode": "#0ea5e9",
       "roadColor": "#94a3b8"
+    },
+    "character": {
+      "skin": "#ffccaa",
+      "hardhat": "#facc15",
+      "cap": "#ef4444",
+      "briefcase": "#8b4513"
     }
   }
 }

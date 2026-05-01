@@ -193,6 +193,12 @@ function populateForms() {
     document.getElementById('hero-intro-input').value = currentData.hero.intro;
     document.getElementById('hero-linkedin-input').value = currentData.hero.linkedin_url;
 
+    // Visibility
+    document.getElementById('toggle-foundation').checked = currentData.sections.visibility.foundation;
+    document.getElementById('toggle-strategy').checked = currentData.sections.visibility.strategy;
+    document.getElementById('toggle-projects').checked = currentData.sections.visibility.projects;
+    document.getElementById('toggle-delivery').checked = currentData.sections.visibility.delivery;
+
     // Experience
     document.getElementById('exp-section-title').value = currentData.sections.foundation.title;
     document.getElementById('exp-section-subtitle').value = currentData.sections.foundation.subtitle;
@@ -218,6 +224,10 @@ function populateForms() {
     // Graphics
     document.getElementById('color-daySky').value = currentData.graphics.theme.daySky;
     document.getElementById('color-nightSky').value = currentData.graphics.theme.nightSky;
+    document.getElementById('color-skin').value = currentData.graphics.character.skin;
+    document.getElementById('color-hardhat').value = currentData.graphics.character.hardhat;
+    document.getElementById('color-cap').value = currentData.graphics.character.cap;
+    document.getElementById('color-briefcase').value = currentData.graphics.character.briefcase;
     document.getElementById('color-shirt').value = currentData.graphics.environment.characterShirt;
     document.getElementById('color-belt').value = currentData.graphics.environment.factoryBelt;
     document.getElementById('color-bars').value = currentData.graphics.environment.marketBars;
@@ -278,6 +288,10 @@ function collectFormData() {
     data.hero.title = document.getElementById('hero-title-input').value;
     data.hero.intro = document.getElementById('hero-intro-input').value;
     data.hero.linkedin_url = document.getElementById('hero-linkedin-input').value;
+    data.sections.visibility.foundation = document.getElementById('toggle-foundation').checked;
+    data.sections.visibility.strategy = document.getElementById('toggle-strategy').checked;
+    data.sections.visibility.projects = document.getElementById('toggle-projects').checked;
+    data.sections.visibility.delivery = document.getElementById('toggle-delivery').checked;
     data.sections.foundation.title = document.getElementById('exp-section-title').value;
     data.sections.foundation.subtitle = document.getElementById('exp-section-subtitle').value;
     data.sections.strategy.title = document.getElementById('strategy-section-title').value;
@@ -290,6 +304,10 @@ function collectFormData() {
     data.sections.contact.academics = document.getElementById('contact-academics-input').value.split('\n').filter(l => l.trim() !== '');
     data.graphics.theme.daySky = document.getElementById('color-daySky').value;
     data.graphics.theme.nightSky = document.getElementById('color-nightSky').value;
+    data.graphics.character.skin = document.getElementById('color-skin').value;
+    data.graphics.character.hardhat = document.getElementById('color-hardhat').value;
+    data.graphics.character.cap = document.getElementById('color-cap').value;
+    data.graphics.character.briefcase = document.getElementById('color-briefcase').value;
     data.graphics.environment.characterShirt = document.getElementById('color-shirt').value;
     data.graphics.environment.factoryBelt = document.getElementById('color-belt').value;
     data.graphics.environment.marketBars = document.getElementById('color-bars').value;

@@ -212,6 +212,93 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Toggles */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-1);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .admin-sidebar h3 {
+                grid-column: 1 / -1;
+                margin-bottom: 1rem !important;
+            }
+            .sidebar-item {
+                font-size: 0.85rem;
+                padding: 0.8rem;
+                text-align: center;
+            }
+            .admin-main {
+                margin-left: 0;
+                padding: 1rem 5%;
+            }
+            .action-bar {
+                left: 0;
+                justify-content: space-between;
+            }
+            .action-bar .btn {
+                font-size: 0.85rem;
+                padding: 0.8rem 1rem;
+            }
+        }
     </style>
 </head>
 <body data-theme="day">
@@ -235,6 +322,7 @@
     <aside class="admin-sidebar" id="sidebar" style="display:none">
         <h3 style="padding: 0 1rem; margin-bottom: 2rem;">Admin Panel</h3>
         <div class="sidebar-item active" data-target="hero-editor">Hero & Intro</div>
+        <div class="sidebar-item" data-target="visibility-editor">Section Visibility</div>
         <div class="sidebar-item" data-target="experience-editor">Experience</div>
         <div class="sidebar-item" data-target="strategy-editor">Strategy & Skills</div>
         <div class="sidebar-item" data-target="projects-editor">Projects</div>
@@ -270,6 +358,43 @@
             <div class="form-group">
                 <label>LinkedIn URL</label>
                 <input type="text" id="hero-linkedin-input">
+            </div>
+        </section>
+
+        <!-- Section Visibility Editor -->
+        <section id="visibility-editor" class="editor-section">
+            <h2 class="section-title">Section Visibility</h2>
+            <div class="form-group">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.8;">Toggle sections on or off. Hidden sections will be completely removed from the scroll timeline.</p>
+                
+                <div class="toggle-row">
+                    <span><strong>Experience (Factory)</strong></span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-foundation">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span><strong>Strategy (Market)</strong></span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-strategy">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span><strong>Projects</strong></span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-projects">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span><strong>Delivery (Execution)</strong></span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-delivery">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
         </section>
 
@@ -359,6 +484,27 @@
                     <div class="color-field">
                         <input type="color" id="color-nightSky">
                         <span>Night Sky</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Character Colors</label>
+                <div class="color-grid">
+                    <div class="color-field">
+                        <input type="color" id="color-skin">
+                        <span>Skin</span>
+                    </div>
+                    <div class="color-field">
+                        <input type="color" id="color-hardhat">
+                        <span>Hardhat</span>
+                    </div>
+                    <div class="color-field">
+                        <input type="color" id="color-cap">
+                        <span>Cap</span>
+                    </div>
+                    <div class="color-field">
+                        <input type="color" id="color-briefcase">
+                        <span>Briefcase</span>
                     </div>
                 </div>
             </div>

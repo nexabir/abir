@@ -199,11 +199,12 @@ function initThreeJS() {
     });
 
     // Materials
-    const matSkin = new THREE.MeshLambertMaterial({ color: 0xffccaa });
+    const charTheme = siteData.graphics.character || { skin: '#ffccaa', hardhat: '#facc15', cap: '#ef4444', briefcase: '#8b4513' };
+    const matSkin = new THREE.MeshLambertMaterial({ color: charTheme.skin });
     const matShirt = new THREE.MeshLambertMaterial({ color: siteData.graphics.environment.characterShirt }); 
-    const matYellow = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
-    const matBrown = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
-    const matRed = new THREE.MeshLambertMaterial({ color: 0xef4444 });
+    const matYellow = new THREE.MeshLambertMaterial({ color: charTheme.hardhat });
+    const matBrown = new THREE.MeshLambertMaterial({ color: charTheme.briefcase });
+    const matRed = new THREE.MeshLambertMaterial({ color: charTheme.cap });
 
     const character = new THREE.Group();
     scene.add(character);
@@ -325,45 +326,68 @@ function initThreeJS() {
         scrollTrigger: { trigger: ".content-wrapper", start: "top top", end: "bottom bottom", scrub: 1 }
     });
 
-    tl.to(camera.position, { x: -1.5, z: 6, duration: 1, ease: "none" }, 0); 
-    tl.to(character.position, { z: -14, duration: 1, ease: "none" }, 1);
-    tl.to(camera.position, { z: -7, duration: 1, ease: "none" }, 1);
-    tl.to(celestialGroup.position, { z: -54, duration: 1, ease: "none" }, 1);
+    // Determine Visible Sections
+    const vis = siteData.sections.visibility || { foundation: true, strategy: true, projects: true, delivery: true };
+    
+    if (!vis.foundation) { document.getElementById('factory').style.display = 'none'; factoryEnv.visible = false; }
+    if (!vis.strategy) { document.getElementById('market').style.display = 'none'; marketEnv.visible = false; }
+    if (!vis.projects) { document.getElementById('projects').style.display = 'none'; projectEnv.visible = false; }
+    if (!vis.delivery) { document.getElementById('office').style.display = 'none'; deliveryEnv.visible = false; }
 
-    tl.call(() => {
-        hardhat.visible = false; packageBox.visible = false; capGroup.visible = false;
-        briefcase.visible = true; matShirt.color.setHex(0xffffff);
-    }, [], 1.5);
-    tl.call(() => {
-        hardhat.visible = true; briefcase.visible = false; matShirt.color.set(siteData.graphics.environment.characterShirt);
-    }, [], 1.49);
+    let step = 0;
+    
+    // Hero -> Foundation (or skip)
+    tl.to(camera.position, { x: -1.5, z: 6, duration: 1, ease: "none" }, step);
+    
+    if (vis.foundation) {
+        step++;
+        tl.to(character.position, { z: -14, duration: 1, ease: "none" }, step);
+        tl.to(camera.position, { z: -7, duration: 1, ease: "none" }, step);
+        tl.to(celestialGroup.position, { z: -54, duration: 1, ease: "none" }, step);
+        
+        tl.call(() => {
+            hardhat.visible = false; packageBox.visible = false; capGroup.visible = false;
+            briefcase.visible = true; matShirt.color.setHex(0xffffff);
+        }, [], step + 0.5);
+        tl.call(() => {
+            hardhat.visible = true; briefcase.visible = false; matShirt.color.set(siteData.graphics.environment.characterShirt);
+        }, [], step + 0.49);
+    }
 
-    tl.to(character.position, { z: -28, duration: 1, ease: "none" }, 2);
-    tl.to(camera.position, { z: -21, x: 1.5, duration: 1, ease: "none" }, 2);
-    tl.to(celestialGroup.position, { z: -68, duration: 1, ease: "none" }, 2);
+    if (vis.strategy || vis.projects) {
+        step++;
+        tl.to(character.position, { z: -28, duration: 1, ease: "none" }, step);
+        tl.to(camera.position, { z: -21, x: 1.5, duration: 1, ease: "none" }, step);
+        tl.to(celestialGroup.position, { z: -68, duration: 1, ease: "none" }, step);
+    }
 
-    tl.to(character.position, { z: -42, duration: 1, ease: "none" }, 3);
-    tl.to(camera.position, { z: -35, duration: 1, ease: "none" }, 3);
-    tl.to(celestialGroup.position, { z: -82, duration: 1, ease: "none" }, 3);
+    if (vis.delivery) {
+        step++;
+        tl.to(character.position, { z: -42, duration: 1, ease: "none" }, step);
+        tl.to(camera.position, { z: -35, duration: 1, ease: "none" }, step);
+        tl.to(celestialGroup.position, { z: -82, duration: 1, ease: "none" }, step);
 
-    tl.call(() => {
-        briefcase.visible = false; capGroup.visible = true; packageBox.visible = true;
-        matShirt.color.setHex(0xf97316); 
-    }, [], 3.5);
-    tl.call(() => {
-        capGroup.visible = false; packageBox.visible = false; briefcase.visible = true;
-        matShirt.color.setHex(0xffffff);
-    }, [], 3.49);
+        tl.call(() => {
+            briefcase.visible = false; capGroup.visible = true; packageBox.visible = true;
+            matShirt.color.setHex(0xf97316); 
+        }, [], step + 0.5);
+        tl.call(() => {
+            capGroup.visible = false; packageBox.visible = false; briefcase.visible = true;
+            matShirt.color.setHex(0xffffff);
+        }, [], step + 0.49);
+    }
 
-    tl.to(camera.position, { z: -39.5, y: 2.2, x: -1.2, duration: 1, ease: "power2.inOut" }, 4);
+    // Final Contact Section
+    step++;
+    tl.to(camera.position, { z: -39.5, y: 2.2, x: -1.2, duration: 1, ease: "power2.inOut" }, step);
     tl.call(() => {
         capGroup.visible = false; packageBox.visible = false;
         matShirt.color.set(siteData.graphics.environment.characterShirt); 
-    }, [], 4.8);
+    }, [], step + 0.8);
     tl.call(() => {
         capGroup.visible = true; packageBox.visible = true;
         matShirt.color.setHex(0xf97316);
-    }, [], 4.79);
+    }, [], step + 0.79);
 }
 
 // Start sequence
