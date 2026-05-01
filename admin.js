@@ -52,11 +52,23 @@ checkSession();
     document.getElementById('signup-btn').addEventListener('click', async () => {
         const username = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-pass').value;
-        if (confirm('Create a new admin account with this username/password?')) {
+        
+        if (!username || !password) {
+            alert('Please enter both username and password.');
+            return;
+        }
+
+        if (confirm('Create a new admin account with this username/password? This will only work on this browser/device.')) {
             const creds = { username, password };
             localStorage.setItem('adminCreds', JSON.stringify(creds));
-            alert('Local admin account created. You can now log in with these credentials.');
+            alert('Local admin account created. You can now log in.');
         }
+    });
+
+    // Logout
+    document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('loggedIn');
+        window.location.reload();
     });
 
 async function showDashboard() {
