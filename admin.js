@@ -25,6 +25,13 @@ const statusBadge = document.getElementById('status-badge');
 
 // Session Check on Load
 async function checkSession() {
+    // First check local login
+    const logged = localStorage.getItem('loggedIn');
+    if (logged === 'true') {
+        showDashboard();
+        return;
+    }
+    // Fallback to Supabase
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
         showDashboard();
