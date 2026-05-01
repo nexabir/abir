@@ -21,15 +21,36 @@
           "company": "Anwar Group & Industries",
           "role": "Business Analyst (Dec 2025 - Present)",
           "description": "Driving system automation and business process re-engineering. Expert in requirement gathering (BRD/FRD), JIRA management, and UAT (User Acceptance Testing) to ensure high-impact delivery.",
-          "tags": ["Requirement Gathering", "JIRA & UAT", "Agile SDLC"]
+          "tags": [
+            "Requirement Gathering",
+            "JIRA & UAT",
+            "Agile SDLC"
+          ]
         }
       ]
     },
     "toolkit_categorized": {
-      "Data & SQL": ["SQL", "Python", "Pandas", "Advanced Excel"],
-      "Visualization": ["Power BI", "Tableau", "Matplotlib"],
-      "Management": ["JIRA", "Agile/Scrum", "Stakeholder Management"],
-      "Modeling": ["Process Mapping", "BPMN", "Gap Analysis"]
+      "Data & SQL": [
+        "SQL",
+        "Python",
+        "Pandas",
+        "Advanced Excel"
+      ],
+      "Visualization": [
+        "Power BI",
+        "Tableau",
+        "Matplotlib"
+      ],
+      "Management": [
+        "JIRA",
+        "Agile/Scrum",
+        "Stakeholder Management"
+      ],
+      "Modeling": [
+        "Process Mapping",
+        "BPMN",
+        "Gap Analysis"
+      ]
     },
     "strategy": {
       "title": "The Strategy",
@@ -55,10 +76,20 @@
           "approach": "Performed EDA using Excel and Python to identify correlation between study habits and performance.",
           "impact": "Identified 3 key variables that predicted 80% of student failures, enabling targeted tutoring.",
           "description": "Full exploratory data analysis identifying factors impacting exam results.",
-          "tools": ["Excel", "Python", "Pandas"],
+          "tools": [
+            "Excel",
+            "Python",
+            "Pandas"
+          ],
           "links": [
-            { "label": "View Dashboard", "url": "#" },
-            { "label": "Github", "url": "#" }
+            {
+              "label": "View Dashboard",
+              "url": "#"
+            },
+            {
+              "label": "Github",
+              "url": "#"
+            }
           ]
         },
         {
@@ -67,10 +98,20 @@
           "approach": "Scraped and analyzed Zomato restaurant data to identify high-potential gaps in cuisine vs location.",
           "impact": "Provided actionable insights for 2 student startups, reducing market entry risk.",
           "description": "Market trend analysis and location-based gap identification for the food industry.",
-          "tools": ["Python", "BeautifulSoup", "Seaborn"],
+          "tools": [
+            "Python",
+            "BeautifulSoup",
+            "Seaborn"
+          ],
           "links": [
-            { "label": "Presentation", "url": "#" },
-            { "label": "Github", "url": "#" }
+            {
+              "label": "Presentation",
+              "url": "#"
+            },
+            {
+              "label": "Github",
+              "url": "#"
+            }
           ]
         }
       ]
@@ -144,5 +185,13 @@
       "briefcase": "#8b4513"
     }
   },
-  "blogs": []
+  "blogs": [],
+  "certifications": [
+    {
+      "name": "New Cert",
+      "issuer": "Issuer",
+      "date": "2024",
+      "image": ""
+    }
+  ]
 }
