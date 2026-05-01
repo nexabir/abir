@@ -336,6 +336,15 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 
 document.getElementById('save-btn').addEventListener('click', saveToGithub);
 
+// Reset GitHub Token
+document.getElementById('reset-token-btn').addEventListener('click', () => {
+    if (confirm("Are you sure you want to remove the current GitHub token?")) {
+        localStorage.removeItem('gh_token');
+        githubConfig.token = '';
+        location.reload();
+    }
+});
+
 // Logout clears simple session
 document.getElementById('logout-btn').addEventListener('click', async () => {
     localStorage.removeItem('loggedIn');
