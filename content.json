@@ -15,7 +15,10 @@
           "company": "Anwar Group & Industries",
           "role": "Business Analyst (Dec 2025 - Present)",
           "description": "Conducting business research, system automation, business analysis, apps development, and performance analysis.",
-          "tags": ["System Automation", "JIRA & UAT"]
+          "tags": [
+            "System Automation",
+            "JIRA & UAT"
+          ]
         }
       ]
     },
@@ -26,7 +29,12 @@
         "Daffodil / LearnTime: Analyzed student-parent data for satisfaction and product strategies.",
         "Publication: Analyzing and Mitigating Linguistic Bias in Bangla NLP (BIM 2025)."
       ],
-      "toolkit": ["SQL / Python", "Power BI / Tableau", "Pandas / NumPy", "Advanced Excel"]
+      "toolkit": [
+        "SQL / Python",
+        "Power BI / Tableau",
+        "Pandas / NumPy",
+        "Advanced Excel"
+      ]
     },
     "projects": {
       "title": "Applied Skills",
@@ -36,16 +44,28 @@
           "title": "Excel EDA: Student Performance",
           "description": "Identified factors significantly impacting exam results via exploratory data analysis in Excel.",
           "links": [
-            { "label": "View Dashboard", "url": "#" },
-            { "label": "Github", "url": "#" }
+            {
+              "label": "View Dashboard",
+              "url": "#"
+            },
+            {
+              "label": "Github",
+              "url": "#"
+            }
           ]
         },
         {
           "title": "Zomato Restaurant Data (Python)",
           "description": "Taught core mathematics and mentored student startups, aligning their ideas with practical scopes.",
           "links": [
-            { "label": "Presentation", "url": "#" },
-            { "label": "Github", "url": "#" }
+            {
+              "label": "Presentation",
+              "url": "#"
+            },
+            {
+              "label": "Github",
+              "url": "#"
+            }
           ]
         }
       ]
@@ -80,10 +100,16 @@
     },
     "particles": {
       "type": "leaves",
-      "count": 40,
+      "count": 400,
       "color": "#22c55e",
-      "speedY": [0.01, 0.03],
-      "speedX": [0.04, 0.06]
+      "speedY": [
+        0.01,
+        0.03
+      ],
+      "speedX": [
+        0.04,
+        0.06
+      ]
     },
     "environment": {
       "characterShirt": "#2563eb",
