@@ -13,6 +13,9 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
     <link rel="canonical" href="https://nexabir.com/">
     
+    <!-- Chart.js for Heatmap -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- Open Graph / Social Previews -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nexabir.com/">
@@ -119,22 +122,25 @@
 
         <!-- Section 3: Market / Analysis -->
         <section class="section step-market layout-left" id="market">
-            <div class="glass-card short-width">
-                <h2 class="section-title" id="market-title"></h2>
-                <h3 class="gradient-text" id="market-subtitle"></h3>
-                
-                <div class="cv-preview stack-col">
-                    <div class="cv-column">
-                        <h4>Analysis & Insights</h4>
-                        <ul id="insights-list">
-                            <!-- Dynamic Items -->
-                        </ul>
+            <div class="glass-card full-width">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:40px;">
+                    <div style="flex:1.2; min-width:300px;">
+                        <h2 class="section-title" id="market-title"></h2>
+                        <h3 class="gradient-text" id="market-subtitle" style="margin-bottom: 2rem;"></h3>
+                        <div class="cv-preview stack-col">
+                            <div class="cv-column">
+                                <h4>Analysis & Insights</h4>
+                                <ul id="insights-list"></ul>
+                            </div>
+                            <div class="cv-column">
+                                <h4>Core Toolkit</h4>
+                                <ul id="toolkit-list" class="skill-tags"></ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="cv-column">
-                        <h4>Core Toolkit</h4>
-                        <ul id="toolkit-list" class="skill-tags" style="margin-top: 0;">
-                            <!-- Dynamic Items -->
-                        </ul>
+                    <div style="flex:1; min-width:300px; max-width:450px; background:rgba(255,255,255,0.03); border-radius:20px; padding:20px; border:1px solid var(--glass-border);">
+                        <h3 style="text-align:center; font-size:1.1rem; margin-bottom:1rem;">Competency <span class="gradient-text">Radar</span></h3>
+                        <canvas id="skillsRadar"></canvas>
                     </div>
                 </div>
             </div>
@@ -259,11 +265,32 @@
             </div>
         </div>
 
+        <!-- Testimonials Section -->
+        <section class="section layout-center" id="testimonials" style="padding: 10vh 0; min-height: auto;">
+            <div class="glass-card full-width" style="text-align: center;">
+                <h2>Stakeholder <span class="gradient-text">Feedback</span></h2>
+                <p style="margin-bottom: 3rem;">What partners and clients say about my analytical impact.</p>
+                <div id="testimonials-container" class="testimonials-scroll">
+                    <!-- Dynamic Items -->
+                </div>
+            </div>
+        </section>
+
         <footer style="padding: 4rem 2rem; text-align: center; opacity: 1; font-size: 0.9rem; position: relative; z-index: 2;">
             <p>&copy; 2026 Md. Abir Ul Islam.</p>
             <a href="admin.html" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1.5rem; border: 1px solid var(--glass-border); border-radius: 20px; color: var(--accent-1); text-decoration: none; font-weight: 600; background: var(--glass-bg); backdrop-filter: blur(5px);">Admin Login</a>
         </footer>
     </main>
+
+    <!-- Case Study Modal -->
+    <div id="case-study-modal" class="modal-overlay" onclick="if(event.target === this) closeCaseStudy()">
+        <div class="modal-content glass-card" style="max-width: 900px; width: 90%; max-height: 85vh; overflow-y: auto;">
+            <button class="close-modal" onclick="closeCaseStudy()">×</button>
+            <div id="modal-body" style="padding: 2rem;">
+                <!-- Injected Case Study Content -->
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -277,6 +277,7 @@ function populateForms() {
     renderCertsList();
     renderDashList();
     renderResList();
+    renderTestList();
     renderBlogList();
 
     // Delivery
@@ -438,6 +439,7 @@ window.updateItem = (type, index, field, value) => {
     if (type === 'cert') currentData.certifications[index][field] = value;
     if (type === 'dash') currentData.sections.dashboards[index][field] = value;
     if (type === 'res') currentData.sections.resources[index][field] = value;
+    if (type === 'test') currentData.sections.testimonials[index][field] = value;
 };
 
 window.updateProjLink = (pIndex, lIndex, field, value) => {

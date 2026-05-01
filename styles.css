@@ -72,6 +72,13 @@ body {
     transition: background-color 1s ease, color 1s ease;
 }
 
+/* Glass Header Fix */
+.glass-header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
 /* Theme Toggle Button */
 .theme-btn {
     position: fixed;
@@ -464,3 +471,70 @@ p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; tran
     outline: none;
     border-color: var(--accent-1);
 }
+/* Testimonials Carousel */
+.testimonials-scroll {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    padding: 1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.testimonials-scroll::-webkit-scrollbar { display: none; }
+
+.testimonial-card {
+    flex: 0 0 350px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    border-radius: 20px;
+    scroll-snap-align: center;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+.testimonial-card:hover { border-color: var(--accent-1); transform: translateY(-5px); }
+.testimonial-quote { font-style: italic; margin-bottom: 1.5rem; color: var(--text-secondary); }
+.testimonial-author { font-weight: 800; color: var(--accent-1); }
+.testimonial-role { font-size: 0.8rem; opacity: 0.7; }
+
+/* Case Study Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.active { display: flex; opacity: 1; }
+
+.case-study-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+@media (max-width: 768px) { .case-study-grid { grid-template-columns: 1fr; } }
+
+.case-study-block h4 { color: var(--accent-1); margin-bottom: 0.5rem; }
+.case-study-block p { font-size: 0.95rem; color: var(--text-secondary); }
+
+.code-block {
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+/* Radar Chart Fix */
+#skillsRadar { max-width: 100%; }

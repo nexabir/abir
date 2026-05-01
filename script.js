@@ -87,7 +87,7 @@ function updateUI() {
     document.getElementById('projects-subtitle').innerText = siteData.sections.projects.subtitle;
     
     const projectsList = document.getElementById('projects-list');
-    projectsList.innerHTML = siteData.sections.projects.items.map(proj => `
+    projectsList.innerHTML = siteData.sections.projects.items.map((proj, index) => `
         <div class="glass-card project-card">
             <h4 style="text-transform:none; margin-bottom: 0.5rem;">${proj.title}</h4>
             <div class="project-meta">
@@ -96,11 +96,14 @@ function updateUI() {
                 <div class="meta-item"><strong>Outcome</strong> <span style="color:var(--accent-1); font-weight:600;">${proj.impact || "N/A"}</span></div>
             </div>
             <p style="font-size:0.85rem; opacity:0.8; margin-bottom:1rem;">${proj.description}</p>
-            <div class="project-tools">
-                ${(proj.tools || []).map(t => `<span class="tool-tag">${t}</span>`).join('')}
-            </div>
-            <div class="button-group" style="justify-content: flex-end; margin-top: 15px;">
-                ${proj.links.map(link => `<a href="${link.url}" target="_blank" class="btn mini-btn ${link.label === 'Github' ? 'secondary-btn' : 'primary-btn'}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">${link.label}</a>`).join('')}
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:15px;">
+                <div class="project-tools">
+                    ${(proj.tools || []).map(t => `<span class="tool-tag">${t}</span>`).join('')}
+                </div>
+                <div style="display:flex; gap:5px;">
+                    <button class="btn mini-btn primary-btn" onclick="openCaseStudy(${index})" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; background:var(--accent-1); border:none;">Deep Dive</button>
+                    ${proj.links.map(link => `<a href="${link.url}" target="_blank" class="btn mini-btn ${link.label === 'Github' ? 'secondary-btn' : 'primary-btn'}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">${link.label}</a>`).join('')}
+                </div>
             </div>
         </div>
     `).join('');
@@ -160,7 +163,110 @@ function updateUI() {
             </div>
         `).join('');
     }
+
+    // New Sections
+    renderSkillsRadar();
+    renderTestimonials();
 }
+
+function renderSkillsRadar() {
+    const ctx = document.getElementById('skillsRadar').getContext('2d');
+    const labels = ["Data Analytics", "Requirement Gathering", "Agile SDLC", "Stakeholder Management", "Technical (SQL/Py)"];
+    
+    // Default values if not in JSON
+    const dataValues = siteData.sections.strategy.competency_scores || [85, 95, 90, 80, 88];
+
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Proficiency',
+                data: dataValues,
+                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                borderColor: '#2563eb',
+                borderWidth: 2,
+                pointBackgroundColor: '#2563eb'
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(255,255,255,0.1)' },
+                    grid: { color: 'rgba(255,255,255,0.1)' },
+                    pointLabels: { color: '#94a3b8', font: { size: 10 } },
+                    ticks: { display: false },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+function renderTestimonials() {
+    const container = document.getElementById('testimonials-container');
+    if (!siteData.sections.testimonials) {
+        siteData.sections.testimonials = [
+            { quote: "Abir's ability to bridge the gap between technical data and business strategy is exceptional.", author: "Project Manager", role: "Anwar Group" },
+            { quote: "The dashboards he built saved us hours of manual reporting every week.", author: "Operations Head", role: "Daffodil Int. Univ" }
+        ];
+    }
+    
+    container.innerHTML = siteData.sections.testimonials.map(t => `
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"${t.quote}"</p>
+            <p class="testimonial-author">${t.author}</p>
+            <p class="testimonial-role">${t.role}</p>
+        </div>
+    `).join('');
+}
+
+window.openCaseStudy = (index) => {
+    const proj = siteData.sections.projects.items[index];
+    const modal = document.getElementById('case-study-modal');
+    const body = document.getElementById('modal-body');
+
+    body.innerHTML = `
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">${proj.title}</h2>
+        <p style="color: var(--accent-1); font-weight: 600; margin-bottom: 2rem;">Deep Dive Case Study</p>
+        
+        <div class="case-study-grid">
+            <div class="case-study-block">
+                <h4>Business Problem</h4>
+                <p>${proj.problem}</p>
+            </div>
+            <div class="case-study-block">
+                <h4>Approach & Methodology</h4>
+                <p>${proj.approach}</p>
+            </div>
+            <div class="case-study-block">
+                <h4>Impact & Outcome</h4>
+                <p>${proj.impact}</p>
+            </div>
+            <div class="case-study-block">
+                <h4>Core Tools</h4>
+                <div class="skill-tags">
+                    ${(proj.tools || []).map(t => `<li>${t}</li>`).join('')}
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem;">
+            <h4>Analysis Snippet</h4>
+            <div class="code-block">
+                ${proj.snippet || "-- Analytical model logic: Proprietary --"}
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('active');
+};
+
+window.closeCaseStudy = () => {
+    document.getElementById('case-study-modal').classList.remove('active');
+};
 
 // Premium Interactions Logic
 window.addEventListener('scroll', () => {
@@ -202,6 +308,32 @@ function initThreeJS() {
 
     scene.fog = new THREE.FogExp2(colors.daySky, siteData.graphics.theme.fogDensity);
     scene.background = colors.daySky;
+
+    // Theme Toggle Logic
+    const toggleBtn = document.getElementById('theme-toggle');
+    const updateTheme = (isNight) => {
+        const theme = isNight ? 'night' : 'day';
+        document.body.setAttribute('data-theme', theme);
+        scene.background = isNight ? colors.nightSky : colors.daySky;
+        scene.fog.color = isNight ? colors.nightSky : colors.daySky;
+        toggleBtn.innerText = isNight ? '☀️ Switch to Day' : '🌙 Switch to Night';
+        
+        // Update 3D lights
+        mainLight.intensity = isNight ? 0.3 : 1;
+        ambientLight.intensity = isNight ? 0.2 : 0.6;
+    };
+
+    toggleBtn.addEventListener('click', () => {
+        isNight = !isNight;
+        updateTheme(isNight);
+        localStorage.setItem('theme', isNight ? 'night' : 'day');
+    });
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'night') {
+        isNight = true;
+        updateTheme(true);
+    }
 
     const sizes = { width: window.innerWidth, height: window.innerHeight };
     const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height, 0.1, 100);
