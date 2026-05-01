@@ -111,7 +111,44 @@ function updateUI() {
     document.getElementById('contact-email').href = `mailto:${siteData.sections.contact.email}`;
     document.getElementById('contact-phone').href = siteData.sections.contact.phone_url;
     document.getElementById('contact-phone').innerText = `Call ${siteData.sections.contact.phone}`;
+
+    // Certifications
+    const certsContainer = document.getElementById('certs-container');
+    if (siteData.certifications) {
+        certsContainer.innerHTML = siteData.certifications.map(cert => `
+            <div class="cert-card">
+                <img src="${cert.image}" alt="${cert.name}">
+                <h4>${cert.name}</h4>
+                <p>${cert.issuer} • ${cert.date}</p>
+            </div>
+        `).join('');
+    }
 }
+
+// Premium Interactions Logic
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("scroll-progress").style.width = scrolled + "%";
+});
+
+const cursor = document.getElementById('custom-cursor');
+window.addEventListener('mousemove', (e) => {
+    if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    }
+});
+
+document.addEventListener('mousedown', () => cursor?.classList.add('active'));
+document.addEventListener('mouseup', () => cursor?.classList.remove('active'));
+
+// Hover effects for links
+document.querySelectorAll('a, button, .sidebar-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor?.classList.add('active'));
+    el.addEventListener('mouseleave', () => cursor?.classList.remove('active'));
+});
 
 // -----------------------------------------------------
 // 2. Three.js Initialization

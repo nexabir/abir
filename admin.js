@@ -215,6 +215,9 @@ function populateForms() {
     // Blogs
     renderBlogList();
 
+    // Certifications
+    renderCertsList();
+
     // Delivery
     document.getElementById('delivery-points-input').value = currentData.sections.delivery.points.join('\n');
 
@@ -325,6 +328,7 @@ function collectFormData() {
     // Blogs are already updated in currentData via the saveBlogPost function, 
     // but just to be sure we don't overwrite them with empty arrays if they were modified:
     data.blogs = currentData.blogs || [];
+    data.certifications = currentData.certifications || [];
 
     data.graphics.theme.daySky = document.getElementById('color-daySky').value;
     data.graphics.theme.nightSky = document.getElementById('color-nightSky').value;
@@ -366,6 +370,41 @@ document.getElementById('add-project-btn').addEventListener('click', () => {
     currentData.sections.projects.items.push({ title: "New Project", description: "Desc", links: [{label: "Link", url: "#"}] });
     renderProjectsList();
 });
+
+document.getElementById('add-cert-btn').addEventListener('click', () => {
+    if(!currentData.certifications) currentData.certifications = [];
+    currentData.certifications.push({ name: "New Cert", issuer: "Issuer", date: "2024", image: "" });
+    renderCertsList();
+});
+
+function renderCertsList() {
+    const container = document.getElementById('certs-list-container');
+    if (!currentData.certifications) currentData.certifications = [];
+    
+    container.innerHTML = currentData.certifications.map((cert, index) => `
+        <div class="list-item">
+            <button class="remove-btn" onclick="removeItem('cert', ${index})">×</button>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
+                <label>Cert Name</label>
+                <input type="text" value="${cert.name}" onchange="updateItem('cert', ${index}, 'name', this.value)">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="padding:0; border:none; background:none; flex:1;">
+                    <label>Issuer</label>
+                    <input type="text" value="${cert.issuer}" onchange="updateItem('cert', ${index}, 'issuer', this.value)">
+                </div>
+                <div class="form-group" style="padding:0; border:none; background:none; width:100px;">
+                    <label>Year</label>
+                    <input type="text" value="${cert.date}" onchange="updateItem('cert', ${index}, 'date', this.value)">
+                </div>
+            </div>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-top:1rem;">
+                <label>Badge Image URL</label>
+                <input type="text" value="${cert.image}" placeholder="https://..." onchange="updateItem('cert', ${index}, 'image', this.value)">
+            </div>
+        </div>
+    `).join('');
+}
 
 // --- Blog Manager Logic ---
 let quill;

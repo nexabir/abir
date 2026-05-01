@@ -8,6 +8,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Open Graph / Social Previews -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Blog | Md. Abir Ul Islam">
+    <meta property="og:description" content="Insights on Business Analysis, Data Analytics, and AI.">
+    <meta property="og:image" content="social_preview.png">
+
     <style>
         body { padding-top: 80px; }
         .blog-container {
@@ -69,6 +76,14 @@
             gap: 1rem;
             align-items: center;
         }
+
+        @media print {
+            .glass-header, .share-row, .secondary-btn, #comments-section { display: none !important; }
+            body { background: white !important; color: black !important; padding: 0 !important; }
+            .blog-container { max-width: 100% !important; margin: 0 !important; padding: 2rem !important; }
+            .post-title { color: black !important; }
+            .post-content p { color: black !important; font-size: 11pt; }
+        }
     </style>
 </head>
 <body data-theme="day">
@@ -96,7 +111,10 @@
 
         <!-- Post View -->
         <div id="blog-post" class="blog-post">
-            <button class="btn secondary-btn mini-btn" onclick="goBack()" style="margin-bottom: 2rem;">← Back to Blogs</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <button class="btn secondary-btn mini-btn" onclick="goBack()">← Back to Blogs</button>
+                <button class="btn primary-btn mini-btn" onclick="window.print()">📄 Save as PDF</button>
+            </div>
             <div class="post-header">
                 <h1 id="post-title" class="post-title"></h1>
                 <div class="post-meta" id="post-meta"></div>

@@ -11,6 +11,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     
+    <!-- Open Graph / Social Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nexabir.netlify.app/">
+    <meta property="og:title" content="Md. Abir Ul Islam | Business Analyst Portfolio">
+    <meta property="og:description" content="Explore the portfolio of Md. Abir Ul Islam, a Business Analyst specializing in Data Analytics, Agile Methodology, and Process Automation.">
+    <meta property="og:image" content="social_preview.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://nexabir.netlify.app/">
+    <meta property="twitter:title" content="Md. Abir Ul Islam | Business Analyst Portfolio">
+    <meta property="twitter:description" content="Explore the portfolio of Md. Abir Ul Islam, a Business Analyst specializing in Data Analytics, Agile Methodology, and Process Automation.">
+    <meta property="twitter:image" content="social_preview.png">
+
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
@@ -19,6 +33,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body data-theme="day">
+
+    <!-- Premium Interactions -->
+    <div id="scroll-progress"></div>
+    <div id="custom-cursor"></div>
 
     <!-- Day / Night Toggle -->
     <button id="theme-toggle" class="theme-btn">🌙 Switch to Night</button>
@@ -124,6 +142,16 @@
                 <h3 class="gradient-text" id="projects-subtitle"></h3>
                 
                 <div id="projects-list" class="cv-preview stack-col">
+                    <!-- Dynamic Items -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Certification Gallery -->
+        <section class="section layout-center" id="certs-section" style="padding: 10vh 0; min-height: auto;">
+            <div class="glass-card full-width" style="text-align: center;">
+                <h2 style="margin-bottom: 2rem;">Professional <span class="gradient-text">Credentials</span></h2>
+                <div class="certs-grid" id="certs-container">
                     <!-- Dynamic Items -->
                 </div>
             </div>

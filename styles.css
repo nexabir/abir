@@ -23,10 +23,44 @@ body[data-theme="night"] {
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --accent-1: #38bdf8; /* Bright Blue */
-    --accent-2: #34d399; /* Bright Green */
-    --glass-bg: rgba(15, 23, 42, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --btn-bg: #1e293b;
+    --accent-2: #8b5cf6;
+    --btn-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Premium Interactions */
+#scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0%; height: 3px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    z-index: 1000;
+    transition: width 0.1s ease;
+}
+
+#custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-1);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out, width 0.2s, height 0.2s, background 0.2s;
+    display: none;
+}
+
+@media (hover: hover) {
+    #custom-cursor { display: block; }
+}
+
+#custom-cursor.active {
+    width: 40px;
+    height: 40px;
+    background: rgba(var(--accent-1-rgb), 0.1);
+    border-color: var(--accent-2);
 }
 
 body {
@@ -286,6 +320,40 @@ p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; tran
     padding: 2px 8px;
     border-radius: 4px;
 }
+
+/* Certifications */
+.certs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.cert-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 250px;
+    transition: transform 0.3s ease;
+}
+
+.cert-card:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-1);
+}
+
+.cert-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(var(--accent-1-rgb), 0.2));
+}
+
+.cert-card h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+.cert-card p { font-size: 0.8rem; margin-bottom: 0; opacity: 0.7; }
 
 /* Modals */
 .modal-overlay {
