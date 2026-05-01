@@ -247,14 +247,45 @@ p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; tran
     right: 20px;
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: var(--text-secondary);
     cursor: pointer;
     transition: color 0.2s;
+    z-index: 1001; /* Ensure it is above modal content */
+    line-height: 1;
 }
 
 .close-modal:hover {
     color: var(--accent-1);
+}
+
+@media (max-width: 768px) {
+    .glass-header .header-content {
+        padding: 0.5rem 1rem;
+        justify-content: space-between;
+    }
+    
+    .header-titles h3 {
+        font-size: 0.9rem;
+    }
+    
+    #header-title {
+        display: none; /* Hide subtitle on mobile to save space */
+    }
+    
+    .header-actions {
+        gap: 5px !important;
+    }
+    
+    .mini-btn {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .mini-btn svg {
+        width: 12px;
+        height: 12px;
+    }
 }
 
 .contact-form .form-group {

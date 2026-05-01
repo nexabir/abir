@@ -165,7 +165,7 @@
         </section>
         
         <!-- Contact Modal -->
-        <div id="contact-modal" class="modal-overlay">
+        <div id="contact-modal" class="modal-overlay" onclick="if(event.target === this) this.classList.remove('active')">
             <div class="glass-card modal-card">
                 <button class="close-modal" onclick="document.getElementById('contact-modal').classList.remove('active')">×</button>
                 <h3 style="margin-bottom: 1.5rem; text-transform: none; font-size: 1.5rem;">Send me a message</h3>
