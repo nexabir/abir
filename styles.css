@@ -152,9 +152,9 @@ p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; tran
     transition: background 1s ease, border 1s ease;
 }
 
-.full-width { max-width: 650px; }
-.short-width { max-width: 450px; }
-.avatar-panel-left { max-width: 450px; text-align: left; }
+.full-width { max-width: 850px; }
+.short-width { max-width: 550px; }
+.avatar-panel-left { max-width: 550px; text-align: left; }
 
 .glass-card.align-right { text-align: right; }
 
