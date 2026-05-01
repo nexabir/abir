@@ -105,7 +105,7 @@
       "fogDensity": 0.04
     },
     "particles": {
-      "type": "leaves",
+      "type": "snow",
       "count": 90,
       "color": "#22c55e",
       "speedY": [
