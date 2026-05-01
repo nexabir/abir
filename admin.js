@@ -271,12 +271,28 @@ function renderProjectsList() {
                 <label>Project Title</label>
                 <input type="text" value="${proj.title}" onchange="updateItem('proj', ${index}, 'title', this.value)">
             </div>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
+                <label>Business Problem</label>
+                <input type="text" value="${proj.problem || ''}" placeholder="e.g. Manual reporting took 10 hours" onchange="updateItem('proj', ${index}, 'problem', this.value)">
+            </div>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
+                <label>Approach / Methodology</label>
+                <input type="text" value="${proj.approach || ''}" placeholder="e.g. Performed Gap Analysis and SQL automation" onchange="updateItem('proj', ${index}, 'approach', this.value)">
+            </div>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
+                <label>Outcome / Impact</label>
+                <input type="text" value="${proj.impact || ''}" placeholder="e.g. Reduced process time by 40%" onchange="updateItem('proj', ${index}, 'impact', this.value)">
+            </div>
             <div class="form-group" style="padding:0; border:none; background:none;">
-                <label>Description</label>
+                <label>Short Description</label>
                 <textarea onchange="updateItem('proj', ${index}, 'description', this.value)">${proj.description}</textarea>
             </div>
+            <div class="form-group" style="padding:0; border:none; background:none; margin-top:1rem;">
+                <label>Tools (comma separated)</label>
+                <input type="text" value="${(proj.tools || []).join(', ')}" placeholder="Excel, SQL, Python" onchange="updateItem('proj', ${index}, 'tools', this.value.split(',').map(s=>s.trim()))">
+            </div>
             ${proj.links.map((link, lIndex) => `
-                <div style="display:flex; gap:10px; margin-top:5px;">
+                <div style="display:flex; gap:10px; margin-top:10px;">
                     <input type="text" value="${link.label}" placeholder="Link Label" onchange="updateProjLink(${index}, ${lIndex}, 'label', this.value)">
                     <input type="text" value="${link.url}" placeholder="URL" onchange="updateProjLink(${index}, ${lIndex}, 'url', this.value)">
                 </div>

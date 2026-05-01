@@ -59,7 +59,19 @@ function updateUI() {
     document.getElementById('market-title').innerText = siteData.sections.strategy.title;
     document.getElementById('market-subtitle').innerText = siteData.sections.strategy.subtitle;
     document.getElementById('insights-list').innerHTML = siteData.sections.strategy.insights.map(point => `<li>${point}</li>`).join('');
-    document.getElementById('toolkit-list').innerHTML = siteData.sections.strategy.toolkit.map(tool => `<li>${tool}</li>`).join('');
+    
+    // Categorized Toolkit
+    const toolkitContainer = document.getElementById('toolkit-container');
+    if (siteData.sections.toolkit_categorized) {
+        toolkitContainer.innerHTML = Object.entries(siteData.sections.toolkit_categorized).map(([cat, tags]) => `
+            <div class="toolkit-category">
+                <h4>${cat}</h4>
+                <div class="toolkit-tags">
+                    ${tags.map(t => `<span class="toolkit-tag">${t}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
 
     // Projects
     document.getElementById('projects-title').innerText = siteData.sections.projects.title;
@@ -67,11 +79,19 @@ function updateUI() {
     
     const projectsList = document.getElementById('projects-list');
     projectsList.innerHTML = siteData.sections.projects.items.map(proj => `
-        <div class="cv-column">
-            <h4>${proj.title}</h4>
-            <p>${proj.description}</p>
-            <div class="button-group" style="justify-content: flex-end; margin-top: 10px;">
-                ${proj.links.map(link => `<a href="${link.url}" target="_blank" class="btn secondary-btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">${link.label}</a>`).join('')}
+        <div class="glass-card project-card">
+            <h4 style="text-transform:none; margin-bottom: 0.5rem;">${proj.title}</h4>
+            <div class="project-meta">
+                <div class="meta-item"><strong>Business Problem</strong> ${proj.problem || "N/A"}</div>
+                <div class="meta-item"><strong>Approach</strong> ${proj.approach || "N/A"}</div>
+                <div class="meta-item"><strong>Outcome</strong> <span style="color:var(--accent-1); font-weight:600;">${proj.impact || "N/A"}</span></div>
+            </div>
+            <p style="font-size:0.85rem; opacity:0.8; margin-bottom:1rem;">${proj.description}</p>
+            <div class="project-tools">
+                ${(proj.tools || []).map(t => `<span class="tool-tag">${t}</span>`).join('')}
+            </div>
+            <div class="button-group" style="justify-content: flex-end; margin-top: 15px;">
+                ${proj.links.map(link => `<a href="${link.url}" target="_blank" class="btn mini-btn ${link.label === 'Github' ? 'secondary-btn' : 'primary-btn'}" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">${link.label}</a>`).join('')}
             </div>
         </div>
     `).join('');
