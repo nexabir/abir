@@ -21,6 +21,15 @@ async function loadContent() {
     }
 }
 
+function formatImageUrl(url) {
+    if (!url) return "";
+    if (url.includes('drive.google.com')) {
+        const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1]?.split('&')[0];
+        if (id) return `https://drive.google.com/uc?export=view&id=${id}`;
+    }
+    return url;
+}
+
 function updateUI() {
     if (!siteData) return;
 
@@ -117,7 +126,7 @@ function updateUI() {
     if (siteData.certifications) {
         certsContainer.innerHTML = siteData.certifications.map(cert => `
             <div class="cert-card">
-                <img src="${cert.image}" alt="${cert.name}">
+                <img src="${formatImageUrl(cert.image)}" alt="${cert.name}">
                 <h4>${cert.name}</h4>
                 <p>${cert.issuer} • ${cert.date}</p>
             </div>
