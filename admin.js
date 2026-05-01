@@ -33,32 +33,43 @@ async function checkSession() {
 checkSession();
 
 // Login
-document.getElementById('login-btn').addEventListener('click', async () => {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-pass').value;
-    
-    showStatus("Logging in...", "saving");
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    
-    if (error) {
-        alert("Login Error: " + error.message);
-        hideStatus();
-    } else {
-        showDashboard();
-    }
-});
+    // Login with username/password (local credentials)
+    document.getElementById('login-btn').addEventListener('click', async () => {
+        const username = document.getElementById('login-email').value.trim(); // repurposed as username
+        const password = document.getElementById('login-pass').value;
+        // Load stored credentials
+        const stored = JSON.parse(localStorage.getItem('adminCreds') || 'null');
+        if (stored && stored.username === username && stored.password === password) {
+            // Successful local login
+            showStatus('Logging in...', 'saving');
+            // Mark session flag
+            localStorage.setItem('loggedIn', 'true');
+            showDashboard();
+        } else {
+            // If no local creds, try Supabase (fallback)
+            showStatus('Logging in with Supabase...', 'saving');
+            const { data, error } = await supabase.auth.signInWithPassword({ email: username, password });
+            if (error) {
+                alert('Login Error: ' + error.message);
+                hideStatus();
+            } else {
+                localStorage.setItem('loggedIn', 'true');
+                showDashboard();
+            }
+        }
+    });
 
 // Signup (Temporary for initial user creation)
-document.getElementById('signup-btn').addEventListener('click', async () => {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-pass').value;
-    
-    if (confirm("Create a new admin account?")) {
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) alert(error.message);
-        else alert("Signup successful! Please confirm your email if necessary, then login.");
-    }
-});
+    // Signup (temporary) – create local credentials if none exist
+    document.getElementById('signup-btn').addEventListener('click', async () => {
+        const username = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-pass').value;
+        if (confirm('Create a new admin account with this username/password?')) {
+            const creds = { username, password };
+            localStorage.setItem('adminCreds', JSON.stringify(creds));
+            alert('Local admin account created. You can now log in with these credentials.');
+        }
+    });
 
 async function showDashboard() {
     authOverlay.style.display = 'none';
@@ -337,8 +348,9 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 
 document.getElementById('save-btn').addEventListener('click', saveToGithub);
 
+// Logout clears simple session
 document.getElementById('logout-btn').addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    localStorage.removeItem('loggedIn');
     location.reload();
 });
 
