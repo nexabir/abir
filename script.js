@@ -8,7 +8,7 @@ let siteData = null;
 // -----------------------------------------------------
 async function loadContent() {
     try {
-        const response = await fetch('content.json');
+        const response = await fetch(`content.json?v=${Date.now()}`);
         siteData = await response.json();
         
         // Populate UI
