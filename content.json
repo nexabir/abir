@@ -139,23 +139,23 @@
       }
     ],
     "contact": {
-      "title": "",
+      "title": "Contact",
       "description": "Based in Dhaka. I actively combine mathematics, machine learning, and automation to create high-impact business value.",
       "academics": [],
-      "email": "",
-      "phone": "",
+      "email": "email@example.com",
+      "phone": "+8801797989412",
       "phone_url": "tel:+8801797989412"
     }
   },
   "graphics": {
     "theme": {
-      "daySky": "#000000",
-      "nightSky": "#000000",
+      "daySky": "#87ceeb",
+      "nightSky": "#0d0d2b",
       "fogDensity": 0.04
     },
     "particles": {
       "type": "leaves",
-      "count": null,
+      "count": 200,
       "color": "#22c55e",
       "speedY": [
         0.01,
@@ -167,17 +167,17 @@
       ]
     },
     "environment": {
-      "characterShirt": "#000000",
-      "factoryBelt": "#000000",
-      "marketBars": "#000000",
+      "characterShirt": "#1e3a8a",
+      "factoryBelt": "#4b5563",
+      "marketBars": "#4b5563",
       "projectNode": "#0ea5e9",
       "roadColor": "#94a3b8"
     },
     "character": {
-      "skin": "#000000",
-      "hardhat": "#000000",
-      "cap": "#000000",
-      "briefcase": "#000000"
+      "skin": "#ffccaa",
+      "hardhat": "#facc15",
+      "cap": "#ef4444",
+      "briefcase": "#8b4513"
     }
   },
   "blogs": [],
