@@ -225,10 +225,11 @@ function populateForms() {
     renderProjectsList();
 
     // Blogs
-    renderBlogList();
-
-    // Certifications
+    renderVisibility();
     renderCertsList();
+    renderDashList();
+    renderResList();
+    renderBlogList();
 
     // Delivery
     document.getElementById('delivery-points-input').value = currentData.sections.delivery.points.join('\n');
@@ -341,6 +342,8 @@ function collectFormData() {
     // but just to be sure we don't overwrite them with empty arrays if they were modified:
     data.blogs = currentData.blogs || [];
     data.certifications = currentData.certifications || [];
+    data.sections.dashboards = currentData.sections.dashboards || [];
+    data.sections.resources = currentData.sections.resources || [];
 
     data.graphics.theme.daySky = document.getElementById('color-daySky').value;
     data.graphics.theme.nightSky = document.getElementById('color-nightSky').value;
@@ -359,14 +362,30 @@ function collectFormData() {
 }
 
 window.removeItem = (type, index) => {
-    if (type === 'exp') currentData.sections.foundation.experience.splice(index, 1);
-    if (type === 'proj') currentData.sections.projects.items.splice(index, 1);
-    type === 'exp' ? renderExperienceList() : renderProjectsList();
+    if (type === 'exp') {
+        currentData.sections.foundation.experience.splice(index, 1);
+        renderExperienceList();
+    } else if (type === 'proj') {
+        currentData.sections.projects.items.splice(index, 1);
+        renderProjectsList();
+    } else if (type === 'cert') {
+        currentData.certifications.splice(index, 1);
+        renderCertsList();
+    } else if (type === 'dash') {
+        currentData.sections.dashboards.splice(index, 1);
+        renderDashList();
+    } else if (type === 'res') {
+        currentData.sections.resources.splice(index, 1);
+        renderResList();
+    }
 };
 
 window.updateItem = (type, index, field, value) => {
     if (type === 'exp') currentData.sections.foundation.experience[index][field] = value;
     if (type === 'proj') currentData.sections.projects.items[index][field] = value;
+    if (type === 'cert') currentData.certifications[index][field] = value;
+    if (type === 'dash') currentData.sections.dashboards[index][field] = value;
+    if (type === 'res') currentData.sections.resources[index][field] = value;
 };
 
 window.updateProjLink = (pIndex, lIndex, field, value) => {
@@ -388,6 +407,47 @@ document.getElementById('add-cert-btn').addEventListener('click', () => {
     currentData.certifications.push({ name: "New Cert", issuer: "Issuer", date: "2024", image: "" });
     renderCertsList();
 });
+
+document.getElementById('add-dash-btn').addEventListener('click', () => {
+    if(!currentData.sections.dashboards) currentData.sections.dashboards = [];
+    currentData.sections.dashboards.push({ title: "New Dashboard", type: "Power BI", embed_url: "", image: "", description: "" });
+    renderDashList();
+});
+
+document.getElementById('add-res-btn').addEventListener('click', () => {
+    if(!currentData.sections.resources) currentData.sections.resources = [];
+    currentData.sections.resources.push({ title: "New Resource", type: "Document", url: "#", description: "" });
+    renderResList();
+});
+
+function renderDashList() {
+    const container = document.getElementById('dashboards-list-container');
+    if (!currentData.sections.dashboards) currentData.sections.dashboards = [];
+    container.innerHTML = currentData.sections.dashboards.map((dash, index) => `
+        <div class="list-item">
+            <button class="remove-btn" onclick="removeItem('dash', ${index})">×</button>
+            <div class="form-group"><label>Title</label><input type="text" value="${dash.title}" onchange="updateItem('dash', ${index}, 'title', this.value)"></div>
+            <div class="form-group"><label>Type (Power BI / Tableau)</label><input type="text" value="${dash.type}" onchange="updateItem('dash', ${index}, 'type', this.value)"></div>
+            <div class="form-group"><label>Preview Image URL</label><input type="text" value="${dash.image}" onchange="updateItem('dash', ${index}, 'image', this.value)"></div>
+            <div class="form-group"><label>Embed/Full Link</label><input type="text" value="${dash.embed_url}" onchange="updateItem('dash', ${index}, 'embed_url', this.value)"></div>
+            <div class="form-group"><label>Description</label><textarea onchange="updateItem('dash', ${index}, 'description', this.value)">${dash.description}</textarea></div>
+        </div>
+    `).join('');
+}
+
+function renderResList() {
+    const container = document.getElementById('resources-list-container');
+    if (!currentData.sections.resources) currentData.sections.resources = [];
+    container.innerHTML = currentData.sections.resources.map((res, index) => `
+        <div class="list-item">
+            <button class="remove-btn" onclick="removeItem('res', ${index})">×</button>
+            <div class="form-group"><label>Resource Title</label><input type="text" value="${res.title}" onchange="updateItem('res', ${index}, 'title', this.value)"></div>
+            <div class="form-group"><label>File Type (Doc / PDF)</label><input type="text" value="${res.type}" onchange="updateItem('res', ${index}, 'type', this.value)"></div>
+            <div class="form-group"><label>Download URL</label><input type="text" value="${res.url}" onchange="updateItem('res', ${index}, 'url', this.value)"></div>
+            <div class="form-group"><label>Description</label><textarea onchange="updateItem('res', ${index}, 'description', this.value)">${res.description}</textarea></div>
+        </div>
+    `).join('');
+}
 
 function renderCertsList() {
     const container = document.getElementById('certs-list-container');

@@ -338,6 +338,8 @@
         <div class="sidebar-item" data-target="visibility-editor">Section Visibility</div>
         <div class="sidebar-item" data-target="blog-editor">Blog Manager</div>
         <div class="sidebar-item" data-target="certs-editor">Certifications</div>
+        <div class="sidebar-item" data-target="dashboards-editor">Visual Dashboards</div>
+        <div class="sidebar-item" data-target="resources-editor">BA Resources</div>
         <div class="sidebar-item" data-target="experience-editor">Experience</div>
         <div class="sidebar-item" data-target="strategy-editor">Strategy & Skills</div>
         <div class="sidebar-item" data-target="projects-editor">Projects</div>
@@ -523,6 +525,24 @@
                 <label>Academics (One per line)</label>
                 <textarea id="contact-academics-input"></textarea>
             </div>
+        </section>
+
+        <!-- Dashboards Editor -->
+        <section id="dashboards-editor" class="admin-section" style="display:none;">
+            <div class="section-header">
+                <h2>Visualization Showcase</h2>
+                <button class="add-btn" id="add-dash-btn">+ Add Dashboard</button>
+            </div>
+            <div id="dashboards-list-container"></div>
+        </section>
+
+        <!-- Resources Editor -->
+        <section id="resources-editor" class="admin-section" style="display:none;">
+            <div class="section-header">
+                <h2>BA Resources & Artifacts</h2>
+                <button class="add-btn" id="add-res-btn">+ Add Resource</button>
+            </div>
+            <div id="resources-list-container"></div>
         </section>
 
         <!-- Graphics Editor -->

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abir.nexabir.workers.dev/sitemap.xml

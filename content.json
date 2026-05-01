@@ -125,6 +125,23 @@
         "Translating business research into deployed automations."
       ]
     },
+    "dashboards": [
+      {
+        "title": "Sales Performance Dashboard",
+        "type": "Power BI",
+        "embed_url": "",
+        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+        "description": "Interactive visualization of multi-region sales data with predictive trend analysis."
+      }
+    ],
+    "resources": [
+      {
+        "title": "Standard BRD Template",
+        "type": "Document",
+        "url": "#",
+        "description": "A comprehensive Business Requirement Document template including Stakeholder Matrix and Functional Specs."
+      }
+    ],
     "contact": {
       "title": "Let's drive growth together.",
       "description": "Based in Dhaka. I actively combine mathematics, machine learning, and automation to create high-impact business value.",

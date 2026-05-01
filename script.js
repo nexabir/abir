@@ -121,6 +121,34 @@ function updateUI() {
     document.getElementById('contact-phone').href = siteData.sections.contact.phone_url;
     document.getElementById('contact-phone').innerText = `Call ${siteData.sections.contact.phone}`;
 
+    // Dashboards
+    const dashContainer = document.getElementById('dashboards-container');
+    if (siteData.sections.dashboards) {
+        dashContainer.innerHTML = siteData.sections.dashboards.map(dash => `
+            <div class="cert-card" style="width: 350px;">
+                <div style="height: 200px; overflow: hidden; border-radius: 10px; margin-bottom: 1rem; border: 1px solid var(--glass-border);">
+                    <img src="${formatImageUrl(dash.image)}" style="width: 100%; height: 100%; object-fit: cover; margin:0;">
+                </div>
+                <h4 style="margin-bottom: 0.2rem;">${dash.title}</h4>
+                <p style="font-size: 0.75rem; color: var(--accent-1); font-weight:600; margin-bottom: 0.5rem;">${dash.type}</p>
+                <p style="font-size: 0.8rem; margin-bottom: 1rem; opacity: 0.7;">${dash.description}</p>
+                ${dash.embed_url ? `<a href="${dash.embed_url}" target="_blank" class="btn mini-btn primary-btn" style="display:inline-block; width: 100%;">View Live Dashboard</a>` : ''}
+            </div>
+        `).join('');
+    }
+
+    // Resources
+    const resContainer = document.getElementById('resources-container');
+    if (siteData.sections.resources) {
+        resContainer.innerHTML = siteData.sections.resources.map(res => `
+            <div class="toolkit-category" style="text-align: left;">
+                <h4 style="color: var(--accent-1);">${res.title}</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 1rem;">${res.description}</p>
+                <a href="${res.url}" target="_blank" class="btn mini-btn secondary-btn" style="padding: 0.4rem 1rem;">Download ${res.type}</a>
+            </div>
+        `).join('');
+    }
+
     // Certifications
     const certsContainer = document.getElementById('certs-container');
     if (siteData.certifications) {
