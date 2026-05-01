@@ -15,6 +15,54 @@ const sidebar = document.getElementById('sidebar');
 const actionBar = document.getElementById('action-bar');
 const statusBadge = document.getElementById('status-badge');
 
+function formatImageUrl(url) {
+    if (!url) return '';
+    const rawId = url.match(/[-\w]{25,}/);
+    if (!rawId) return url;
+    return `https://lh3.googleusercontent.com/d/${rawId[0]}`;
+}
+
+window.showChartModal = () => document.getElementById('chart-modal').style.display = 'block';
+window.hideChartModal = () => document.getElementById('chart-modal').style.display = 'none';
+
+window.insertTable = () => {
+    const tableModule = quill.getModule('table');
+    tableModule.insertTable(3, 3);
+};
+
+window.insertChart = () => {
+    const labels = document.getElementById('chart-labels').value.split(',').map(s => s.trim());
+    const data = document.getElementById('chart-data').value.split(',').map(s => s.trim());
+    const type = document.getElementById('chart-type-select').value;
+    
+    if (labels.length === 0 || data.length === 0) {
+        alert("Please enter labels and data.");
+        return;
+    }
+
+    const chartConfig = {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Data Points',
+                data: data,
+                backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                borderColor: 'rgba(255,255,255,0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: type === 'pie' } }
+        }
+    };
+
+    const range = quill.getSelection();
+    quill.insertText(range ? range.index : 0, `\n[CHART_START]${JSON.stringify(chartConfig)}[CHART_END]\n`);
+    hideChartModal();
+};
+
 // -----------------------------------------------------
 // 1. Supabase Authentication
 // -----------------------------------------------------
@@ -270,9 +318,13 @@ function renderExperienceList() {
                 <label>Role</label>
                 <input type="text" value="${exp.role}" onchange="updateItem('exp', ${index}, 'role', this.value)">
             </div>
-            <div class="form-group" style="padding:0; border:none; background:none;">
+            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
                 <label>Description</label>
                 <textarea onchange="updateItem('exp', ${index}, 'description', this.value)">${exp.description}</textarea>
+            </div>
+            <div class="form-group" style="padding:0; border:none; background:none;">
+                <label>Skills/Tags (Comma separated)</label>
+                <input type="text" value="${(exp.tags || []).join(', ')}" onchange="updateItem('exp', ${index}, 'tags', this.value.split(',').map(s=>s.trim()))">
             </div>
         </div>
     `).join('');
@@ -456,23 +508,22 @@ function renderCertsList() {
     container.innerHTML = currentData.certifications.map((cert, index) => `
         <div class="list-item">
             <button class="remove-btn" onclick="removeItem('cert', ${index})">×</button>
-            <div class="form-group" style="padding:0; border:none; background:none; margin-bottom:1rem;">
-                <label>Cert Name</label>
-                <input type="text" value="${cert.name}" onchange="updateItem('cert', ${index}, 'name', this.value)">
-            </div>
-            <div style="display:flex; gap:10px;">
-                <div class="form-group" style="padding:0; border:none; background:none; flex:1;">
-                    <label>Issuer</label>
-                    <input type="text" value="${cert.issuer}" onchange="updateItem('cert', ${index}, 'issuer', this.value)">
+            <div style="display:flex; gap:20px; align-items:center;">
+                <div style="width: 60px; height: 60px; background:var(--btn-bg); border-radius:10px; overflow:hidden;">
+                    <img src="${formatImageUrl(cert.image)}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='https://via.placeholder.com/60?text=Cert'">
                 </div>
-                <div class="form-group" style="padding:0; border:none; background:none; width:100px;">
-                    <label>Year</label>
-                    <input type="text" value="${cert.date}" onchange="updateItem('cert', ${index}, 'date', this.value)">
+                <div style="flex:1;">
+                    <input type="text" value="${cert.name}" onchange="updateItem('cert', ${index}, 'name', this.value)" style="font-weight:bold; margin-bottom:5px;">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" value="${cert.issuer}" onchange="updateItem('cert', ${index}, 'issuer', this.value)" placeholder="Issuer">
+                        <input type="text" value="${cert.date}" onchange="updateItem('cert', ${index}, 'date', this.value)" style="width:80px;" placeholder="Year">
+                    </div>
                 </div>
             </div>
             <div class="form-group" style="padding:0; border:none; background:none; margin-top:1rem;">
-                <label>Badge Image URL</label>
-                <input type="text" value="${cert.image}" placeholder="https://..." onchange="updateItem('cert', ${index}, 'image', this.value)">
+                <label>Badge Image URL (Google Drive or Direct Link)</label>
+                <input type="text" value="${cert.image}" onchange="updateItem('cert', ${index}, 'image', this.value)">
+                <p style="font-size:0.7rem; opacity:0.6; margin-top:5px;">Tip: Paste a Google Drive "Shared" link and it will auto-format.</p>
             </div>
         </div>
     `).join('');

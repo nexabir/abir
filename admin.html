@@ -435,13 +435,42 @@
                 <input type="file" id="blog-image" accept="image/*" style="margin-bottom: 1rem; background:none; border:none; padding:0;">
                 <div id="blog-image-preview" style="max-height: 150px; overflow: hidden; border-radius: 8px; margin-bottom: 1rem;"></div>
                 
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button type="button" class="btn mini-btn secondary-btn" onclick="insertTable()">+ Insert Table</button>
+                    <button type="button" class="btn mini-btn secondary-btn" onclick="showChartModal()">+ Insert Chart</button>
+                </div>
+
                 <label>Article Content</label>
                 <div id="quill-editor" style="background: var(--btn-bg); color: var(--text-primary); border-radius: 0 0 8px 8px; min-height: 300px;"></div>
                 
-                <button id="save-blog-post-btn" class="btn primary-btn" style="margin-top: 1rem; width: 100%;">Save Article to Drafts/JSON</button>
-                <p style="font-size:0.8rem; margin-top:0.5rem; opacity:0.7;">Note: Articles are saved locally first. Click "Push Changes to GitHub" to publish.</p>
+                <button id="save-blog-post-btn" class="btn primary-btn" style="margin-top: 1rem; width: 100%;">Save Article</button>
             </div>
         </section>
+
+        <!-- Chart Modal (Hidden) -->
+        <div id="chart-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--glass-bg); padding:2rem; border:1px solid var(--glass-border); border-radius:15px; z-index:2000; width:400px; backdrop-filter:blur(20px);">
+            <h3>Insert Dynamic Chart</h3>
+            <div class="form-group" style="padding:0; margin-top:1rem;">
+                <label>Labels (Comma separated)</label>
+                <input type="text" id="chart-labels" placeholder="Jan, Feb, Mar">
+            </div>
+            <div class="form-group" style="padding:0;">
+                <label>Data (Comma separated)</label>
+                <input type="text" id="chart-data" placeholder="10, 20, 30">
+            </div>
+            <div class="form-group" style="padding:0;">
+                <label>Chart Type</label>
+                <select id="chart-type-select">
+                    <option value="bar">Bar Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:1rem;">
+                <button class="btn primary-btn mini-btn" onclick="insertChart()">Insert</button>
+                <button class="btn secondary-btn mini-btn" onclick="hideChartModal()">Cancel</button>
+            </div>
+        </div>
 
         <!-- Certifications Editor -->
         <section id="certs-editor" class="editor-section">
@@ -528,7 +557,7 @@
         </section>
 
         <!-- Dashboards Editor -->
-        <section id="dashboards-editor" class="admin-section" style="display:none;">
+        <section id="dashboards-editor" class="editor-section">
             <div class="section-header">
                 <h2>Visualization Showcase</h2>
                 <button class="add-btn" id="add-dash-btn">+ Add Dashboard</button>
@@ -537,7 +566,7 @@
         </section>
 
         <!-- Resources Editor -->
-        <section id="resources-editor" class="admin-section" style="display:none;">
+        <section id="resources-editor" class="editor-section">
             <div class="section-header">
                 <h2>BA Resources & Artifacts</h2>
                 <button class="add-btn" id="add-res-btn">+ Add Resource</button>
@@ -632,6 +661,7 @@
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
