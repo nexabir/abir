@@ -212,6 +212,9 @@ function populateForms() {
     // Projects
     renderProjectsList();
 
+    // Blogs
+    renderBlogList();
+
     // Delivery
     document.getElementById('delivery-points-input').value = currentData.sections.delivery.points.join('\n');
 
@@ -302,6 +305,11 @@ function collectFormData() {
     data.sections.contact.email = document.getElementById('contact-email-input').value;
     data.sections.contact.phone = document.getElementById('contact-phone-input').value;
     data.sections.contact.academics = document.getElementById('contact-academics-input').value.split('\n').filter(l => l.trim() !== '');
+    
+    // Blogs are already updated in currentData via the saveBlogPost function, 
+    // but just to be sure we don't overwrite them with empty arrays if they were modified:
+    data.blogs = currentData.blogs || [];
+
     data.graphics.theme.daySky = document.getElementById('color-daySky').value;
     data.graphics.theme.nightSky = document.getElementById('color-nightSky').value;
     data.graphics.character.skin = document.getElementById('color-skin').value;
@@ -342,6 +350,129 @@ document.getElementById('add-project-btn').addEventListener('click', () => {
     currentData.sections.projects.items.push({ title: "New Project", description: "Desc", links: [{label: "Link", url: "#"}] });
     renderProjectsList();
 });
+
+// --- Blog Manager Logic ---
+let quill;
+if (document.getElementById('quill-editor')) {
+    quill = new Quill('#quill-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+}
+
+let currentBlogImageBase64 = "";
+
+document.getElementById('blog-image').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            currentBlogImageBase64 = e.target.result;
+            document.getElementById('blog-image-preview').innerHTML = `<img src="${currentBlogImageBase64}" style="max-width:100%;">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function renderBlogList() {
+    const container = document.getElementById('blog-list-container');
+    if (!currentData.blogs) currentData.blogs = [];
+    
+    if (currentData.blogs.length === 0) {
+        container.innerHTML = '<p style="opacity:0.7;">No articles yet.</p>';
+        return;
+    }
+
+    container.innerHTML = currentData.blogs.map((b, index) => `
+        <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h4 style="margin-bottom:0.2rem;">${b.title}</h4>
+                <small style="color:var(--accent-1);">${new Date(b.timestamp).toLocaleDateString()}</small>
+            </div>
+            <div>
+                <button class="btn secondary-btn mini-btn" onclick="openBlogEditor(${index})">Edit</button>
+                <button class="btn primary-btn mini-btn" style="background:#ef4444; border-color:#ef4444;" onclick="deleteBlog(${index})">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+window.openBlogEditor = (index = -1) => {
+    document.getElementById('blog-list-view').style.display = 'none';
+    document.getElementById('blog-compose-view').style.display = 'block';
+    
+    if (index >= 0) {
+        const b = currentData.blogs[index];
+        document.getElementById('blog-id').value = b.id;
+        document.getElementById('blog-title').value = b.title;
+        quill.root.innerHTML = b.content;
+        currentBlogImageBase64 = b.image || "";
+        document.getElementById('blog-image-preview').innerHTML = b.image ? `<img src="${b.image}" style="max-width:100%;">` : "";
+    } else {
+        document.getElementById('blog-id').value = "new";
+        document.getElementById('blog-title').value = "";
+        quill.root.innerHTML = "";
+        currentBlogImageBase64 = "";
+        document.getElementById('blog-image-preview').innerHTML = "";
+        document.getElementById('blog-image').value = "";
+    }
+};
+
+document.getElementById('add-blog-btn').addEventListener('click', () => openBlogEditor(-1));
+document.getElementById('cancel-blog-btn').addEventListener('click', () => {
+    document.getElementById('blog-list-view').style.display = 'block';
+    document.getElementById('blog-compose-view').style.display = 'none';
+});
+
+document.getElementById('save-blog-post-btn').addEventListener('click', () => {
+    const title = document.getElementById('blog-title').value.trim();
+    if (!title) return alert("Title is required!");
+    
+    const content = quill.root.innerHTML;
+    // create a simple text snippet
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = content;
+    const textContent = tempDiv.textContent || tempDiv.innerText || "";
+    const snippet = textContent.substring(0, 150) + "...";
+
+    const blogId = document.getElementById('blog-id').value;
+    
+    const postData = {
+        id: blogId === "new" ? Date.now() : parseInt(blogId),
+        timestamp: blogId === "new" ? Date.now() : currentData.blogs.find(b => b.id == blogId).timestamp,
+        title: title,
+        snippet: snippet,
+        content: content,
+        image: currentBlogImageBase64
+    };
+
+    if (blogId === "new") {
+        currentData.blogs.unshift(postData);
+    } else {
+        const idx = currentData.blogs.findIndex(b => b.id == blogId);
+        if (idx !== -1) currentData.blogs[idx] = postData;
+    }
+
+    document.getElementById('blog-list-view').style.display = 'block';
+    document.getElementById('blog-compose-view').style.display = 'none';
+    renderBlogList();
+});
+
+window.deleteBlog = (index) => {
+    if (confirm("Delete this article?")) {
+        currentData.blogs.splice(index, 1);
+        renderBlogList();
+    }
+};
 
 document.querySelectorAll('.sidebar-item').forEach(item => {
     item.addEventListener('click', () => {

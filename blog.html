@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Md. Abir Ul Islam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { padding-top: 80px; }
+        .blog-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 8%;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .blog-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-1);
+        }
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .blog-date {
+            font-size: 0.85rem;
+            color: var(--accent-1);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .blog-card h3 { text-transform: none; font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .blog-card p { font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .blog-post { display: none; }
+        .blog-post.active { display: block; }
+        .blog-list.hidden { display: none; }
+        
+        .post-header { margin-bottom: 2rem; }
+        .post-title { font-size: 2.5rem; margin-bottom: 1rem; }
+        .post-meta { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+        .post-content img { max-width: 100%; border-radius: 10px; margin: 1.5rem 0; }
+        .post-content iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; margin: 1.5rem 0; }
+        .post-content p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-primary); }
+        .post-content a { color: var(--accent-1); text-decoration: none; font-weight: 600; }
+        .post-content a:hover { text-decoration: underline; }
+
+        .share-row {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+    </style>
+</head>
+<body data-theme="day">
+
+    <header class="glass-header visible" style="transform:none; pointer-events:auto; opacity:1;">
+        <div class="header-content">
+            <div class="header-titles">
+                <h3>Md. Abir Ul Islam</h3>
+                <p>Business Analyst</p>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 10px;">
+                <a href="index.html" class="btn secondary-btn mini-btn">🏠 Home</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="blog-container">
+        <!-- List View -->
+        <div id="blog-list" class="blog-list">
+            <h1 style="margin-bottom: 2rem;">Latest <span class="gradient-text">Articles</span></h1>
+            <div class="blog-grid" id="blog-grid">
+                <!-- Dynamically loaded blogs -->
+            </div>
+        </div>
+
+        <!-- Post View -->
+        <div id="blog-post" class="blog-post">
+            <button class="btn secondary-btn mini-btn" onclick="goBack()" style="margin-bottom: 2rem;">← Back to Blogs</button>
+            <div class="post-header">
+                <h1 id="post-title" class="post-title"></h1>
+                <div class="post-meta" id="post-meta"></div>
+            </div>
+            <div id="post-content" class="post-content"></div>
+            
+            <div class="share-row">
+                <strong>Share this article:</strong>
+                <a href="#" id="share-linkedin" target="_blank" class="btn linkedin-btn mini-btn">LinkedIn</a>
+                <a href="#" id="share-twitter" target="_blank" class="btn secondary-btn mini-btn">Twitter</a>
+                <a href="#" id="share-facebook" target="_blank" class="btn secondary-btn mini-btn">Facebook</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let blogs = [];
+
+        async function loadBlogs() {
+            try {
+                const response = await fetch('content.json');
+                const data = await response.json();
+                blogs = data.blogs || [];
+                
+                // apply theme
+                if (data.graphics && data.graphics.theme) {
+                    document.documentElement.style.setProperty('--bg-color', data.graphics.theme.daySky);
+                }
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const postId = urlParams.get('id');
+
+                if (postId) {
+                    showPost(postId);
+                } else {
+                    renderList();
+                }
+            } catch (e) {
+                console.error("Failed to load blogs");
+            }
+        }
+
+        function renderList() {
+            const grid = document.getElementById('blog-grid');
+            if (blogs.length === 0) {
+                grid.innerHTML = "<p>No articles published yet.</p>";
+                return;
+            }
+
+            // Sort newest first
+            const sorted = [...blogs].sort((a,b) => b.timestamp - a.timestamp);
+
+            grid.innerHTML = sorted.map(b => `
+                <div class="blog-card" onclick="window.location.href='?id=${b.id}'">
+                    ${b.image ? `<img src="${b.image}" alt="Cover">` : ''}
+                    <span class="blog-date">${new Date(b.timestamp).toLocaleDateString()}</span>
+                    <h3>${b.title}</h3>
+                    <p>${b.snippet}</p>
+                </div>
+            `).join('');
+        }
+
+        function showPost(id) {
+            const post = blogs.find(b => b.id == id);
+            if (!post) {
+                window.location.href = 'blog.html';
+                return;
+            }
+
+            document.getElementById('blog-list').classList.add('hidden');
+            document.getElementById('blog-post').classList.add('active');
+
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-meta').innerText = `Published on ${new Date(post.timestamp).toLocaleDateString()}`;
+            document.getElementById('post-content').innerHTML = post.content;
+
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(post.title);
+            
+            document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        }
+
+        function goBack() {
+            window.location.href = 'blog.html';
+        }
+
+        loadBlogs();
+    </script>
+</body>
+</html>
