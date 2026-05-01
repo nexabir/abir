@@ -106,7 +106,7 @@
     },
     "particles": {
       "type": "leaves",
-      "count": 400,
+      "count": 90,
       "color": "#22c55e",
       "speedY": [
         0.01,
