@@ -125,19 +125,6 @@
         "Translating business research into deployed automations."
       ]
     },
-    "certifications": [
-      {
-        "name": "Google Data Analytics Professional",
-        "issuer": "Google / Coursera",
-        "date": "2024",
-        "image": "https://images.credly.com/images/2d5367be-1317-48f8-a006-25807908b981/GCC_badge_DA_600x600.png"
-      },
-      {
-        "name": "Python for Data Science",
-        "issuer": "IBM",
-        "date": "2024",
-        "image": "https://images.credly.com/images/96901861-1d57-4148-89c0-675e478542fc/Data_Science_Foundations_Level_1_-_Python_for_Data_Science.png"
-      }
     ],
     "contact": {
       "title": "Let's drive growth together.",
@@ -188,10 +175,16 @@
   "blogs": [],
   "certifications": [
     {
-      "name": "New Cert",
-      "issuer": "Issuer",
+      "name": "Google Data Analytics Professional",
+      "issuer": "Google / Coursera",
       "date": "2024",
-      "image": ""
+      "image": "https://images.credly.com/images/2d5367be-1317-48f8-a006-25807908b981/GCC_badge_DA_600x600.png"
+    },
+    {
+      "name": "Python for Data Science",
+      "issuer": "IBM",
+      "date": "2024",
+      "image": "https://images.credly.com/images/96901861-1d57-4148-89c0-675e478542fc/Data_Science_Foundations_Level_1_-_Python_for_Data_Science.png"
     }
   ]
 }
