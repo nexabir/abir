@@ -1,8 +1,4 @@
-// Initialize Supabase
-const supabaseUrl = 'https://pchkfdqimrinaeznqmnl.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjaGtmZHFpbXJpbmFlem5xbW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NjIyOTEsImV4cCI6MjA4OTAzODI5MX0.CR2PLFeOVdHxSKiedsXmyo9Z1mzwvkevBhAFOJAdaB8';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
+// Removed Supabase dependencies since we are using purely local auth
 let githubConfig = {
     token: localStorage.getItem('gh_token') || '',
     user: 'nexabir',
@@ -24,16 +20,10 @@ const statusBadge = document.getElementById('status-badge');
 // -----------------------------------------------------
 
 // Session Check on Load
-async function checkSession() {
-    // First check local login
+function checkSession() {
+    // Check local login
     const logged = localStorage.getItem('loggedIn');
     if (logged === 'true') {
-        showDashboard();
-        return;
-    }
-    // Fallback to Supabase
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
         showDashboard();
     }
 }
@@ -41,7 +31,7 @@ checkSession();
 
 // Login
     // Login with username/password (local credentials)
-    document.getElementById('login-btn').addEventListener('click', async () => {
+    document.getElementById('login-btn').addEventListener('click', () => {
         const username = document.getElementById('login-email').value.trim(); // repurposed as username
         const password = document.getElementById('login-pass').value;
         // Load stored credentials
@@ -53,16 +43,7 @@ checkSession();
             localStorage.setItem('loggedIn', 'true');
             showDashboard();
         } else {
-            // If no local creds, try Supabase (fallback)
-            showStatus('Logging in with Supabase...', 'saving');
-            const { data, error } = await supabase.auth.signInWithPassword({ email: username, password });
-            if (error) {
-                alert('Login Error: ' + error.message);
-                hideStatus();
-            } else {
-                localStorage.setItem('loggedIn', 'true');
-                showDashboard();
-            }
+            alert('Invalid username or password! If you have not created an account yet, use the Sign Up button.');
         }
     });
 
