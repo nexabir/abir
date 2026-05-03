@@ -325,8 +325,22 @@ function initThreeJS() {
 
     toggleBtn.addEventListener('click', () => {
         isNight = !isNight;
-        updateTheme(isNight);
-        localStorage.setItem('theme', isNight ? 'night' : 'day');
+        const theme = isNight ? 'night' : 'day';
+        document.body.setAttribute('data-theme', theme);
+        toggleBtn.innerText = isNight ? '☀️ Switch to Day' : '🌙 Switch to Night';
+        localStorage.setItem('theme', theme);
+
+        // GSAP transitions
+        gsap.to(scene.fog.color, { r: isNight ? colors.nightSky.r : colors.daySky.r, g: isNight ? colors.nightSky.g : colors.daySky.g, b: isNight ? colors.nightSky.b : colors.daySky.b, duration: 1.5 });
+        gsap.to(scene.background, { r: isNight ? colors.nightSky.r : colors.daySky.r, g: isNight ? colors.nightSky.g : colors.daySky.g, b: isNight ? colors.nightSky.b : colors.daySky.b, duration: 1.5 });
+        
+        if (typeof sunObj !== 'undefined' && typeof moonObj !== 'undefined') {
+            gsap.to(sunObj.position, { y: isNight ? -15 : 15, duration: 1.5, ease: "power2.inOut" });
+            gsap.to(moonObj.position, { y: isNight ? 15 : -15, duration: 1.5, ease: "power2.inOut" });
+        }
+        
+        gsap.to(mainLight, { intensity: isNight ? 0.3 : 1, duration: 1.5 });
+        gsap.to(ambientLight, { intensity: isNight ? 0.2 : 0.6, duration: 1.5 });
     });
 
     // Load saved theme
@@ -401,18 +415,7 @@ function initThreeJS() {
     moonObj.position.set(-10, -15, 0); 
     celestialGroup.add(moonObj);
 
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        isNight = !isNight;
-        document.body.setAttribute('data-theme', isNight ? 'night' : 'day');
-        document.getElementById('theme-toggle').innerText = isNight ? "☀️ Switch to Day" : "🌙 Switch to Night";
 
-        gsap.to(scene.fog.color, { r: isNight ? colors.nightSky.r : colors.daySky.r, g: isNight ? colors.nightSky.g : colors.daySky.g, b: isNight ? colors.nightSky.b : colors.daySky.b, duration: 1.5 });
-        gsap.to(scene.background, { r: isNight ? colors.nightSky.r : colors.daySky.r, g: isNight ? colors.nightSky.g : colors.daySky.g, b: isNight ? colors.nightSky.b : colors.daySky.b, duration: 1.5 });
-
-        gsap.to(sunObj.position, { y: isNight ? -15 : 15, duration: 1.5, ease: "power2.inOut" });
-        gsap.to(moonObj.position, { y: isNight ? 15 : -15, duration: 1.5, ease: "power2.inOut" });
-        gsap.to(ambientLight, { intensity: isNight ? 0.3 : 0.8, duration: 1.5 });
-    });
 
     // Sticky Header Logic
     const stickyHeader = document.getElementById('sticky-header');

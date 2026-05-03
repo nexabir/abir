@@ -121,6 +121,10 @@
     </style>
 </head>
 <body data-theme="day">
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'day';
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
 
     <header class="glass-header visible" style="transform:none; pointer-events:auto; opacity:1;">
         <div class="header-content">
@@ -192,11 +196,6 @@
                 const data = await response.json();
                 blogs = data.blogs || [];
                 
-                // apply theme
-                if (data.graphics && data.graphics.theme) {
-                    document.documentElement.style.setProperty('--bg-color', data.graphics.theme.daySky);
-                }
-
                 const urlParams = new URLSearchParams(window.location.search);
                 const postId = urlParams.get('id');
 

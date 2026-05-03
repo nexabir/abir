@@ -303,6 +303,10 @@
     </style>
 </head>
 <body data-theme="day">
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'day';
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
 
     <div id="auth-overlay">
         <div class="glass-card auth-card" style="max-width: 400px; opacity: 1; transform: none;">
