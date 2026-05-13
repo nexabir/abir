@@ -24,13 +24,17 @@ const Admin = ({ theme }) => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
 
-  // Site Content State
-  const [siteContent, setSiteContent] = useState({});
+  // Site Content State (with Safety Defaults)
+  const [siteContent, setSiteContent] = useState({
+    hero: { title: '', subtitle: '' },
+    sections: { skills: [], experience: [], projects: [] }
+  });
   const [systemConfig, setSystemConfig] = useState({
     particles: { count: 100, speed: 0.5, color: '#eab308' },
     branding: { font: 'Inter', favicon: '/favicon.svg' },
     defaultTheme: 'dark'
   });
+
 
   useEffect(() => {
     fetchAllData();
@@ -239,12 +243,14 @@ const Admin = ({ theme }) => {
                   <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Sliders size={18} /> THE_ECOSYSTEM (SKILLS)</h4>
                   <button 
                     onClick={() => {
-                      const current = siteContent.sections?.skills || [];
+                      const sections = siteContent.sections || { skills: [], experience: [], projects: [] };
+                      const current = sections.skills || [];
                       const updated = [...current, { category: "New Category", items: ["Skill 1", "Skill 2"] }];
-                      setSiteContent({...siteContent, sections: {...siteContent.sections, skills: updated}});
+                      setSiteContent({...siteContent, sections: {...sections, skills: updated}});
                     }}
                     className="btn" style={{ fontSize: '0.7rem', padding: '5px 12px' }}
                   >
+
                     <Plus size={14} /> ADD_CATEGORY
                   </button>
                 </div>
@@ -288,12 +294,14 @@ const Admin = ({ theme }) => {
                   <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Briefcase size={18} /> PROFESSIONAL_BACKGROUND</h4>
                   <button 
                     onClick={() => {
-                      const current = siteContent.sections?.experience || [];
+                      const sections = siteContent.sections || { skills: [], experience: [], projects: [] };
+                      const current = sections.experience || [];
                       const updated = [...current, { year: "2024", role: "New Role", company: "Company Name", desc: "Job description here..." }];
-                      setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
+                      setSiteContent({...siteContent, sections: {...sections, experience: updated}});
                     }}
                     className="btn" style={{ fontSize: '0.7rem', padding: '5px 12px' }}
                   >
+
                     <Plus size={14} /> ADD_EXPERIENCE
                   </button>
                 </div>
@@ -335,12 +343,14 @@ const Admin = ({ theme }) => {
                   <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Code size={18} /> FEATURED_PROJECTS</h4>
                   <button 
                     onClick={() => {
-                      const current = siteContent.sections?.projects || [];
+                      const sections = siteContent.sections || { skills: [], experience: [], projects: [] };
+                      const current = sections.projects || [];
                       const updated = [...current, { title: "New Project", desc: "Project description", tags: ["React", "AI"], link: "#" }];
-                      setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
+                      setSiteContent({...siteContent, sections: {...sections, projects: updated}});
                     }}
                     className="btn" style={{ fontSize: '0.7rem', padding: '5px 12px' }}
                   >
+
                     <Plus size={14} /> ADD_PROJECT
                   </button>
                 </div>
