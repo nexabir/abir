@@ -14,24 +14,35 @@ const BlogPost = ({ theme }) => {
   useEffect(() => {
     const fetchBlog = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .eq('id', id)
-        .single();
+      try {
+        if (!supabase) throw new Error('Supabase not initialized');
 
-      if (error) {
-        console.error('Error fetching blog:', error);
-        navigate('/');
-      } else {
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
         setBlog(data);
+      } catch (err) {
+        console.warn('BlogPost fetch failed, checking local data:', err.message);
+        const localData = await import('../data/content.json');
+        const found = localData.default.blogs?.find(b => String(b.id) === String(id));
+        if (found) {
+          setBlog(found);
+        } else {
+          navigate('/');
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchBlog();
     window.scrollTo(0, 0);
   }, [id, navigate]);
+
 
   if (loading) return <Loader theme={theme} />;
   if (!blog) return null;

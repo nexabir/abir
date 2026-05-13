@@ -26,38 +26,51 @@ const Dashboard = ({ theme }) => {
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      // Fetch site content
-      const { data: contentData } = await supabase
-        .from('site_content')
-        .select('*');
-      
-      const contentMap = {};
-      contentData?.forEach(item => {
-        contentMap[item.id] = item.content;
-      });
+      try {
+        if (!supabase) {
+          throw new Error('Supabase client not initialized');
+        }
 
-      // Fetch blogs
-      const { data: blogsData } = await supabase
-        .from('blogs')
-        .select('*')
-        .order('timestamp', { ascending: false });
+        // Fetch site content
+        const { data: contentData, error: contentError } = await supabase
+          .from('site_content')
+          .select('*');
+        
+        if (contentError) throw contentError;
 
-      // Fallback to local data if Supabase is empty during migration
-      if (Object.keys(contentMap).length === 0) {
-        import('../data/content.json').then(localData => {
-          setSiteData(localData.default);
-          setBlogs(localData.default.blogs || []);
+        const contentMap = {};
+        contentData?.forEach(item => {
+          contentMap[item.id] = item.content;
         });
-      } else {
+
+        // Fetch blogs
+        const { data: blogsData, error: blogError } = await supabase
+          .from('blogs')
+          .select('*')
+          .order('timestamp', { ascending: false });
+        
+        if (blogError) throw blogError;
+
+        // Check if we have the critical data (hero and sections)
+        if (!contentMap.hero || !contentMap.sections) {
+          throw new Error('Incomplete data in Supabase');
+        }
+
         setSiteData(contentMap);
         setBlogs(blogsData || []);
+      } catch (err) {
+        console.warn('Dashboard fetch failed, falling back to local data:', err.message);
+        const localData = await import('../data/content.json');
+        setSiteData(localData.default);
+        setBlogs(localData.default.blogs || []);
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
 
     fetchData();
   }, []);
+
 
   if (loading || !siteData) return <div style={{ height: '100vh' }}></div>;
 
