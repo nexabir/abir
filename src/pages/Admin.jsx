@@ -59,12 +59,21 @@ const Admin = ({ theme }) => {
       data.forEach(item => {
         contentMap[item.id] = item.content;
       });
-      setSiteContent(contentMap);
+      // Use functional update to merge with safety defaults
+      setSiteContent(prev => ({
+        ...prev,
+        ...contentMap,
+        sections: {
+          ...prev.sections,
+          ...(contentMap.sections || {})
+        }
+      }));
       if (contentMap.system_config) {
         setSystemConfig(contentMap.system_config);
       }
     }
   };
+
 
 
   const fetchBlogs = async () => {
