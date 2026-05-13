@@ -22,7 +22,10 @@ const staggerContainer = {
 
 const Dashboard = ({ theme }) => {
   const navigate = useNavigate();
-  const [siteData, setSiteData] = React.useState(null);
+  const [siteData, setSiteData] = React.useState({
+    hero: { title: 'Business Analyst', subtitle: 'Strategy through Data', intro: 'Transforming complexity into clarity.' },
+    sections: { skills: [], experience: [], projects: [] }
+  });
   const [blogs, setBlogs] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -30,9 +33,7 @@ const Dashboard = ({ theme }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        if (!supabase) {
-          throw new Error('Supabase client not initialized');
-        }
+        if (!supabase) throw new Error('Supabase client not initialized');
 
         // Fetch site content
         const { data: contentData, error: contentError } = await supabase
@@ -46,6 +47,14 @@ const Dashboard = ({ theme }) => {
           contentMap[item.id] = item.content;
         });
 
+        // Merge Supabase data with Safety Defaults
+        setSiteData(prev => ({
+          ...prev,
+          ...contentMap,
+          hero: { ...prev.hero, ...(contentMap.hero || {}) },
+          sections: { ...prev.sections, ...(contentMap.sections || {}) }
+        }));
+        
         // Fetch blogs
         const { data: blogsData, error: blogError } = await supabase
           .from('blogs')
@@ -53,36 +62,17 @@ const Dashboard = ({ theme }) => {
           .order('timestamp', { ascending: false });
         
         if (blogError) throw blogError;
+        setBlogs(blogsData || []);
 
-        // Check if we have the critical data (hero and sections)
-        if (!contentMap.hero || !contentMap.sections) {
-          console.warn('Incomplete data in Supabase, merged with local backup.');
-          // Merge Supabase data with local backup to ensure it doesn't crash
-          const mergedData = { ...localBackupData, ...contentMap };
-          setSiteData(mergedData);
-        } else {
-          setSiteData(contentMap);
-        }
-        
-        setBlogs(blogsData && blogsData.length > 0 ? blogsData : []);
       } catch (err) {
-        console.error('Dashboard fetch failed, using local backup:', err.message);
-        try {
-          const response = await fetch('/content.json');
-          const localBackupData = await response.json();
-          setSiteData(localBackupData);
-          setBlogs(localBackupData.blogs || []);
-        } catch (fetchErr) {
-          console.error('Critical: Backup data also failed', fetchErr);
-        }
+        console.error('Dashboard fetch failed, using defaults:', err.message);
       } finally {
         setLoading(false);
       }
-
     };
-
     fetchData();
   }, []);
+
 
 
 

@@ -31,7 +31,12 @@ function App() {
         .single();
       
       if (!error && data) {
-        setSystemConfig(data.content);
+        setSystemConfig(prev => ({
+          ...prev,
+          ...data.content,
+          branding: { ...prev.branding, ...(data.content.branding || {}) },
+          particles: { ...prev.particles, ...(data.content.particles || {}) }
+        }));
         // Apply dynamic font
         if (data.content.branding?.font) {
           document.documentElement.style.setProperty('--main-font', data.content.branding.font);
@@ -40,6 +45,7 @@ function App() {
     };
     fetchConfig();
   }, []);
+
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
