@@ -139,16 +139,15 @@ const Dashboard = ({ theme }) => {
           <motion.h1 
             variants={fadeUp}
             style={{ 
-              fontSize: 'clamp(3rem, 8vw, 5.5rem)', 
+              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', 
               fontWeight: 800, 
-              lineHeight: 1.05, 
+              lineHeight: 1.1, 
               marginBottom: '1.5rem', 
               color: 'var(--text-main)',
               letterSpacing: '-0.03em'
             }}
           >
-            Turning Data Chaos <br/>
-            Into <span className="text-accent" style={{ fontStyle: 'italic' }}>Strategy.</span>
+            {siteData.hero?.title || 'Data Chaos Into Strategy'}
           </motion.h1>
           
           <motion.p 
@@ -161,8 +160,9 @@ const Dashboard = ({ theme }) => {
               lineHeight: 1.6 
             }}
           >
-            {siteData.hero.intro}
+            {siteData.hero?.subtitle || siteData.hero?.intro || 'Empowering decisions through advanced analytics.'}
           </motion.p>
+
           
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
             <button 
@@ -210,44 +210,23 @@ const Dashboard = ({ theme }) => {
             gap: '2rem' 
           }}
         >
-          <motion.div variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
-            <Code size={32} className="text-accent" style={{ marginBottom: '1.5rem' }} />
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem' }}>Data Engineering</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Extracting and transforming complex datasets from disparate enterprise sources with precision.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {siteData.sections.strategy.toolkit.slice(0,4).map(skill => (
-                <span key={skill} style={{ fontSize: '0.75rem', padding: '4px 10px', background: 'rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>{skill}</span>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
-            <PenTool size={32} className="text-accent" style={{ marginBottom: '1.5rem' }} />
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem' }}>Visual Logic</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Crafting intuitive dashboards and interfaces that turn numbers into actionable insights.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {siteData.sections.strategy.toolkit.slice(4,8).map(skill => (
-                <span key={skill} style={{ fontSize: '0.75rem', padding: '4px 10px', background: 'rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>{skill}</span>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
-            <Briefcase size={32} className="text-accent" style={{ marginBottom: '1.5rem' }} />
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem' }}>Strategic Impact</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Driving operational efficiency and scaling solutions across organizations.
-            </p>
-            <div style={{ padding: '1rem', background: 'var(--accent-glow)', borderRadius: '12px' }}>
-              <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent)', display: 'block' }}>+84%</span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-main)' }}>Efficiency Increase</span>
-            </div>
-          </motion.div>
+          {(siteData.sections.skills || []).map((cat, idx) => (
+            <motion.div key={idx} variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '1.5rem' }}>
+                <div style={{ padding: '10px', background: 'var(--accent-glow)', borderRadius: '12px' }}>
+                  <Code size={24} className="text-accent" />
+                </div>
+                <h3 style={{ fontSize: '1.3rem' }}>{cat.category}</h3>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {cat.items.map(skill => (
+                  <span key={skill} style={{ fontSize: '0.75rem', padding: '4px 10px', background: 'rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>{skill}</span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
+
       </section>
 
       {/* 3. EXPERIENCE TIMELINE */}
@@ -267,7 +246,7 @@ const Dashboard = ({ theme }) => {
           <div style={{ position: 'absolute', top: 0, bottom: 0, left: '6px', width: '2px', background: 'var(--border-color)' }} />
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            {siteData.sections.foundation.experience.map((exp, index) => (
+            {(siteData.sections.experience || []).map((exp, index) => (
               <motion.div key={index} variants={fadeUp} style={{ position: 'relative' }}>
                 {/* Timeline Dot */}
                 <div style={{ 
@@ -276,22 +255,15 @@ const Dashboard = ({ theme }) => {
                 }} />
                 
                 <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '0.3rem' }}>{exp.role}</h3>
-                <h4 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>{exp.company}</h4>
+                <h4 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>{exp.company} <span style={{ marginLeft: '1rem', opacity: 0.5 }}>{exp.year}</span></h4>
                 
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem', maxWidth: '700px' }}>
-                  {exp.description}
+                  {exp.desc}
                 </p>
-                
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {exp.tags && exp.tags.map(tag => (
-                    <span key={tag} style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </motion.div>
             ))}
           </motion.div>
+
         </div>
       </section>
 
@@ -314,7 +286,7 @@ const Dashboard = ({ theme }) => {
           variants={staggerContainer}
           style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2.5rem' }}
         >
-          {siteData.sections.projects.items.map((project, index) => (
+          { (siteData.sections.projects || []).map((project, index) => (
             <motion.div 
               key={index}
               variants={fadeUp}
@@ -323,33 +295,25 @@ const Dashboard = ({ theme }) => {
             >
               <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1rem' }}>{project.title}</h3>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
-                {project.description}
+                {project.desc}
               </p>
 
-              {project.impact && (
-                <div style={{ padding: '1.2rem', backgroundColor: 'var(--accent-glow)', borderRadius: '12px', marginBottom: '2rem', borderLeft: '3px solid var(--accent)' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-main)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Impact</span>
-                  <span style={{ fontSize: '1rem', color: 'var(--accent)', fontWeight: 600 }}>{project.impact}</span>
-                </div>
-              )}
-
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
-                {project.tools?.map((tool, tIndex) => (
+                {project.tags?.map((tag, tIndex) => (
                   <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
-                    {tool}
+                    {tag}
                   </span>
                 ))}
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
-                {project.links?.map((link, lIndex) => (
-                  <a key={lIndex} href={link.url} target="_blank" rel="noopener noreferrer" className="btn" style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}>
-                    {link.label} <ExternalLink size={16} />
-                  </a>
-                ))}
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}>
+                  View Project <ExternalLink size={16} />
+                </a>
               </div>
             </motion.div>
           ))}
+
         </motion.div>
       </section>
 
