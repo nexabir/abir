@@ -3,9 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Settings as SettingsIcon, Save, RefreshCw, Key, 
   FileText, Plus, Edit, Trash2, LogOut, Layout, 
-  Image as ImageIcon, Check, X, AlertCircle
+  Image as ImageIcon, Check, X, AlertCircle, Type, 
+  Activity, Sliders, Globe
 } from 'lucide-react';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { supabase } from '../lib/supabaseClient';
+
 
 const Admin = ({ theme }) => {
   const [activeTab, setActiveTab] = useState('blogs');
@@ -20,9 +24,44 @@ const Admin = ({ theme }) => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
 
+  // Site Content State
+  const [siteContent, setSiteContent] = useState({});
+  const [systemConfig, setSystemConfig] = useState({
+    particles: { count: 100, speed: 0.5, color: '#eab308' },
+    branding: { font: 'Inter', favicon: '/favicon.svg' },
+    defaultTheme: 'dark'
+  });
+
   useEffect(() => {
-    fetchBlogs();
+    fetchAllData();
   }, []);
+
+  const fetchAllData = async () => {
+    setLoading(true);
+    await Promise.all([
+      fetchBlogs(),
+      fetchSiteContent()
+    ]);
+    setLoading(false);
+  };
+
+  const fetchSiteContent = async () => {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('*');
+    
+    if (!error && data) {
+      const contentMap = {};
+      data.forEach(item => {
+        contentMap[item.id] = item.content;
+      });
+      setSiteContent(contentMap);
+      if (contentMap.system_config) {
+        setSystemConfig(contentMap.system_config);
+      }
+    }
+  };
+
 
   const fetchBlogs = async () => {
     setLoading(true);
@@ -169,16 +208,138 @@ const Admin = ({ theme }) => {
           </motion.div>
         )}
 
-        {activeTab === 'settings' && (
+        {activeTab === 'content' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-             {/* Existing Settings logic can go here */}
-             <div className="glass-panel" style={{ padding: '2rem' }}>
-               <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}><Key size={18} /> API_KEY_MANAGEMENT</h3>
-               <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Supabase Connection: ACTIVE</p>
-               <button className="btn" disabled><RefreshCw size={16} /> RE_SYNC_DATA</button>
-             </div>
+            <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '2rem' }}>Site_Content_Editor</h3>
+            
+            <div style={{ display: 'grid', gap: '2rem' }}>
+              {/* Hero Section */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', color: 'var(--accent)' }}>HERO_SECTION</h4>
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>MAIN_HEADLINE</label>
+                  <input 
+                    className="admin-input" 
+                    value={siteContent.hero?.title || ''} 
+                    onChange={e => setSiteContent({...siteContent, hero: {...siteContent.hero, title: e.target.value}})}
+                  />
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>SUBTITLE</label>
+                  <textarea 
+                    className="admin-input" 
+                    style={{ height: '100px' }}
+                    value={siteContent.hero?.subtitle || ''} 
+                    onChange={e => setSiteContent({...siteContent, hero: {...siteContent.hero, subtitle: e.target.value}})}
+                  />
+                </div>
+              </div>
+
+              {/* Skills Editor */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', color: 'var(--accent)' }}>SKILLS_MATRIX</h4>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '1rem' }}>Edit the skills categories on your dashboard.</p>
+                {/* Simplified Skills JSON Editor for now */}
+                <textarea 
+                  className="admin-input" 
+                  style={{ height: '200px', fontFamily: 'monospace' }}
+                  value={JSON.stringify(siteContent.sections?.skills || [], null, 2)}
+                  onChange={e => {
+                    try {
+                      const parsed = JSON.parse(e.target.value);
+                      setSiteContent({...siteContent, sections: {...siteContent.sections, skills: parsed}});
+                    } catch (err) {}
+                  }}
+                />
+              </div>
+
+              <button 
+                onClick={async () => {
+                  setLoading(true);
+                  for (const [id, content] of Object.entries(siteContent)) {
+                    await supabase.from('site_content').upsert({ id, content });
+                  }
+                  alert('Site content updated successfully!');
+                  setLoading(false);
+                }} 
+                className="btn btn-primary" 
+                style={{ width: 'fit-content' }}
+              >
+                <Save size={18} /> PUSH_CHANGES_TO_PROD
+              </button>
+            </div>
           </motion.div>
         )}
+
+        {activeTab === 'settings' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '2rem' }}>System_Config</h3>
+            
+            <div style={{ display: 'grid', gap: '2rem' }}>
+              {/* Particle Engine */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}><Activity size={18} /> PARTICLE_ENGINE_V2</h4>
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <label style={{ fontSize: '0.8rem' }}>PARTICLE_COUNT</label>
+                      <span>{systemConfig.particles.count}</span>
+                    </div>
+                    <input 
+                      type="range" min="10" max="500" step="10" 
+                      style={{ width: '100%', accentColor: 'var(--accent)' }}
+                      value={systemConfig.particles.count}
+                      onChange={e => setSystemConfig({...systemConfig, particles: {...systemConfig.particles, count: parseInt(e.target.value)}})}
+                    />
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <label style={{ fontSize: '0.8rem' }}>FLOW_SPEED</label>
+                      <span>{systemConfig.particles.speed}x</span>
+                    </div>
+                    <input 
+                      type="range" min="0.1" max="5.0" step="0.1" 
+                      style={{ width: '100%', accentColor: 'var(--accent)' }}
+                      value={systemConfig.particles.speed}
+                      onChange={e => setSystemConfig({...systemConfig, particles: {...systemConfig.particles, speed: parseFloat(e.target.value)}})}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Branding */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}><Globe size={18} /> BRANDING_ASSETS</h4>
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>PRIMARY_FONT_FAMILY</label>
+                  <input 
+                    className="admin-input" 
+                    value={systemConfig.branding.font}
+                    onChange={e => setSystemConfig({...systemConfig, branding: {...systemConfig.branding, font: e.target.value}})}
+                  />
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>FAVICON_SOURCE_URL</label>
+                  <input 
+                    className="admin-input" 
+                    value={systemConfig.branding.favicon}
+                    onChange={e => setSystemConfig({...systemConfig, branding: {...systemConfig.branding, favicon: e.target.value}})}
+                  />
+                </div>
+              </div>
+
+              <button 
+                onClick={async () => {
+                  setLoading(true);
+                  await supabase.from('site_content').upsert({ id: 'system_config', content: systemConfig });
+                  alert('System configuration saved!');
+                  setLoading(false);
+                }} 
+                className="btn btn-primary" 
+                style={{ width: 'fit-content' }}
+              >
+                <Save size={18} /> APPLY_SYSTEM_CONFIG
+              </button>
+            </div>
+          </motion.div>
+        )}
+
       </main>
 
       {/* Blog Editor Modal */}
@@ -212,9 +373,25 @@ const Admin = ({ theme }) => {
                   <textarea value={snippet} onChange={e => setSnippet(e.target.value)} required className="admin-input" style={{ height: '80px' }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>CONTENT (HTML)</label>
-                  <textarea value={content} onChange={e => setContent(e.target.value)} required className="admin-input" style={{ height: '250px', fontFamily: 'monospace' }} />
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>CONTENT (RICH_TEXT_EDITOR)</label>
+                  <div className="quill-container">
+                    <ReactQuill 
+                      theme="snow" 
+                      value={content} 
+                      onChange={setContent} 
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, false] }],
+                          ['bold', 'italic', 'underline', 'strike'],
+                          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                          ['link', 'image', 'code-block'],
+                          ['clean']
+                        ],
+                      }}
+                    />
+                  </div>
                 </div>
+
                 <div>
                   <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>IMAGE_URL / BASE64</label>
                   <input value={image} onChange={e => setImage(e.target.value)} className="admin-input" />
@@ -251,6 +428,37 @@ const Admin = ({ theme }) => {
             border-color: var(--accent);
             box-shadow: 0 0 10px var(--accent-glow);
           }
+          .quill-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+          }
+          .ql-toolbar {
+            background: rgba(255,255,255,0.05) !important;
+            border: none !important;
+            border-bottom: 1px solid var(--border-color) !important;
+          }
+          .ql-container {
+            border: none !important;
+            min-height: 300px;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 1rem !important;
+            color: var(--text-main) !important;
+          }
+          .ql-editor {
+            min-height: 300px;
+          }
+          .ql-stroke {
+            stroke: var(--text-main) !important;
+          }
+          .ql-fill {
+            fill: var(--text-main) !important;
+          }
+          .ql-picker {
+            color: var(--text-main) !important;
+          }
+
         `}
       </style>
     </div>

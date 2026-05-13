@@ -12,15 +12,39 @@ import { Navigate } from 'react-router-dom';
 function App() {
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [systemConfig, setSystemConfig] = useState({
+    particles: { count: 100, speed: 0.5, color: '#eab308' },
+    branding: { font: 'Inter', favicon: '/favicon.svg' }
+  });
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const fetchConfig = async () => {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*')
+        .eq('id', 'system_config')
+        .single();
+      
+      if (!error && data) {
+        setSystemConfig(data.content);
+        // Apply dynamic font
+        if (data.content.branding?.font) {
+          document.documentElement.style.setProperty('--main-font', data.content.branding.font);
+        }
+      }
+    };
+    fetchConfig();
+  }, []);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
+
 
 
   const ProtectedRoute = ({ children }) => {
@@ -73,11 +97,12 @@ function App() {
         <Route 
           path="/" 
           element={
-            <Layout theme={theme} toggleTheme={toggleTheme}>
-              <Dashboard theme={theme} />
+            <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
+              <Dashboard theme={theme} config={systemConfig} />
             </Layout>
           } 
         />
+
         <Route 
           path="/login" 
           element={<Login theme={theme} />} 
@@ -95,11 +120,12 @@ function App() {
         <Route 
           path="/blog/:id" 
           element={
-            <Layout theme={theme} toggleTheme={toggleTheme}>
+            <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
               <BlogPost theme={theme} />
             </Layout>
           } 
         />
+
         {/* Catch-all for debugging - shows a message instead of jumping home */}
         <Route path="*" element={
           <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>

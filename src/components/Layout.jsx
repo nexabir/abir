@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import LiveWallpaper from './LiveWallpaper';
 
-const Layout = ({ children, theme, toggleTheme }) => {
+const Layout = ({ children, theme, toggleTheme, config }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -37,7 +37,8 @@ const Layout = ({ children, theme, toggleTheme }) => {
     <div style={{ minHeight: '100vh', width: '100vw', overflowX: 'hidden' }}>
       
       {/* Interactive Live Wallpaper */}
-      <LiveWallpaper theme={theme} />
+      <LiveWallpaper theme={theme} config={config} />
+
 
 
       {/* Sticky Top Navbar */}

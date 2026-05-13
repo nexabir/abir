@@ -2,10 +2,11 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const ParticleNetwork = ({ theme }) => {
+const ParticleNetwork = ({ theme, config }) => {
   const pointsRef = useRef();
   const { viewport, mouse } = useThree();
-  
+  const particleCount = Math.min(config?.particles?.count || 100, 1000);
+  const flowSpeed = config?.particles?.speed || 0.5;
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
   React.useEffect(() => {
@@ -20,7 +21,6 @@ const ParticleNetwork = ({ theme }) => {
   }, []);
 
   // Create optimized particle geometry
-  const particleCount = 800; // Increased for denser look
   
   const [positions, originalPositions, colors] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
@@ -48,15 +48,17 @@ const ParticleNetwork = ({ theme }) => {
     }
     
     return [pos, origPos, cols];
-  }, [theme]);
+  }, [theme, particleCount]);
+
 
   // Animate the particles
   useFrame(() => {
     if (!pointsRef.current) return;
     
-    // Slow rotation
-    pointsRef.current.rotation.y += 0.001;
-    pointsRef.current.rotation.x += 0.0005;
+    // Slow rotation - based on config speed
+    pointsRef.current.rotation.y += 0.002 * flowSpeed;
+    pointsRef.current.rotation.x += 0.001 * flowSpeed;
+
     
     // Mouse Interaction: Repel particles
     const positions = pointsRef.current.geometry.attributes.position.array;
@@ -125,16 +127,17 @@ const ParticleNetwork = ({ theme }) => {
   );
 };
 
-const LiveWallpaper = ({ theme }) => {
+const LiveWallpaper = ({ theme, config }) => {
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: -1 }}>
       <Canvas camera={{ position: [0, 0, 15], fov: 60 }} dpr={[1, 2]}>
         <ambientLight intensity={0.5} />
-        <ParticleNetwork theme={theme} />
+        <ParticleNetwork theme={theme} config={config} />
         <fog attach="fog" args={[theme === 'dark' ? '#050505' : '#f8fafc', 5, 25]} />
       </Canvas>
     </div>
   );
 };
+
 
 export default LiveWallpaper;
