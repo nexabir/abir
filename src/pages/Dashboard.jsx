@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Download, ExternalLink, ArrowRight, Briefcase, Code, PenTool } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import localBackupData from '../data/content.json';
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -53,21 +55,19 @@ const Dashboard = ({ theme }) => {
 
         // Check if we have the critical data (hero and sections)
         if (!contentMap.hero || !contentMap.sections) {
-          throw new Error('Incomplete data in Supabase');
+          console.warn('Incomplete data in Supabase, merged with local backup.');
+          // Merge Supabase data with local backup to ensure it doesn't crash
+          const mergedData = { ...localBackupData, ...contentMap };
+          setSiteData(mergedData);
+        } else {
+          setSiteData(contentMap);
         }
-
-        setSiteData(contentMap);
-        setBlogs(blogsData || []);
+        
+        setBlogs(blogsData && blogsData.length > 0 ? blogsData : (localBackupData.blogs || []));
       } catch (err) {
-        console.error('Dashboard fetch failed:', err.message);
-        try {
-          const localData = await import('../data/content.json');
-          console.log('Successfully fell back to local content.json');
-          setSiteData(localData.default || localData);
-          setBlogs(localData.default?.blogs || localData.blogs || []);
-        } catch (localErr) {
-          console.error('Critical Error: Could not even load local content.json', localErr);
-        }
+        console.error('Dashboard fetch failed, using local backup:', err.message);
+        setSiteData(localBackupData);
+        setBlogs(localBackupData.blogs || []);
       } finally {
         setLoading(false);
       }
@@ -75,6 +75,7 @@ const Dashboard = ({ theme }) => {
 
     fetchData();
   }, []);
+
 
 
   if (loading) return <Loader theme={theme} />;

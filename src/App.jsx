@@ -10,7 +10,7 @@ import { supabase } from './lib/supabaseClient';
 import { Navigate } from 'react-router-dom';
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
@@ -22,13 +22,6 @@ function App() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  useEffect(() => {
-    // Simulate initial booting sequence
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const ProtectedRoute = ({ children }) => {
     const [session, setSession] = useState(null);
