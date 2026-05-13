@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Download, ExternalLink, ArrowRight, Briefcase, Code, PenTool } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../components/Loader';
+
 
 
 const fadeUp = {
