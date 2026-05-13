@@ -59,10 +59,15 @@ const Dashboard = ({ theme }) => {
         setSiteData(contentMap);
         setBlogs(blogsData || []);
       } catch (err) {
-        console.warn('Dashboard fetch failed, falling back to local data:', err.message);
-        const localData = await import('../data/content.json');
-        setSiteData(localData.default);
-        setBlogs(localData.default.blogs || []);
+        console.error('Dashboard fetch failed:', err.message);
+        try {
+          const localData = await import('../data/content.json');
+          console.log('Successfully fell back to local content.json');
+          setSiteData(localData.default || localData);
+          setBlogs(localData.default?.blogs || localData.blogs || []);
+        } catch (localErr) {
+          console.error('Critical Error: Could not even load local content.json', localErr);
+        }
       } finally {
         setLoading(false);
       }
@@ -72,7 +77,23 @@ const Dashboard = ({ theme }) => {
   }, []);
 
 
-  if (loading || !siteData) return <div style={{ height: '100vh' }}></div>;
+  if (loading) return <Loader theme={theme} />;
+  
+  if (!siteData) return (
+    <div style={{ 
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      color: 'var(--text-main)',
+      background: 'var(--bg-main)'
+    }}>
+      <h2>System Initialization Failed</h2>
+      <p style={{ color: 'var(--accent)' }}>Please check browser console for error logs.</p>
+      <button onClick={() => window.location.reload()} className="btn" style={{ marginTop: '1rem' }}>Retry Sync</button>
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '10rem' }}>
