@@ -22,6 +22,10 @@ const Layout = ({ children, theme, toggleTheme }) => {
   ];
 
   const scrollToSection = (id) => {
+    if (window.location.pathname !== '/') {
+      window.location.href = `/#${id}`;
+      return;
+    }
     const el = document.getElementById(id);
     if (el) {
       const y = el.getBoundingClientRect().top + window.scrollY - 100;
@@ -58,7 +62,10 @@ const Layout = ({ children, theme, toggleTheme }) => {
       }}>
         {/* Brand */}
         <div 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            if (window.location.pathname !== '/') window.location.href = '/';
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
           style={{ 
             fontSize: '1.2rem', 
             fontWeight: 800, 

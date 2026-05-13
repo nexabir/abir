@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download, ExternalLink, ArrowRight, Briefcase, Code, PenTool } from 'lucide-react';
-import siteData from '../data/content.json';
+import { supabase } from '../lib/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -17,6 +18,49 @@ const staggerContainer = {
 };
 
 const Dashboard = ({ theme }) => {
+  const navigate = useNavigate();
+  const [siteData, setSiteData] = React.useState(null);
+  const [blogs, setBlogs] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      // Fetch site content
+      const { data: contentData } = await supabase
+        .from('site_content')
+        .select('*');
+      
+      const contentMap = {};
+      contentData?.forEach(item => {
+        contentMap[item.id] = item.content;
+      });
+
+      // Fetch blogs
+      const { data: blogsData } = await supabase
+        .from('blogs')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+      // Fallback to local data if Supabase is empty during migration
+      if (Object.keys(contentMap).length === 0) {
+        import('../data/content.json').then(localData => {
+          setSiteData(localData.default);
+          setBlogs(localData.default.blogs || []);
+        });
+      } else {
+        setSiteData(contentMap);
+        setBlogs(blogsData || []);
+      }
+      
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading || !siteData) return <div style={{ height: '100vh' }}></div>;
+
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '10rem' }}>
       
@@ -279,10 +323,11 @@ const Dashboard = ({ theme }) => {
         </motion.div>
 
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {siteData.blogs && siteData.blogs.length > 0 ? siteData.blogs.map((blog, index) => (
+          {blogs && blogs.length > 0 ? blogs.map((blog, index) => (
             <motion.div 
-              key={index}
+              key={blog.id || index}
               variants={fadeUp}
+              onClick={() => navigate(`/blog/${blog.id}`)}
               style={{ 
                 padding: '2rem', 
                 borderBottom: '1px solid var(--border-color)',
