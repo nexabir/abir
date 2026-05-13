@@ -46,6 +46,10 @@ function App() {
     return children;
   };
 
+  useEffect(() => {
+    console.log('App initialized at path:', window.location.pathname);
+  }, []);
+
   if (loading) {
     return <Loader theme={theme} />;
   }
@@ -66,14 +70,6 @@ function App() {
           element={<Login theme={theme} />} 
         />
         <Route 
-          path="/blog/:id" 
-          element={
-            <Layout theme={theme} toggleTheme={toggleTheme}>
-              <BlogPost theme={theme} />
-            </Layout>
-          } 
-        />
-        <Route 
           path="/admin" 
           element={
             <ProtectedRoute>
@@ -83,9 +79,25 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/blog/:id" 
+          element={
+            <Layout theme={theme} toggleTheme={toggleTheme}>
+              <BlogPost theme={theme} />
+            </Layout>
+          } 
+        />
+        {/* Catch-all for debugging - shows a message instead of jumping home */}
+        <Route path="*" element={
+          <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
+            404 - This route was not found in the application logic. (Current Path: {window.location.pathname})
+          </div>
+        } />
       </Routes>
     </Router>
   );
+
+
 }
 
 export default App;

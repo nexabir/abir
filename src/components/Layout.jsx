@@ -36,8 +36,8 @@ const Layout = ({ children, theme, toggleTheme }) => {
   return (
     <div style={{ minHeight: '100vh', width: '100vw', overflowX: 'hidden' }}>
       
-      {/* Interactive Live Wallpaper - Temporarily disabled for stability check */}
-      {/* <LiveWallpaper theme={theme} /> */}
+      {/* Interactive Live Wallpaper */}
+      <LiveWallpaper theme={theme} />
 
 
       {/* Sticky Top Navbar */}
