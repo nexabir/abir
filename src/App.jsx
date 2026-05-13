@@ -28,6 +28,11 @@ function App() {
     const [checking, setChecking] = useState(true);
 
     useEffect(() => {
+      if (!supabase) {
+        setChecking(false);
+        return;
+      }
+
       supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setChecking(false);
@@ -37,14 +42,22 @@ function App() {
         setSession(session);
       });
 
-      return () => subscription.unsubscribe();
+      return () => subscription?.unsubscribe();
     }, []);
 
     if (checking) return <Loader theme={theme} />;
-    if (!session) return <Navigate to="/login" />;
+    
+    if (!supabase) return (
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
+        Supabase Connection Error. Please check your Environment Variables.
+      </div>
+    );
+
+    if (!session) return <Navigate to="/login" replace />;
 
     return children;
   };
+
 
   useEffect(() => {
     console.log('App initialized at path:', window.location.pathname);
