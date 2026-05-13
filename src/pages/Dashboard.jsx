@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Download, ExternalLink, ArrowRight, Briefcase, Code, PenTool } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import localBackupData from '../data/content.json';
 
 
 const fadeUp = {
@@ -63,14 +62,21 @@ const Dashboard = ({ theme }) => {
           setSiteData(contentMap);
         }
         
-        setBlogs(blogsData && blogsData.length > 0 ? blogsData : (localBackupData.blogs || []));
+        setBlogs(blogsData && blogsData.length > 0 ? blogsData : []);
       } catch (err) {
         console.error('Dashboard fetch failed, using local backup:', err.message);
-        setSiteData(localBackupData);
-        setBlogs(localBackupData.blogs || []);
+        try {
+          const response = await fetch('/content.json');
+          const localBackupData = await response.json();
+          setSiteData(localBackupData);
+          setBlogs(localBackupData.blogs || []);
+        } catch (fetchErr) {
+          console.error('Critical: Backup data also failed', fetchErr);
+        }
       } finally {
         setLoading(false);
       }
+
     };
 
     fetchData();
