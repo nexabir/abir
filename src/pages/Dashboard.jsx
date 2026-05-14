@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, ExternalLink, ArrowRight, Briefcase, Code, PenTool } from 'lucide-react';
+import { Download, ArrowRight, Code, Linkedin } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
+import CompetencyRadar from '../components/CompetencyRadar';
+import ProjectModal from '../components/ProjectModal';
 
 
 
@@ -23,11 +25,53 @@ const staggerContainer = {
 const Dashboard = ({ theme }) => {
   const navigate = useNavigate();
   const [siteData, setSiteData] = React.useState({
-    hero: { title: 'Business Analyst', subtitle: 'Strategy through Data', intro: 'Transforming complexity into clarity.' },
-    sections: { skills: [], experience: [], projects: [] }
+    hero: { 
+      title: 'Architecting Business Value', 
+      subtitle: 'Strategy through Data', 
+      intro: 'Bridging the gap between data strategy and enterprise-scale execution.',
+      cv_url: 'CV of Md. Abir Ul Islam.pdf'
+    },
+    sections: { 
+      skills: [], 
+      experience: [], 
+      projects: [
+        {
+          title: "Supply Chain Waste Optimization",
+          impact_badge: "ROI: $2M+",
+          problem: "Unidentified friction points in inventory lifecycle causing 15% annual waste across multi-region distribution centers.",
+          approach: "Architected a predictive analytics framework using Python (Pandas) and SQL to correlate demand spikes with localized logistics bottlenecks.",
+          impact: ["20% Reduction in Inventory Waste", "Achieved $2M in annual operational savings", "98% Forecast accuracy for Q4 2025"],
+          desc: "Enterprise-level supply chain optimization project reducing operational overhead.",
+          tags: ["SQL", "Python", "Predictive Modeling", "Supply Chain"],
+          link: "#"
+        },
+        {
+          title: "Predictive Customer Retention Engine",
+          impact_badge: "+12% Retention",
+          problem: "Accelerating churn rates in the SME segment without a clear data-driven understanding of customer pain points.",
+          approach: "Developed a stakeholder-facing Tableau dashboard integrated with a Logistic Regression model to identify 'At-Risk' accounts 30 days prior to renewal.",
+          impact: ["12% Relative increase in retention", "Identified $500k in potential upsell opportunities", "Adopted as standard BI tool for Sales Team"],
+          desc: "Data-driven churn analysis and retention strategy for subscription services.",
+          tags: ["Tableau", "Statistics", "Strategy", "Customer Success"],
+          link: "#"
+        },
+        {
+          title: "Automated Financial Reporting Pipeline",
+          impact_badge: "95% Efficiency",
+          problem: "Manual monthly reporting cycle requiring 40+ man-hours per department, leading to frequent human error and delayed insights.",
+          approach: "Engineered an automated ETL pipeline using Python and Advanced Excel VBA to consolidate data from 5 disparate sources into a unified real-time dashboard.",
+          impact: ["Reduced reporting time from 40 hours to 2 hours", "100% Data accuracy across all audited reports", "Saved 160+ departmental hours per month"],
+          desc: "Process re-engineering and automation of critical financial workflows.",
+          tags: ["Automation", "Python", "VBA", "Process Mapping"],
+          link: "#"
+        }
+      ] 
+    }
   });
   const [blogs, setBlogs] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [selectedProject, setSelectedProject] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -137,7 +181,7 @@ const Dashboard = ({ theme }) => {
               letterSpacing: '-0.03em'
             }}
           >
-            {siteData?.hero?.title || 'Data Chaos Into Strategy'}
+            {siteData?.hero?.title || 'Architecting Business Value'}
           </motion.h1>
           
           <motion.p 
@@ -150,7 +194,7 @@ const Dashboard = ({ theme }) => {
               lineHeight: 1.6 
             }}
           >
-            {siteData?.hero?.subtitle || siteData?.hero?.intro || 'Empowering decisions through advanced analytics.'}
+            {siteData?.hero?.subtitle || siteData?.hero?.intro || 'Bridging the gap between data strategy and enterprise-scale execution.'}
           </motion.p>
           
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
@@ -168,6 +212,15 @@ const Dashboard = ({ theme }) => {
               style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '50px', backdropFilter: 'blur(10px)' }}
             >
               <Download size={18} /> Resume
+            </a>
+            <a 
+              href="https://bd.linkedin.com/in/md-abir-ul-islam" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn"
+              style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '50px', backdropFilter: 'blur(10px)' }}
+            >
+              <Linkedin size={18} /> LinkedIn
             </a>
           </motion.div>
         </motion.div>
@@ -214,6 +267,24 @@ const Dashboard = ({ theme }) => {
               </div>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Competency Visualization */}
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="glass-panel" 
+          style={{ marginTop: '4rem', padding: '3rem', borderRadius: '32px', textAlign: 'center' }}
+        >
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>Strategic <span className="text-accent">Competency Matrix</span></h3>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <CompetencyRadar theme={theme} />
+          </div>
+          <p style={{ marginTop: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+            A balanced profile across technical execution, business strategy, and stakeholder communication.
+          </p>
         </motion.div>
       </section>
 
@@ -280,9 +351,23 @@ const Dashboard = ({ theme }) => {
               className="glass-panel"
               style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
             >
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1rem' }}>{project?.title}</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                 <h3 style={{ fontSize: '1.4rem', fontWeight: 600 }}>{project?.title}</h3>
+                 <span style={{ 
+                   fontSize: '0.7rem', 
+                   padding: '4px 10px', 
+                   background: 'var(--accent-glow)', 
+                   color: 'var(--accent)', 
+                   borderRadius: '12px', 
+                   fontWeight: 700,
+                   border: '1px solid var(--accent)'
+                 }}>
+                   {project?.impact_badge || 'High ROI'}
+                 </span>
+              </div>
+              
               <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
-                {project?.desc}
+                {project?.desc || project?.snippet}
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
@@ -294,14 +379,29 @@ const Dashboard = ({ theme }) => {
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
-                <a href={project?.link || '#'} target="_blank" rel="noopener noreferrer" className="btn" style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}>
-                  View Project <ExternalLink size={16} />
-                </a>
+                <button 
+                  onClick={() => {
+                    setSelectedProject(project);
+                    setIsModalOpen(true);
+                  }} 
+                  className="btn btn-primary" 
+                  style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}
+                >
+                  View Case Study
+                </button>
               </div>
             </motion.div>
           ))}
         </motion.div>
       </section>
+
+      {/* Project Detail Modal */}
+      <ProjectModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        project={selectedProject} 
+        theme={theme} 
+      />
 
 
 

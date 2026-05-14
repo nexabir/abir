@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Linkedin } from 'lucide-react';
 import LiveWallpaper from './LiveWallpaper';
 
 const Layout = ({ children, theme, toggleTheme, config }) => {
@@ -129,6 +129,37 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
         >
           {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
         </button>
+
+        {/* LinkedIn Link */}
+        <a 
+          href="https://bd.linkedin.com/in/md-abir-ul-islam" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{
+            background: 'var(--accent-glow)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-main)',
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            textDecoration: 'none'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.borderColor = 'var(--accent)';
+            e.currentTarget.style.color = 'var(--accent)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border-color)';
+            e.currentTarget.style.color = 'var(--text-main)';
+          }}
+        >
+          <Linkedin size={16} />
+        </a>
       </header>
 
       {/* Main Content */}
