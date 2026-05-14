@@ -4,8 +4,9 @@ import {
   Settings as SettingsIcon, Save, RefreshCw, Key, 
   FileText, Plus, Edit, Trash2, LogOut, Layout, 
   Image as ImageIcon, Check, X, AlertCircle, Type, 
-  Activity, Sliders, Globe
+  Activity, Sliders, Globe, Briefcase, Code
 } from 'lucide-react';
+
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { supabase } from '../lib/supabaseClient';
