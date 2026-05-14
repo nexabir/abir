@@ -263,7 +263,7 @@ const Admin = ({ theme }) => {
                   </button>
                 </div>
                 <div style={{ display: 'grid', gap: '1rem' }}>
-                  {(siteContent?.sections?.skills || []).map((cat, idx) => (
+                  {(Array.isArray(siteContent?.sections?.skills) ? siteContent.sections.skills : []).map((cat, idx) => (
                     <div key={idx} style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                       <div style={{ display: 'flex', gap: '1rem', marginBottom: '0.5rem' }}>
                         <input 
@@ -271,22 +271,22 @@ const Admin = ({ theme }) => {
                           style={{ flex: 1 }}
                           value={cat?.category || ''} 
                           onChange={e => {
-                            const updated = [...(siteContent?.sections?.skills || [])];
+                            const updated = [...(Array.isArray(siteContent?.sections?.skills) ? siteContent.sections.skills : [])];
                             updated[idx].category = e.target.value;
                             setSiteContent({...siteContent, sections: {...siteContent.sections, skills: updated}});
                           }}
                         />
                         <button onClick={() => {
-                          const updated = (siteContent?.sections?.skills || []).filter((_, i) => i !== idx);
+                          const updated = (Array.isArray(siteContent?.sections?.skills) ? siteContent.sections.skills : []).filter((_, i) => i !== idx);
                           setSiteContent({...siteContent, sections: {...siteContent.sections, skills: updated}});
                         }} style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={16} /></button>
                       </div>
                       <input 
                         className="admin-input" 
                         style={{ fontSize: '0.8rem' }}
-                        value={cat?.items?.join(', ') || ''} 
+                        value={Array.isArray(cat?.items) ? cat.items.join(', ') : ''} 
                         onChange={e => {
-                          const updated = [...(siteContent?.sections?.skills || [])];
+                          const updated = [...(Array.isArray(siteContent?.sections?.skills) ? siteContent.sections.skills : [])];
                           updated[idx].items = e.target.value.split(',').map(s => s.trim());
                           setSiteContent({...siteContent, sections: {...siteContent.sections, skills: updated}});
                         }}
@@ -294,6 +294,7 @@ const Admin = ({ theme }) => {
                     </div>
                   ))}
                 </div>
+
               </div>
 
 
@@ -314,36 +315,37 @@ const Admin = ({ theme }) => {
                   </button>
                 </div>
                 <div style={{ display: 'grid', gap: '1rem' }}>
-                  {(siteContent?.sections?.experience || []).map((exp, idx) => (
+                  {(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : []).map((exp, idx) => (
                     <div key={idx} style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                       <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '10px', marginBottom: '10px' }}>
                         <input className="admin-input" value={exp?.year || ''} placeholder="Year" onChange={e => {
-                          const updated = [...(siteContent?.sections?.experience || [])]; updated[idx].year = e.target.value;
+                          const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].year = e.target.value;
                           setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
                         }} />
                         <input className="admin-input" value={exp?.role || ''} placeholder="Role" onChange={e => {
-                          const updated = [...(siteContent?.sections?.experience || [])]; updated[idx].role = e.target.value;
+                          const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].role = e.target.value;
                           setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
                         }} />
                         <div style={{ display: 'flex', gap: '10px' }}>
                           <input className="admin-input" value={exp?.company || ''} placeholder="Company" onChange={e => {
-                            const updated = [...(siteContent?.sections?.experience || [])]; updated[idx].company = e.target.value;
+                            const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].company = e.target.value;
                             setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
                           }} />
                           <button onClick={() => {
-                            const updated = (siteContent?.sections?.experience || []).filter((_, i) => i !== idx);
+                            const updated = (Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : []).filter((_, i) => i !== idx);
                             setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
                           }} style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={16} /></button>
                         </div>
                       </div>
                       <textarea className="admin-input" style={{ height: '60px', fontSize: '0.8rem' }} value={exp?.desc || ''} placeholder="Description" onChange={e => {
-                        const updated = [...(siteContent?.sections?.experience || [])]; updated[idx].desc = e.target.value;
+                        const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].desc = e.target.value;
                         setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
                       }} />
                     </div>
                   ))}
                 </div>
               </div>
+
 
 
               {/* Featured Projects Manager */}
@@ -363,35 +365,36 @@ const Admin = ({ theme }) => {
                   </button>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                  {(siteContent?.sections?.projects || []).map((proj, idx) => (
+                  {(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : []).map((proj, idx) => (
                     <div key={idx} style={{ padding: '1.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                         <input className="admin-input" value={proj?.title || ''} placeholder="Title" onChange={e => {
-                          const updated = [...(siteContent?.sections?.projects || [])]; updated[idx].title = e.target.value;
+                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].title = e.target.value;
                           setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
                         }} />
                         <button onClick={() => {
-                          const updated = (siteContent?.sections?.projects || []).filter((_, i) => i !== idx);
+                          const updated = (Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : []).filter((_, i) => i !== idx);
                           setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
                         }} style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', marginLeft: '10px' }}><Trash2 size={16} /></button>
                       </div>
                       <textarea className="admin-input" style={{ height: '60px', fontSize: '0.8rem', marginBottom: '10px' }} value={proj?.desc || ''} placeholder="Description" onChange={e => {
-                        const updated = [...(siteContent?.sections?.projects || [])]; updated[idx].desc = e.target.value;
+                        const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].desc = e.target.value;
                         setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
                       }} />
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <input className="admin-input" value={proj?.tags?.join(', ') || ''} placeholder="Tags (React, AI)" onChange={e => {
-                          const updated = [...(siteContent?.sections?.projects || [])]; updated[idx].tags = e.target.value.split(',').map(s => s.trim());
+                        <input className="admin-input" value={Array.isArray(proj?.tags) ? proj.tags.join(', ') : ''} placeholder="Tags (React, AI)" onChange={e => {
+                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].tags = e.target.value.split(',').map(s => s.trim());
                           setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
                         }} />
                         <input className="admin-input" value={proj?.link || ''} placeholder="Link" onChange={e => {
-                          const updated = [...(siteContent?.sections?.projects || [])]; updated[idx].link = e.target.value;
+                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].link = e.target.value;
                           setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
                         }} />
                       </div>
                     </div>
                   ))}
                 </div>
+
               </div>
 
 

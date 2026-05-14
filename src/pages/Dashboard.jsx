@@ -199,7 +199,7 @@ const Dashboard = ({ theme }) => {
             gap: '2rem' 
           }}
         >
-          {(siteData?.sections?.skills || []).map((cat, idx) => (
+          {(Array.isArray(siteData?.sections?.skills) ? siteData.sections.skills : []).map((cat, idx) => (
             <motion.div key={idx} variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '1.5rem' }}>
                 <div style={{ padding: '10px', background: 'var(--accent-glow)', borderRadius: '12px' }}>
@@ -208,7 +208,7 @@ const Dashboard = ({ theme }) => {
                 <h3 style={{ fontSize: '1.3rem' }}>{cat?.category}</h3>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {(cat?.items || []).map(skill => (
+                {(Array.isArray(cat?.items) ? cat.items : []).map(skill => (
                   <span key={skill} style={{ fontSize: '0.75rem', padding: '4px 10px', background: 'rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>{skill}</span>
                 ))}
               </div>
@@ -234,7 +234,7 @@ const Dashboard = ({ theme }) => {
           <div style={{ position: 'absolute', top: 0, bottom: 0, left: '6px', width: '2px', background: 'var(--border-color)' }} />
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            {(siteData?.sections?.experience || []).map((exp, index) => (
+            {(Array.isArray(siteData?.sections?.experience) ? siteData.sections.experience : []).map((exp, index) => (
               <motion.div key={index} variants={fadeUp} style={{ position: 'relative' }}>
                 {/* Timeline Dot */}
                 <div style={{ 
@@ -273,7 +273,7 @@ const Dashboard = ({ theme }) => {
           variants={staggerContainer}
           style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2.5rem' }}
         >
-          { (siteData?.sections?.projects || []).map((project, index) => (
+          { (Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => (
             <motion.div 
               key={index}
               variants={fadeUp}
@@ -286,7 +286,7 @@ const Dashboard = ({ theme }) => {
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
-                {(project?.tags || []).map((tag, tIndex) => (
+                {(Array.isArray(project?.tags) ? project.tags : []).map((tag, tIndex) => (
                   <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
                     {tag}
                   </span>
@@ -302,6 +302,7 @@ const Dashboard = ({ theme }) => {
           ))}
         </motion.div>
       </section>
+
 
 
       {/* 5. INSIGHTS / BLOG */}
