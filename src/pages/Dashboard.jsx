@@ -137,7 +137,7 @@ const Dashboard = ({ theme }) => {
               letterSpacing: '-0.03em'
             }}
           >
-            {siteData.hero?.title || 'Data Chaos Into Strategy'}
+            {siteData?.hero?.title || 'Data Chaos Into Strategy'}
           </motion.h1>
           
           <motion.p 
@@ -150,20 +150,19 @@ const Dashboard = ({ theme }) => {
               lineHeight: 1.6 
             }}
           >
-            {siteData.hero?.subtitle || siteData.hero?.intro || 'Empowering decisions through advanced analytics.'}
+            {siteData?.hero?.subtitle || siteData?.hero?.intro || 'Empowering decisions through advanced analytics.'}
           </motion.p>
-
           
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
             <button 
               className="btn btn-primary" 
-              onClick={() => document.getElementById('projects-section').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' })}
               style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '50px' }}
             >
               View Work <ArrowRight size={18} />
             </button>
             <a 
-              href={`/${siteData.hero.cv_url}`} 
+              href={`/${siteData?.hero?.cv_url || '#'}`} 
               download 
               className="btn"
               style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '50px', backdropFilter: 'blur(10px)' }}
@@ -200,23 +199,22 @@ const Dashboard = ({ theme }) => {
             gap: '2rem' 
           }}
         >
-          {(siteData.sections.skills || []).map((cat, idx) => (
+          {(siteData?.sections?.skills || []).map((cat, idx) => (
             <motion.div key={idx} variants={fadeUp} className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '1.5rem' }}>
                 <div style={{ padding: '10px', background: 'var(--accent-glow)', borderRadius: '12px' }}>
                   <Code size={24} className="text-accent" />
                 </div>
-                <h3 style={{ fontSize: '1.3rem' }}>{cat.category}</h3>
+                <h3 style={{ fontSize: '1.3rem' }}>{cat?.category}</h3>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {cat.items.map(skill => (
+                {(cat?.items || []).map(skill => (
                   <span key={skill} style={{ fontSize: '0.75rem', padding: '4px 10px', background: 'rgba(0,0,0,0.1)', border: '1px solid var(--border-color)', borderRadius: '20px' }}>{skill}</span>
                 ))}
               </div>
             </motion.div>
           ))}
         </motion.div>
-
       </section>
 
       {/* 3. EXPERIENCE TIMELINE */}
@@ -236,7 +234,7 @@ const Dashboard = ({ theme }) => {
           <div style={{ position: 'absolute', top: 0, bottom: 0, left: '6px', width: '2px', background: 'var(--border-color)' }} />
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            {(siteData.sections.experience || []).map((exp, index) => (
+            {(siteData?.sections?.experience || []).map((exp, index) => (
               <motion.div key={index} variants={fadeUp} style={{ position: 'relative' }}>
                 {/* Timeline Dot */}
                 <div style={{ 
@@ -244,16 +242,15 @@ const Dashboard = ({ theme }) => {
                   borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 10px var(--accent-glow)' 
                 }} />
                 
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '0.3rem' }}>{exp.role}</h3>
-                <h4 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>{exp.company} <span style={{ marginLeft: '1rem', opacity: 0.5 }}>{exp.year}</span></h4>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '0.3rem' }}>{exp?.role}</h3>
+                <h4 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>{exp?.company} <span style={{ marginLeft: '1rem', opacity: 0.5 }}>{exp?.year}</span></h4>
                 
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem', maxWidth: '700px' }}>
-                  {exp.desc}
+                  {exp?.desc}
                 </p>
               </motion.div>
             ))}
           </motion.div>
-
         </div>
       </section>
 
@@ -276,20 +273,20 @@ const Dashboard = ({ theme }) => {
           variants={staggerContainer}
           style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2.5rem' }}
         >
-          { (siteData.sections.projects || []).map((project, index) => (
+          { (siteData?.sections?.projects || []).map((project, index) => (
             <motion.div 
               key={index}
               variants={fadeUp}
               className="glass-panel"
               style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
             >
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1rem' }}>{project.title}</h3>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '1rem' }}>{project?.title}</h3>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
-                {project.desc}
+                {project?.desc}
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
-                {project.tags?.map((tag, tIndex) => (
+                {(project?.tags || []).map((tag, tIndex) => (
                   <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
                     {tag}
                   </span>
@@ -297,15 +294,15 @@ const Dashboard = ({ theme }) => {
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
-                <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}>
+                <a href={project?.link || '#'} target="_blank" rel="noopener noreferrer" className="btn" style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}>
                   View Project <ExternalLink size={16} />
                 </a>
               </div>
             </motion.div>
           ))}
-
         </motion.div>
       </section>
+
 
       {/* 5. INSIGHTS / BLOG */}
       <section id="blog-section" style={{ paddingTop: '8rem' }}>
