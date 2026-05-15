@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Linkedin } from 'lucide-react';
+import { Sun, Moon, Link } from 'lucide-react';
 import LiveWallpaper from './LiveWallpaper';
 
 const Layout = ({ children, theme, toggleTheme, config }) => {
@@ -158,7 +158,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
             e.currentTarget.style.color = 'var(--text-main)';
           }}
         >
-          <Linkedin size={16} />
+          <Link size={16} />
         </a>
       </header>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, ArrowRight, Code, Linkedin } from 'lucide-react';
+import { Download, ArrowRight, Code, Link } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
@@ -220,7 +220,7 @@ const Dashboard = ({ theme }) => {
               className="btn"
               style={{ padding: '0.8rem 2rem', fontSize: '1rem', borderRadius: '50px', backdropFilter: 'blur(10px)' }}
             >
-              <Linkedin size={18} /> LinkedIn
+              <Link size={18} /> LinkedIn
             </a>
           </motion.div>
         </motion.div>

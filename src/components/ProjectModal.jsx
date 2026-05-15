@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, Target, Tool, Award } from 'lucide-react';
+import { X, CheckCircle, Target, Settings, Award } from 'lucide-react';
 
 const ProjectModal = ({ isOpen, onClose, project, theme }) => {
   if (!project) return null;
@@ -83,7 +83,7 @@ const ProjectModal = ({ isOpen, onClose, project, theme }) => {
               {/* Approach */}
               <section>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem', color: 'var(--accent)' }}>
-                  <Tool size={20} />
+                  <Settings size={20} />
                   <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>The Approach</h3>
                 </div>
                 <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '1.05rem' }}>{project.approach || "Utilized Agile methodologies and data-driven stakeholder mapping to identify key friction points and architect a scalable solution."}</p>
