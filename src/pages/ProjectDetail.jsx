@@ -21,6 +21,42 @@ const staggerContainer = {
   }
 };
 
+const defaultProjects = [
+  {
+    title: "Supply Chain Waste Optimization",
+    impact_badge: "ROI: $2M+",
+    problem: "Unidentified friction points in inventory lifecycle causing 15% annual waste across multi-region distribution centers.",
+    approach: "Architected a predictive analytics framework using Python (Pandas) and SQL to correlate demand spikes with localized logistics bottlenecks.",
+    impact: ["20% Reduction in Inventory Waste", "Achieved $2M in annual operational savings", "98% Forecast accuracy for Q4 2025"],
+    desc: "Enterprise-level supply chain optimization project reducing operational overhead.",
+    tags: ["SQL", "Python", "Predictive Modeling", "Supply Chain"],
+    link: "#",
+    github_link: "#"
+  },
+  {
+    title: "Predictive Customer Retention Engine",
+    impact_badge: "+12% Retention",
+    problem: "Accelerating churn rates in the SME segment without a clear data-driven understanding of customer pain points.",
+    approach: "Developed a stakeholder-facing Tableau dashboard integrated with a Logistic Regression model to identify 'At-Risk' accounts 30 days prior to renewal.",
+    impact: ["12% Relative increase in retention", "Identified $500k in potential upsell opportunities", "Adopted as standard BI tool for Sales Team"],
+    desc: "Data-driven churn analysis and retention strategy for subscription services.",
+    tags: ["Tableau", "Statistics", "Strategy", "Customer Success"],
+    link: "#",
+    github_link: "#"
+  },
+  {
+    title: "Automated Financial Reporting Pipeline",
+    impact_badge: "95% Efficiency",
+    problem: "Manual monthly reporting cycle requiring 40+ man-hours per department, leading to frequent human error and delayed insights.",
+    approach: "Engineered an automated ETL pipeline using Python and Advanced Excel VBA to consolidate data from 5 disparate sources into a unified real-time dashboard.",
+    impact: ["Reduced reporting time from 40 hours to 2 hours", "100% Data accuracy across all audited reports", "Saved 160+ departmental hours per month"],
+    desc: "Process re-engineering and automation of critical financial workflows.",
+    tags: ["Automation", "Python", "VBA", "Process Mapping"],
+    link: "#",
+    github_link: "#"
+  }
+];
+
 const ProjectDetail = ({ theme }) => {
   const { index } = useParams();
   const navigate = useNavigate();
@@ -32,39 +68,35 @@ const ProjectDetail = ({ theme }) => {
     const fetchProject = async () => {
       setLoading(true);
       try {
-        if (!supabase) throw new Error('Supabase not initialized');
+        let projects = [];
+        if (supabase) {
+          const { data, error } = await supabase
+            .from('site_content')
+            .select('*')
+            .eq('id', 'sections')
+            .single();
 
-        const { data, error } = await supabase
-          .from('site_content')
-          .select('*')
-          .eq('id', 'sections')
-          .single();
+          if (!error && Array.isArray(data?.content?.projects) && data.content.projects.length > 0) {
+            projects = data.content.projects;
+          }
+        }
 
-        if (error) throw error;
+        if (projects.length === 0) {
+          projects = defaultProjects;
+        }
 
-        const projects = data?.content?.projects || [];
         setAllProjects(projects);
         const idx = parseInt(index, 10);
         if (projects[idx]) {
           setProject(projects[idx]);
+        } else if (defaultProjects[idx]) {
+          setProject(defaultProjects[idx]);
         }
       } catch (err) {
         console.error('Failed to fetch project:', err.message);
-        // Fallback defaults
-        const defaults = [
-          {
-            title: "Supply Chain Waste Optimization",
-            impact_badge: "ROI: $2M+",
-            problem: "Unidentified friction points in inventory lifecycle causing 15% annual waste across multi-region distribution centers.",
-            approach: "Architected a predictive analytics framework using Python (Pandas) and SQL to correlate demand spikes with localized logistics bottlenecks.",
-            impact: ["20% Reduction in Inventory Waste", "Achieved $2M in annual operational savings", "98% Forecast accuracy for Q4 2025"],
-            desc: "Enterprise-level supply chain optimization project reducing operational overhead.",
-            tags: ["SQL", "Python", "Predictive Modeling", "Supply Chain"],
-            link: "#"
-          }
-        ];
         const idx = parseInt(index, 10);
-        if (defaults[idx]) setProject(defaults[idx]);
+        setAllProjects(defaultProjects);
+        if (defaultProjects[idx]) setProject(defaultProjects[idx]);
       } finally {
         setLoading(false);
       }
