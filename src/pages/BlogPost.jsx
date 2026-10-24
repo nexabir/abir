@@ -52,11 +52,11 @@ const BlogPost = ({ theme }) => {
       <motion.button 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/#blog-section')}
         className="btn"
         style={{ marginBottom: '3rem', borderRadius: '50px', padding: '0.6rem 1.5rem', gap: '10px' }}
       >
-        <ArrowLeft size={18} /> BACK_TO_SYSTEM
+        <ArrowLeft size={18} /> Back to Insights
       </motion.button>
 
       <motion.div
