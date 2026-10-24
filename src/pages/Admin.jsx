@@ -64,6 +64,73 @@ const defaultServices = [
   }
 ];
 
+const defaultClients = [
+  {
+    name: "Akij Resource",
+    logo: "/assets/clients/akij-resource.png",
+    industry: "Conglomerate & Industrial Manufacturing",
+    website: "https://akijresource.com/",
+    scope: "Business intelligence architecture, sales reporting consolidation, and executive operational KPIs.",
+    tag: "Enterprise BI"
+  },
+  {
+    name: "Anwar Group of Industries",
+    logo: "/assets/clients/Anwar-Group.jpg",
+    industry: "Infrastructure & Industrial Conglomerate",
+    website: "https://anwargroup.com/",
+    scope: "Multi-entity financial consolidation, cash runway visibility, and financial variance dashboards.",
+    tag: "Financial Analytics"
+  },
+  {
+    name: "Daffodil Family",
+    logo: "/assets/clients/Daffodil Family.png",
+    industry: "Education, Technology & Venture Ecosystem",
+    website: "https://daffodil.family/",
+    scope: "Strategic analytics, operational monitoring dashboards, and academic performance tracking systems.",
+    tag: "Data Strategy"
+  },
+  {
+    name: "Global Entrepreneurship Network (GEN)",
+    logo: "/assets/clients/GEN.png",
+    industry: "Global Venture Ecosystem & Programs",
+    website: "https://www.genglobal.org/",
+    scope: "Venture ecosystem telemetry, startup program metrics, and stakeholder impact analytics.",
+    tag: "Program Analytics"
+  },
+  {
+    name: "Biggani.org",
+    logo: "/assets/clients/biggani.org.png",
+    industry: "Science & Tech Knowledge Platform",
+    website: "https://biggani.org/",
+    scope: "Audience telemetry, digital engagement tracking, and multi-channel content performance analytics.",
+    tag: "Digital Analytics"
+  },
+  {
+    name: "DRILLAB",
+    logo: "/assets/clients/DRILLAB.png",
+    industry: "Innovation, Research & Lab Technology",
+    website: "https://drillab.com/",
+    scope: "Operational workflow telemetry, research data pipeline automation, and tracking dashboards.",
+    tag: "Operational BI"
+  },
+  {
+    name: "LearnTime",
+    logo: "/assets/clients/learntime.png",
+    industry: "EdTech & Online Learning Platform",
+    website: "https://learntime.com.bd/",
+    scope: "Student cohort retention analysis, course revenue velocity, and customer acquisition unit economics.",
+    tag: "Cohort Analytics"
+  },
+  {
+    name: "DPI Entrepreneurship Club",
+    logo: "/assets/clients/DPI-Entrepreneurship-Club.png",
+    industry: "Institutional Incubator & Community",
+    website: "https://www.facebook.com/dpientrepreneurshipclub/",
+    scope: "Venture incubation telemetry, student startup progress tracking, and workshop metrics.",
+    tag: "Venture Analytics"
+  }
+];
+
 const Admin = ({ theme }) => {
   const [activeTab, setActiveTab] = useState('blogs');
   const [blogs, setBlogs] = useState([]);
@@ -88,6 +155,7 @@ const Admin = ({ theme }) => {
       skills: [], 
       experience: [], 
       services: defaultServices,
+      clients: defaultClients,
       projects: [] 
     },
     contact: {
@@ -195,12 +263,16 @@ const Admin = ({ theme }) => {
 
       const loadedProjects = contentMap.sections?.projects;
       const loadedServices = contentMap.sections?.services;
+      const loadedClients = contentMap.sections?.clients;
       const projectsToUse = (Array.isArray(loadedProjects) && loadedProjects.length > 0)
         ? loadedProjects
         : defaultProjects;
       const servicesToUse = (Array.isArray(loadedServices) && loadedServices.length > 0)
         ? loadedServices
         : defaultServices;
+      const clientsToUse = (Array.isArray(loadedClients) && loadedClients.length > 0)
+        ? loadedClients
+        : defaultClients;
 
       setSiteContent(prev => ({
         ...prev,
@@ -211,6 +283,7 @@ const Admin = ({ theme }) => {
           ...prev.sections,
           ...(contentMap.sections || {}),
           services: servicesToUse,
+          clients: clientsToUse,
           projects: projectsToUse
         }
       }));
@@ -675,49 +748,158 @@ const Admin = ({ theme }) => {
               </div>
 
 
-              {/* Professional Background Manager */}
+              {/* Clients & Growth Partners Manager */}
               <div className="glass-panel" style={{ padding: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                  <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Briefcase size={18} /> PROFESSIONAL_BACKGROUND</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 700 }}>
+                      <Globe size={20} /> CLIENTS_&_PARTNERS_MANAGER
+                    </h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '4px' }}>
+                      Showcase enterprise clients and partner logos, website links, industries, and engagement scopes on the live site.
+                    </p>
+                  </div>
                   <button 
                     onClick={() => {
-                      const sections = siteContent?.sections || { skills: [], experience: [], projects: [] };
-                      const current = sections?.experience || [];
-                      const updated = [...current, { year: "2024", role: "New Role", company: "Company Name", desc: "Job description here..." }];
-                      setSiteContent({...siteContent, sections: {...sections, experience: updated}});
+                      const sections = siteContent?.sections || { skills: [], experience: [], projects: [], services: [], clients: [] };
+                      const current = sections?.clients || [];
+                      const updated = [
+                        ...current,
+                        {
+                          name: "New Client Partner",
+                          logo: "/assets/clients/akij-resource.png",
+                          industry: "Technology / Industry",
+                          website: "https://example.com",
+                          scope: "Description of the data consulting, reporting automation, or analytics work delivered.",
+                          tag: "Enterprise BI"
+                        }
+                      ];
+                      setSiteContent({ ...siteContent, sections: { ...sections, clients: updated } });
                     }}
-                    className="btn" style={{ fontSize: '0.7rem', padding: '5px 12px' }}
+                    className="btn btn-primary" style={{ fontSize: '0.75rem', padding: '6px 14px' }}
                   >
-                    <Plus size={14} /> ADD_EXPERIENCE
+                    <Plus size={14} /> ADD_CLIENT_PARTNER
                   </button>
                 </div>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : []).map((exp, idx) => (
-                    <div key={idx} style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '10px', marginBottom: '10px' }}>
-                        <input className="admin-input" value={exp?.year || ''} placeholder="Year" onChange={e => {
-                          const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].year = e.target.value;
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
-                        }} />
-                        <input className="admin-input" value={exp?.role || ''} placeholder="Role" onChange={e => {
-                          const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].role = e.target.value;
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
-                        }} />
-                        <div style={{ display: 'flex', gap: '10px' }}>
-                          <input className="admin-input" value={exp?.company || ''} placeholder="Company" onChange={e => {
-                            const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].company = e.target.value;
-                            setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
-                          }} />
-                          <button onClick={() => {
-                            const updated = (Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : []).filter((_, i) => i !== idx);
-                            setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
-                          }} style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={16} /></button>
+
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  {(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients).map((client, cIdx) => (
+                    <div key={cIdx} className="admin-project-card" style={{ padding: '1.5rem' }}>
+                      <div className="admin-project-card__header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span className="admin-project-card__number">CLIENT #{cIdx + 1}</span>
+                          <span style={{ fontWeight: 700 }}>{client.name || 'Untitled Client'}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = (Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients).filter((_, i) => i !== cIdx);
+                            setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                          }}
+                          style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                          title="Delete Partner"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      <div className="admin-project-card__grid">
+                        <div className="admin-project-card__row">
+                          <div className="admin-field">
+                            <label>Client / Partner Name</label>
+                            <input 
+                              className="admin-input" 
+                              value={client.name || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                                updated[cIdx].name = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                              }} 
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>Industry / Vertical</label>
+                            <input 
+                              className="admin-input" 
+                              value={client.industry || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                                updated[cIdx].industry = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                              }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-project-card__row">
+                          <div className="admin-field">
+                            <label>Website URL</label>
+                            <input 
+                              className="admin-input" 
+                              value={client.website || ''} 
+                              placeholder="https://clientwebsite.com"
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                                updated[cIdx].website = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                              }} 
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>Scope Tag (e.g. Enterprise BI, Data Strategy)</label>
+                            <input 
+                              className="admin-input" 
+                              value={client.tag || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                                updated[cIdx].tag = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                              }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-field">
+                          <label>Logo Asset URL or Path</label>
+                          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <input 
+                              className="admin-input" 
+                              style={{ flex: 1 }}
+                              value={client.logo || ''} 
+                              placeholder="/assets/clients/filename.png"
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                                updated[cIdx].logo = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                              }} 
+                            />
+                            {client.logo && (
+                              <div style={{ 
+                                width: '75px', height: '48px', background: '#fff', borderRadius: '8px', 
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', flexShrink: 0,
+                                border: '1px solid var(--border-color)'
+                              }}>
+                                <img src={client.logo} alt="Preview" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} onError={(e) => e.target.style.display = 'none'} />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="admin-field">
+                          <label>Work Delivered / Scope Description</label>
+                          <textarea 
+                            className="admin-input" 
+                            style={{ height: '65px', fontSize: '0.85rem' }} 
+                            value={client.scope || ''} 
+                            placeholder="Briefly describe what was implemented or achieved for this client..."
+                            onChange={e => {
+                              const updated = [...(Array.isArray(siteContent?.sections?.clients) ? siteContent.sections.clients : defaultClients)];
+                              updated[cIdx].scope = e.target.value;
+                              setSiteContent({ ...siteContent, sections: { ...siteContent.sections, clients: updated } });
+                            }} 
+                          />
                         </div>
                       </div>
-                      <textarea className="admin-input" style={{ height: '60px', fontSize: '0.8rem' }} value={exp?.desc || ''} placeholder="Description" onChange={e => {
-                        const updated = [...(Array.isArray(siteContent?.sections?.experience) ? siteContent.sections.experience : [])]; updated[idx].desc = e.target.value;
-                        setSiteContent({...siteContent, sections: {...siteContent.sections, experience: updated}});
-                      }} />
                     </div>
                   ))}
                 </div>

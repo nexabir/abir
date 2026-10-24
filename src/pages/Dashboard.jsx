@@ -77,6 +77,73 @@ const defaultServices = [
   }
 ];
 
+const defaultClients = [
+  {
+    name: "Akij Resource",
+    logo: "/assets/clients/akij-resource.png",
+    industry: "Conglomerate & Industrial Manufacturing",
+    website: "https://akijresource.com/",
+    scope: "Business intelligence architecture, sales reporting consolidation, and executive operational KPIs.",
+    tag: "Enterprise BI"
+  },
+  {
+    name: "Anwar Group of Industries",
+    logo: "/assets/clients/Anwar-Group.jpg",
+    industry: "Infrastructure & Industrial Conglomerate",
+    website: "https://anwargroup.com/",
+    scope: "Multi-entity financial consolidation, cash runway visibility, and financial variance dashboards.",
+    tag: "Financial Analytics"
+  },
+  {
+    name: "Daffodil Family",
+    logo: "/assets/clients/Daffodil Family.png",
+    industry: "Education, Technology & Venture Ecosystem",
+    website: "https://daffodil.family/",
+    scope: "Strategic analytics, operational monitoring dashboards, and academic performance tracking systems.",
+    tag: "Data Strategy"
+  },
+  {
+    name: "Global Entrepreneurship Network (GEN)",
+    logo: "/assets/clients/GEN.png",
+    industry: "Global Venture Ecosystem & Programs",
+    website: "https://www.genglobal.org/",
+    scope: "Venture ecosystem telemetry, startup program metrics, and stakeholder impact analytics.",
+    tag: "Program Analytics"
+  },
+  {
+    name: "Biggani.org",
+    logo: "/assets/clients/biggani.org.png",
+    industry: "Science & Tech Knowledge Platform",
+    website: "https://biggani.org/",
+    scope: "Audience telemetry, digital engagement tracking, and multi-channel content performance analytics.",
+    tag: "Digital Analytics"
+  },
+  {
+    name: "DRILLAB",
+    logo: "/assets/clients/DRILLAB.png",
+    industry: "Innovation, Research & Lab Technology",
+    website: "https://drillab.com/",
+    scope: "Operational workflow telemetry, research data pipeline automation, and tracking dashboards.",
+    tag: "Operational BI"
+  },
+  {
+    name: "LearnTime",
+    logo: "/assets/clients/learntime.png",
+    industry: "EdTech & Online Learning Platform",
+    website: "https://learntime.com.bd/",
+    scope: "Student cohort retention analysis, course revenue velocity, and user acquisition analytics.",
+    tag: "Cohort Analytics"
+  },
+  {
+    name: "DPI Entrepreneurship Club",
+    logo: "/assets/clients/DPI-Entrepreneurship-Club.png",
+    industry: "Institutional Incubator & Community",
+    website: "https://www.facebook.com/dpientrepreneurshipclub/",
+    scope: "Venture incubation telemetry, student startup progress tracking, and workshop metrics.",
+    tag: "Venture Analytics"
+  }
+];
+
 const Dashboard = ({ theme }) => {
   const navigate = useNavigate();
   const [siteData, setSiteData] = React.useState({
@@ -91,6 +158,7 @@ const Dashboard = ({ theme }) => {
       skills: [], 
       experience: [], 
       services: defaultServices,
+      clients: defaultClients,
       projects: [
         {
           title: "Multi-Channel Agency Performance & Client Reporting Hub",
@@ -223,6 +291,7 @@ const Dashboard = ({ theme }) => {
         // Merge Supabase data with Safety Defaults
         const loadedProjects = contentMap.sections?.projects;
         const loadedServices = contentMap.sections?.services;
+        const loadedClients = contentMap.sections?.clients;
         setSiteData(prev => ({
           ...prev,
           ...contentMap,
@@ -231,6 +300,9 @@ const Dashboard = ({ theme }) => {
           sections: { 
             ...prev.sections, 
             ...(contentMap.sections || {}),
+            clients: (Array.isArray(loadedClients) && loadedClients.length > 0)
+              ? loadedClients
+              : prev.sections.clients,
             services: (Array.isArray(loadedServices) && loadedServices.length > 0)
               ? loadedServices
               : prev.sections.services,
@@ -541,41 +613,101 @@ const Dashboard = ({ theme }) => {
         </motion.div>
       </section>
 
-      {/* 3. EXPERIENCE TIMELINE */}
-      <section id="experience-section" style={{ paddingTop: '8rem' }}>
+      {/* 3. CLIENTS & STRATEGIC PARTNERS */}
+      <section id="clients-section" style={{ paddingTop: '8rem' }}>
         <motion.div 
           initial="hidden" 
           whileInView="visible" 
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeUp}
-          style={{ marginBottom: '4rem' }}
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Professional <span className="text-accent">Background</span></h2>
+          <div style={{ marginBottom: '1rem' }}>
+            <span style={{ 
+              padding: '6px 18px', 
+              borderRadius: '30px', 
+              border: '1px solid var(--border-color)', 
+              color: 'var(--accent)', 
+              fontSize: '0.85rem', 
+              fontWeight: 600,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              backdropFilter: 'blur(10px)'
+            }}>
+              Proven Track Record
+            </span>
+          </div>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>
+            Clients & <span className="text-accent">Partner Organizations</span>
+          </h2>
+          <p style={{ color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
+            Collaborated with enterprise conglomerates, growing startups, and innovation programs on data strategy, analytics, and business reporting automation.
+          </p>
         </motion.div>
 
-        <div style={{ position: 'relative', paddingLeft: '2rem' }}>
-          {/* Timeline Line */}
-          <div style={{ position: 'absolute', top: 0, bottom: 0, left: '6px', width: '2px', background: 'var(--border-color)' }} />
-          
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            {(Array.isArray(siteData?.sections?.experience) ? siteData.sections.experience : []).map((exp, index) => (
-              <motion.div key={index} variants={fadeUp} style={{ position: 'relative' }}>
-                {/* Timeline Dot */}
-                <div style={{ 
-                  position: 'absolute', left: '-2rem', top: '6px', width: '14px', height: '14px', 
-                  borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 10px var(--accent-glow)' 
-                }} />
-                
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '0.3rem' }}>{exp?.role}</h3>
-                <h4 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>{exp?.company} <span style={{ marginLeft: '1rem', opacity: 0.5 }}>{exp?.year}</span></h4>
-                
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem', maxWidth: '700px' }}>
-                  {exp?.desc}
-                </p>
-              </motion.div>
+        {/* Scrolling Partner Logos Marquee */}
+        <div className="partners-marquee">
+          <div className="partners-track">
+            {[...(Array.isArray(siteData?.sections?.clients) ? siteData.sections.clients : defaultClients), ...(Array.isArray(siteData?.sections?.clients) ? siteData.sections.clients : defaultClients)].map((client, idx) => (
+              <div key={idx} className="partners-badge" title={client.name}>
+                <img src={client.logo} alt={client.name} onError={(e) => { e.target.style.display = 'none'; }} />
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
+
+        {/* Detailed Client Cards Grid */}
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="clients-grid"
+        >
+          {(Array.isArray(siteData?.sections?.clients) ? siteData.sections.clients : defaultClients).map((client, idx) => (
+            <motion.div key={idx} variants={fadeUp} className="client-card">
+              <div className="client-logo-box">
+                <img src={client.logo} alt={client.name} onError={(e) => { e.target.style.display = 'none'; }} />
+              </div>
+
+              <div className="client-card__name">
+                <span>{client.name}</span>
+                {client.website && client.website !== '#' && (
+                  <a 
+                    href={client.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="client-card__link"
+                    title={`Visit ${client.name}`}
+                  >
+                    <ExternalLink size={15} />
+                  </a>
+                )}
+              </div>
+
+              <div className="client-card__industry">{client.industry}</div>
+
+              <p className="client-card__scope">{client.scope}</p>
+
+              <div className="client-card__footer">
+                <span className="client-card__tag">
+                  <CheckCircle size={12} style={{ color: 'var(--accent)' }} />
+                  {client.tag || 'Engagement Partner'}
+                </span>
+                {client.website && client.website !== '#' && (
+                  <a 
+                    href={client.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="client-card__link"
+                  >
+                    Visit <ArrowUpRight size={13} />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* 4. PROJECTS */}

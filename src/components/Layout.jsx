@@ -16,8 +16,8 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
   const navItems = [
     { id: 'about-section', label: 'About' },
     { id: 'services-section', label: 'Services' },
+    { id: 'clients-section', label: 'Clients' },
     { id: 'projects-section', label: 'Case Studies' },
-    { id: 'experience-section', label: 'Experience' },
     { id: 'blog-section', label: 'Insights' },
     { id: 'contact-section', label: 'Contact' },
   ];
