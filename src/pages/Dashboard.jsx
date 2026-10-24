@@ -96,11 +96,18 @@ const Dashboard = ({ theme }) => {
         });
 
         // Merge Supabase data with Safety Defaults
+        const loadedProjects = contentMap.sections?.projects;
         setSiteData(prev => ({
           ...prev,
           ...contentMap,
           hero: { ...prev.hero, ...(contentMap.hero || {}) },
-          sections: { ...prev.sections, ...(contentMap.sections || {}) }
+          sections: { 
+            ...prev.sections, 
+            ...(contentMap.sections || {}),
+            projects: (Array.isArray(loadedProjects) && loadedProjects.length > 0)
+              ? loadedProjects
+              : prev.sections.projects
+          }
         }));
         
         // Fetch blogs

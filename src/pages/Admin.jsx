@@ -62,12 +62,54 @@ const Admin = ({ theme }) => {
         contentMap[item.id] = item.content;
       });
       // Use functional update to merge with safety defaults
+      const defaultProjects = [
+        {
+          title: "Supply Chain Waste Optimization",
+          impact_badge: "ROI: $2M+",
+          problem: "Unidentified friction points in inventory lifecycle causing 15% annual waste across multi-region distribution centers.",
+          approach: "Architected a predictive analytics framework using Python (Pandas) and SQL to correlate demand spikes with localized logistics bottlenecks.",
+          impact: ["20% Reduction in Inventory Waste", "Achieved $2M in annual operational savings", "98% Forecast accuracy for Q4 2025"],
+          desc: "Enterprise-level supply chain optimization project reducing operational overhead.",
+          tags: ["SQL", "Python", "Predictive Modeling", "Supply Chain"],
+          link: "#",
+          github_link: "#"
+        },
+        {
+          title: "Predictive Customer Retention Engine",
+          impact_badge: "+12% Retention",
+          problem: "Accelerating churn rates in the SME segment without a clear data-driven understanding of customer pain points.",
+          approach: "Developed a stakeholder-facing Tableau dashboard integrated with a Logistic Regression model to identify 'At-Risk' accounts 30 days prior to renewal.",
+          impact: ["12% Relative increase in retention", "Identified $500k in potential upsell opportunities", "Adopted as standard BI tool for Sales Team"],
+          desc: "Data-driven churn analysis and retention strategy for subscription services.",
+          tags: ["Tableau", "Statistics", "Strategy", "Customer Success"],
+          link: "#",
+          github_link: "#"
+        },
+        {
+          title: "Automated Financial Reporting Pipeline",
+          impact_badge: "95% Efficiency",
+          problem: "Manual monthly reporting cycle requiring 40+ man-hours per department, leading to frequent human error and delayed insights.",
+          approach: "Engineered an automated ETL pipeline using Python and Advanced Excel VBA to consolidate data from 5 disparate sources into a unified real-time dashboard.",
+          impact: ["Reduced reporting time from 40 hours to 2 hours", "100% Data accuracy across all audited reports", "Saved 160+ departmental hours per month"],
+          desc: "Process re-engineering and automation of critical financial workflows.",
+          tags: ["Automation", "Python", "VBA", "Process Mapping"],
+          link: "#",
+          github_link: "#"
+        }
+      ];
+
+      const loadedProjects = contentMap.sections?.projects;
+      const projectsToUse = (Array.isArray(loadedProjects) && loadedProjects.length > 0)
+        ? loadedProjects
+        : defaultProjects;
+
       setSiteContent(prev => ({
         ...prev,
         ...contentMap,
         sections: {
           ...prev.sections,
-          ...(contentMap.sections || {})
+          ...(contentMap.sections || {}),
+          projects: projectsToUse
         }
       }));
       if (contentMap.system_config) {
