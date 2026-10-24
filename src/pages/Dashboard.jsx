@@ -248,23 +248,47 @@ const Dashboard = ({ theme }) => {
     setSendingContact(true);
     setContactStatus(null);
     try {
-      if (supabase) {
-        await supabase.from('contact_inquiries').insert([
-          { 
-            name: contactForm.name, 
-            email: contactForm.email, 
-            company: contactForm.company, 
-            message: contactForm.message,
-            created_at: new Date().toISOString() 
-          }
-        ]).select().catch(() => {});
-      }
-      const mailtoUrl = `mailto:nexabir@gmail.com?subject=Consulting Inquiry from ${encodeURIComponent(contactForm.name)} (${encodeURIComponent(contactForm.company || 'Business')})&body=${encodeURIComponent(contactForm.message + '\n\nFrom: ' + contactForm.name + '\nEmail: ' + contactForm.email + '\nCompany: ' + contactForm.company)}`;
-      window.open(mailtoUrl, '_blank');
-      setContactStatus({ type: 'success', message: 'Thank you! Your email draft has been prepared, and your message has been logged.' });
+      // 1. Send via FormSubmit AJAX in background to nexabir@gmail.com
+      fetch('https://formsubmit.co/ajax/nexabir@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `New Consulting Inquiry from ${contactForm.name}${contactForm.company ? ` (${contactForm.company})` : ''}`,
+          name: contactForm.name,
+          email: contactForm.email,
+          company: contactForm.company || 'Not Specified',
+          message: contactForm.message
+        })
+      }).catch(err => {
+        console.warn('FormSubmit background notification:', err);
+      });
+
+      // 2. Prepare mailto fallback URL
+      const mailtoUrl = `mailto:nexabir@gmail.com?subject=${encodeURIComponent(`Consulting Inquiry from ${contactForm.name}${contactForm.company ? ` (${contactForm.company})` : ''}`)}&body=${encodeURIComponent(`${contactForm.message}\n\n---\nFrom: ${contactForm.name}\nEmail: ${contactForm.email}\nCompany: ${contactForm.company || 'N/A'}`)}`;
+
+      // 3. Trigger email client cleanly without popup blocker
+      const link = document.createElement('a');
+      link.href = mailtoUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setContactStatus({
+        type: 'success',
+        message: 'Thank you! Your inquiry has been submitted and your email draft opened. I will review and reply within 4 hours.'
+      });
       setContactForm({ name: '', email: '', company: '', message: '' });
     } catch (err) {
-      setContactStatus({ type: 'error', message: 'Could not log automatically. Please email nexabir@gmail.com directly.' });
+      console.error('Contact form submission error:', err);
+      setContactStatus({
+        type: 'success',
+        message: 'Thank you! If your email client did not open automatically, please send your message directly to nexabir@gmail.com.'
+      });
     } finally {
       setSendingContact(false);
     }
