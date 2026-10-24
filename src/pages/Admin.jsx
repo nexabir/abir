@@ -5,13 +5,64 @@ import {
   FileText, Plus, Edit, Trash2, LogOut, Layout, 
   Image as ImageIcon, Check, X, AlertCircle, Type, 
   Activity, Sliders, Globe, Briefcase, Code,
-  ChevronUp, ChevronDown, Target, Award, ExternalLink, FolderGit2
+  ChevronUp, ChevronDown, Target, Award, ExternalLink, FolderGit2,
+  Calendar, Mail, Clock, Sparkles, Layers
 } from 'lucide-react';
 
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { supabase } from '../lib/supabaseClient';
 
+const defaultServices = [
+  {
+    title: "Rapid BI & Analytics Audit",
+    tier: "Offer A • Quick Win",
+    badge: "3-5 Days Turnaround",
+    price: "$450 – $750",
+    period: "fixed fee",
+    desc: "Uncover hidden reporting bottlenecks, eliminate tracking discrepancies, and receive an actionable architecture blueprint.",
+    timeframe: "Delivered in 3 to 5 business days",
+    deliverables: [
+      "Full audit of ad platforms (Meta, Google), GA4, CRM, and Excel reporting models",
+      "Root cause diagnosis of attribution, ROAS, and CAC calculation discrepancies",
+      "Fixed-scope technical recommendation report & recommended BI dashboard schema"
+    ],
+    ctaText: "Request Audit",
+    featured: false
+  },
+  {
+    title: "Custom Dashboard & Data Pipeline",
+    tier: "Offer B • Core Engagement",
+    badge: "Most Popular",
+    price: "$1,200 – $2,800",
+    period: "project-based",
+    desc: "Consolidate scattered data sources into automated, client-ready Power BI dashboards that refresh without manual intervention.",
+    timeframe: "Delivered in 2 to 3 weeks",
+    deliverables: [
+      "Automated multi-channel data ingestion & normalization pipeline (SQL / Python / Power Query)",
+      "Executive KPI dashboard + deep-dive operational and cohort analysis views",
+      "Interactive Loom video documentation, staff training, and 30-day post-delivery hypercare"
+    ],
+    ctaText: "Discuss Your Dashboard",
+    featured: true
+  },
+  {
+    title: "Fractional Analytics Partner",
+    tier: "Offer C • Advisory Retainer",
+    badge: "Dedicated Partner",
+    price: "$800 – $1,500",
+    period: "per month",
+    desc: "Ongoing decision support, reporting automation, and custom deep-dive analysis without full-time employee overhead.",
+    timeframe: "Month-to-month flexibility • 10-20 hrs/mo",
+    deliverables: [
+      "Bi-weekly executive KPI reviews & proactive growth bottleneck identification",
+      "Continuous data model maintenance, new platform connectors, and metric updates",
+      "Priority response on ad-hoc analytical queries and board/investor presentation decks"
+    ],
+    ctaText: "Explore Partnership",
+    featured: false
+  }
+];
 
 const Admin = ({ theme }) => {
   const [activeTab, setActiveTab] = useState('blogs');
@@ -28,15 +79,28 @@ const Admin = ({ theme }) => {
 
   // Site Content State (with Safety Defaults)
   const [siteContent, setSiteContent] = useState({
-    hero: { title: '', subtitle: '' },
-    sections: { skills: [], experience: [], projects: [] }
+    hero: { 
+      badge: 'Data & Analytics Consultant',
+      title: 'Turning Fragmented Data into Clear Growth Decisions', 
+      subtitle: 'I help growing businesses and performance marketing agencies turn scattered ad spend, sales, and operational data into automated Power BI dashboards, actionable insights, and reliable monthly reports.' 
+    },
+    sections: { 
+      skills: [], 
+      experience: [], 
+      services: defaultServices,
+      projects: [] 
+    },
+    contact: {
+      email: 'nexabir@gmail.com',
+      calendly: 'https://calendly.com',
+      linkedin: 'https://bd.linkedin.com/in/md-abir-ul-islam'
+    }
   });
   const [systemConfig, setSystemConfig] = useState({
     particles: { count: 100, speed: 0.5, color: '#eab308' },
     branding: { font: 'Inter', favicon: '/favicon.svg' },
     defaultTheme: 'dark'
   });
-
 
   useEffect(() => {
     fetchAllData();
@@ -130,16 +194,23 @@ const Admin = ({ theme }) => {
       ];
 
       const loadedProjects = contentMap.sections?.projects;
+      const loadedServices = contentMap.sections?.services;
       const projectsToUse = (Array.isArray(loadedProjects) && loadedProjects.length > 0)
         ? loadedProjects
         : defaultProjects;
+      const servicesToUse = (Array.isArray(loadedServices) && loadedServices.length > 0)
+        ? loadedServices
+        : defaultServices;
 
       setSiteContent(prev => ({
         ...prev,
         ...contentMap,
+        hero: { ...prev.hero, ...(contentMap.hero || {}) },
+        contact: { ...prev.contact, ...(contentMap.contact || {}) },
         sections: {
           ...prev.sections,
           ...(contentMap.sections || {}),
+          services: servicesToUse,
           projects: projectsToUse
         }
       }));
@@ -305,6 +376,13 @@ const Admin = ({ theme }) => {
               <div className="glass-panel" style={{ padding: '2rem' }}>
                 <h4 style={{ marginBottom: '1.5rem', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Type size={18} /> HERO_SECTION</h4>
                 <div style={{ display: 'grid', gap: '1rem' }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>BADGE_TAG</label>
+                  <input 
+                    className="admin-input" 
+                    value={siteContent.hero?.badge || ''} 
+                    placeholder="e.g. Data & Analytics Consultant"
+                    onChange={e => setSiteContent({...siteContent, hero: {...siteContent.hero, badge: e.target.value}})}
+                  />
                   <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>MAIN_HEADLINE</label>
                   <input 
                     className="admin-input" 
@@ -318,6 +396,230 @@ const Admin = ({ theme }) => {
                     value={siteContent.hero?.subtitle || ''} 
                     onChange={e => setSiteContent({...siteContent, hero: {...siteContent.hero, subtitle: e.target.value}})}
                   />
+                </div>
+              </div>
+
+              {/* Services & Engagement Models Manager */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 700 }}>
+                      <Briefcase size={20} /> SERVICES_&_ENGAGEMENT_MODELS_MANAGER
+                    </h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '4px' }}>
+                      Configure service tiers (Offer A, B, C), pricing, turnaround time, deliverables, and CTA buttons on the live site.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      const sections = siteContent?.sections || { skills: [], experience: [], projects: [], services: [] };
+                      const current = sections?.services || [];
+                      const updated = [
+                        ...current,
+                        {
+                          title: "New Engagement Model",
+                          tier: `Offer ${String.fromCharCode(65 + current.length)}`,
+                          badge: "Custom",
+                          price: "$500 – $1,000",
+                          period: "fixed fee",
+                          desc: "High-level summary of the offering and target clientele.",
+                          timeframe: "Delivered in 1 to 2 weeks",
+                          deliverables: ["Deliverable item 1", "Deliverable item 2"],
+                          ctaText: "Get Started",
+                          featured: false
+                        }
+                      ];
+                      setSiteContent({ ...siteContent, sections: { ...sections, services: updated } });
+                    }}
+                    className="btn btn-primary" style={{ fontSize: '0.75rem', padding: '6px 14px' }}
+                  >
+                    <Plus size={14} /> ADD_SERVICE_TIER
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  {(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices).map((srv, sIdx) => (
+                    <div key={sIdx} className="admin-project-card" style={{ padding: '1.5rem' }}>
+                      <div className="admin-project-card__header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span className="admin-project-card__number">TIER #{sIdx + 1}</span>
+                          <span style={{ fontWeight: 700 }}>{srv.title || 'Untitled Service'}</span>
+                          {srv.featured && (
+                            <span style={{ fontSize: '0.7rem', padding: '2px 8px', background: 'var(--accent)', color: 'var(--bg-color)', borderRadius: '6px', fontWeight: 700 }}>
+                              FEATURED
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                              updated[sIdx].featured = !updated[sIdx].featured;
+                              setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                            }}
+                            className="btn"
+                            style={{ fontSize: '0.7rem', padding: '4px 10px' }}
+                          >
+                            <Sparkles size={12} /> {srv.featured ? 'Unfeature' : 'Feature'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices).filter((_, i) => i !== sIdx);
+                              setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                            }}
+                            style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="admin-project-card__grid">
+                        <div className="admin-project-card__row">
+                          <div className="admin-field">
+                            <label>Service Title</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.title || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].title = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>Tier Label (e.g. Offer A • Quick Win)</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.tier || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].tier = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-project-card__row">
+                          <div className="admin-field">
+                            <label>Price Display (e.g. $450 – $750)</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.price || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].price = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>Billing Period (e.g. fixed fee, project-based, per month)</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.period || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].period = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-project-card__row">
+                          <div className="admin-field">
+                            <label>Timeframe (e.g. Delivered in 3-5 days)</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.timeframe || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].timeframe = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>Badge Tag (e.g. Most Popular)</label>
+                            <input 
+                              className="admin-input" 
+                              value={srv.badge || ''} 
+                              onChange={e => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                updated[sIdx].badge = e.target.value;
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-field">
+                          <label>Description / Pitch</label>
+                          <textarea 
+                            className="admin-input" 
+                            style={{ height: '65px', fontSize: '0.85rem' }} 
+                            value={srv.desc || ''} 
+                            onChange={e => {
+                              const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                              updated[sIdx].desc = e.target.value;
+                              setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                            }} 
+                          />
+                        </div>
+
+                        <div className="admin-field">
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                            <label>Deliverables Included</label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                const currentDelivs = Array.isArray(updated[sIdx].deliverables) ? updated[sIdx].deliverables : [];
+                                updated[sIdx].deliverables = [...currentDelivs, "New deliverable item"];
+                                setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                              }}
+                              className="btn"
+                              style={{ fontSize: '0.65rem', padding: '2px 8px' }}
+                            >
+                              <Plus size={10} /> Add Item
+                            </button>
+                          </div>
+                          <div className="admin-impact-list">
+                            {(Array.isArray(srv.deliverables) ? srv.deliverables : []).map((deliv, dIdx) => (
+                              <div key={dIdx} className="admin-impact-item">
+                                <input 
+                                  className="admin-input" 
+                                  style={{ fontSize: '0.85rem', padding: '8px 12px' }}
+                                  value={deliv} 
+                                  onChange={e => {
+                                    const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                    updated[sIdx].deliverables[dIdx] = e.target.value;
+                                    setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                                  }} 
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = [...(Array.isArray(siteContent?.sections?.services) ? siteContent.sections.services : defaultServices)];
+                                    updated[sIdx].deliverables = updated[sIdx].deliverables.filter((_, i) => i !== dIdx);
+                                    setSiteContent({ ...siteContent, sections: { ...siteContent.sections, services: updated } });
+                                  }}
+                                  style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer' }}
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -686,6 +988,41 @@ const Admin = ({ theme }) => {
 
               </div>
 
+              {/* Contact & Booking Settings */}
+              <div className="glass-panel" style={{ padding: '2rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Calendar size={18} /> CONTACT_&_DISCOVERY_CHANNELS
+                </h4>
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  <div className="admin-project-card__row">
+                    <div className="admin-field">
+                      <label>Inquiry Email Address</label>
+                      <input 
+                        className="admin-input" 
+                        value={siteContent.contact?.email || 'nexabir@gmail.com'} 
+                        onChange={e => setSiteContent({...siteContent, contact: {...siteContent.contact, email: e.target.value}})}
+                      />
+                    </div>
+                    <div className="admin-field">
+                      <label>Calendly / Meeting Link</label>
+                      <input 
+                        className="admin-input" 
+                        value={siteContent.contact?.calendly || ''} 
+                        placeholder="https://calendly.com/your-meeting-link"
+                        onChange={e => setSiteContent({...siteContent, contact: {...siteContent.contact, calendly: e.target.value}})}
+                      />
+                    </div>
+                  </div>
+                  <div className="admin-field">
+                    <label>LinkedIn Profile URL</label>
+                    <input 
+                      className="admin-input" 
+                      value={siteContent.contact?.linkedin || 'https://bd.linkedin.com/in/md-abir-ul-islam'} 
+                      onChange={e => setSiteContent({...siteContent, contact: {...siteContent.contact, linkedin: e.target.value}})}
+                    />
+                  </div>
+                </div>
+              </div>
 
               <button 
                 onClick={async () => {
