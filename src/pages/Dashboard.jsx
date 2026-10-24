@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import { 
   Download, ArrowRight, Code, Link, ExternalLink, 
   LayoutGrid, ListFilter, Sparkles, Eye, ArrowUpRight, CheckCircle,
-  Mail, Calendar, Send, ShieldCheck, Clock, Zap, TrendingUp, Check
+  Mail, Calendar, Send, ShieldCheck, Clock, Zap, TrendingUp, Check,
+  Plus, Users, Target, DollarSign, Timer, BarChart3, Calculator, X,
+  HelpCircle, MessageSquareQuote
 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
@@ -228,7 +230,7 @@ const Dashboard = ({ theme }) => {
     },
     contact: {
       email: 'nexabir@gmail.com',
-      calendly: 'https://calendly.com',
+      calendly: 'https://calendly.com/nexabir',
       linkedin: 'https://bd.linkedin.com/in/md-abir-ul-islam'
     }
   });
@@ -242,6 +244,15 @@ const Dashboard = ({ theme }) => {
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
   const [sendingContact, setSendingContact] = useState(false);
   const [contactStatus, setContactStatus] = useState(null);
+
+  // FAQ accordion state
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
+  // ROI calculator state
+  const [roiInputs, setRoiInputs] = useState({ hours: 15, rate: 50, clients: 5 });
+
+  // Calendly popup state
+  const [showCalendly, setShowCalendly] = useState(false);
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
@@ -465,6 +476,27 @@ const Dashboard = ({ theme }) => {
               <Download size={16} /> Resume
             </a>
           </motion.div>
+
+          {/* Hero Metrics Authority Strip */}
+          <motion.div variants={fadeUp} className="hero-metrics-strip">
+            <div className="hero-metric">
+              <span className="hero-metric__value">8+</span>
+              <span className="hero-metric__label">Enterprise Clients</span>
+            </div>
+            <div className="hero-metric">
+              <span className="hero-metric__value">75%</span>
+              <span className="hero-metric__label">Avg. Time Saved</span>
+            </div>
+            <div className="hero-metric">
+              <span className="hero-metric__value">$220K+</span>
+              <span className="hero-metric__label">Revenue Impact</span>
+            </div>
+            <div className="hero-metric">
+              <span className="hero-metric__value">92%</span>
+              <span className="hero-metric__label">Forecast Accuracy</span>
+            </div>
+          </motion.div>
+
         </motion.div>
       </section>
 
@@ -634,6 +666,153 @@ const Dashboard = ({ theme }) => {
               </button>
             </motion.div>
           ))}
+        </motion.div>
+      </section>
+
+      {/* 2.7 ROI / TIME-SAVED CALCULATOR */}
+      <section id="roi-calculator" className="roi-calculator">
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
+        >
+          <div style={{ marginBottom: '1rem' }}>
+            <span style={{ 
+              padding: '6px 18px', 
+              borderRadius: '30px', 
+              border: '1px solid var(--border-color)', 
+              color: 'var(--accent)', 
+              fontSize: '0.85rem', 
+              fontWeight: 600,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              backdropFilter: 'blur(10px)'
+            }}>
+              Interactive Calculator
+            </span>
+          </div>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>
+            How Much Time & Money <span className="text-accent">Are You Losing?</span>
+          </h2>
+          <p style={{ color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
+            Adjust the sliders to match your team's current manual reporting workload and see how automation can impact your bottom line.
+          </p>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          className="roi-calculator__card"
+        >
+          <div className="roi-calculator__inputs">
+            <div className="roi-calculator__field">
+              <label>Hours Spent on Manual Reporting / Month</label>
+              <div className="field-value">{roiInputs.hours} hrs / month</div>
+              <input 
+                type="range" 
+                min="5" 
+                max="80" 
+                step="1" 
+                value={roiInputs.hours}
+                onChange={e => setRoiInputs(prev => ({ ...prev, hours: Number(e.target.value) }))}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                <span>5 hrs</span>
+                <span>80 hrs</span>
+              </div>
+            </div>
+
+            <div className="roi-calculator__field">
+              <label>Effective Team Hourly Rate (USD)</label>
+              <div className="field-value">${roiInputs.rate} / hr</div>
+              <input 
+                type="range" 
+                min="20" 
+                max="200" 
+                step="5" 
+                value={roiInputs.rate}
+                onChange={e => setRoiInputs(prev => ({ ...prev, rate: Number(e.target.value) }))}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                <span>$20</span>
+                <span>$200</span>
+              </div>
+            </div>
+
+            <div className="roi-calculator__field">
+              <label>Number of Active Clients / Reports</label>
+              <div className="field-value">{roiInputs.clients} clients</div>
+              <input 
+                type="range" 
+                min="1" 
+                max="30" 
+                step="1" 
+                value={roiInputs.clients}
+                onChange={e => setRoiInputs(prev => ({ ...prev, clients: Number(e.target.value) }))}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                <span>1</span>
+                <span>30</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Dynamic Results */}
+          {(() => {
+            const monthlyHoursSaved = Math.round(roiInputs.hours * 0.75);
+            const monthlyCostSaved = monthlyHoursSaved * roiInputs.rate;
+            const annualSavings = monthlyCostSaved * 12;
+            const hoursPerClient = roiInputs.clients > 0 ? Math.round((roiInputs.hours * 0.75) / roiInputs.clients) : 0;
+            return (
+              <div className="roi-calculator__results">
+                <div className="roi-result-card">
+                  <div className="roi-result-card__icon"><Timer size={24} /></div>
+                  <div className="roi-result-card__value">{monthlyHoursSaved} hrs</div>
+                  <div className="roi-result-card__label">Hours Saved Monthly</div>
+                </div>
+                <div className="roi-result-card">
+                  <div className="roi-result-card__icon"><DollarSign size={24} /></div>
+                  <div className="roi-result-card__value">${monthlyCostSaved.toLocaleString()}</div>
+                  <div className="roi-result-card__label">Monthly Cost Recovered</div>
+                </div>
+                <div className="roi-result-card">
+                  <div className="roi-result-card__icon"><TrendingUp size={24} /></div>
+                  <div className="roi-result-card__value">${annualSavings.toLocaleString()}</div>
+                  <div className="roi-result-card__label">Projected Annual Savings</div>
+                </div>
+                <div className="roi-result-card">
+                  <div className="roi-result-card__icon"><BarChart3 size={24} /></div>
+                  <div className="roi-result-card__value">{hoursPerClient} hrs</div>
+                  <div className="roi-result-card__label">Freed Per Client / Month</div>
+                </div>
+              </div>
+            );
+          })()}
+
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => {
+                const el = document.getElementById('contact-section');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                  const monthlyHoursSaved = Math.round(roiInputs.hours * 0.75);
+                  const monthlyCostSaved = monthlyHoursSaved * roiInputs.rate;
+                  setContactForm(prev => ({
+                    ...prev,
+                    message: `Hi Abir, based on my calculator results (${monthlyHoursSaved} hrs/mo saved, $${monthlyCostSaved.toLocaleString()}/mo recovered), I'd like to discuss automating my reporting. We currently spend ${roiInputs.hours} hrs/mo across ${roiInputs.clients} clients.`
+                  }));
+                }
+              }}
+              style={{ borderRadius: '50px', padding: '0.9rem 2.5rem', fontSize: '1rem' }}
+            >
+              <Calculator size={18} /> Claim Your Savings — Book a Call
+            </button>
+          </div>
         </motion.div>
       </section>
 
@@ -1063,6 +1242,92 @@ const Dashboard = ({ theme }) => {
         </motion.div>
       </section>
 
+      {/* 5.5 FAQ SECTION — OBJECTION KILLER */}
+      <section id="faq-section" className="faq-section">
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+        >
+          <div style={{ marginBottom: '1rem' }}>
+            <span style={{ 
+              padding: '6px 18px', 
+              borderRadius: '30px', 
+              border: '1px solid var(--border-color)', 
+              color: 'var(--accent)', 
+              fontSize: '0.85rem', 
+              fontWeight: 600,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              backdropFilter: 'blur(10px)'
+            }}>
+              Common Questions
+            </span>
+          </div>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>
+            Frequently <span className="text-accent">Asked Questions</span>
+          </h2>
+          <p style={{ color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
+            Answers to the most common concerns from agency owners, e-commerce founders, and operations teams evaluating data consulting partnerships.
+          </p>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          className="faq-list"
+        >
+          {[
+            {
+              q: "We already use Excel and Google Sheets. Why do we need a Power BI dashboard?",
+              a: "Excel is powerful for ad-hoc analysis but breaks down when you need real-time, multi-source reporting across ad platforms, CRMs, and e-commerce backends. Power BI automates data refresh, eliminates copy-paste errors, and gives your team interactive drill-down views that spreadsheets simply can't replicate. You keep your spreadsheets — I build the layer above them."
+            },
+            {
+              q: "How long does a typical engagement take from kickoff to delivery?",
+              a: "A Rapid BI Audit (Offer A) delivers a full architecture report in 3-5 business days. A Custom Dashboard project (Offer B) typically ships production-ready within 2-3 weeks, including data pipeline setup, design iteration, and staff training. Retainer partnerships (Offer C) begin with a 2-week onboarding sprint followed by ongoing bi-weekly deliverables."
+            },
+            {
+              q: "What if our data is messy, incomplete, or spread across too many tools?",
+              a: "That's exactly the problem I solve. Every engagement starts with a thorough data inventory and source mapping exercise. I clean, normalize, and consolidate data from Meta Ads, Google Ads, GA4, Shopify, HubSpot, Airtable, and dozens of other tools into a unified pipeline. Messy data isn't a blocker — it's day one."
+            },
+            {
+              q: "Can we try a small project before committing to a larger engagement?",
+              a: "Absolutely. The Rapid BI Audit (Offer A at $450–$750) is designed as a low-risk entry point. You get a full diagnostic report with actionable recommendations, and if we're a good fit, we can scale into a Custom Dashboard or Retainer engagement. No long-term contracts required."
+            },
+            {
+              q: "What makes you different from hiring a full-time data analyst?",
+              a: "A full-time analyst costs $60K–$120K+ annually in salary, benefits, and tooling — plus months of ramp-up time. As a fractional partner, you get senior-level data architecture and strategic consulting at a fraction of the cost, with zero onboarding overhead. I deliver production systems, not learning curves."
+            },
+            {
+              q: "Do you sign NDAs and protect our sensitive business data?",
+              a: "Yes. Mutual NDA execution is standard before any data sharing begins. I follow strict data governance protocols: all credentials are stored in encrypted vaults, access is scoped to the minimum necessary, and I never retain client data after project completion unless explicitly requested for ongoing retainer work."
+            },
+            {
+              q: "Will my team need technical skills to use the dashboards you build?",
+              a: "Not at all. Every dashboard I deliver is designed for non-technical stakeholders — account managers, C-suite, and operations teams. I provide interactive Loom video walkthroughs, written documentation, and 30-day post-delivery support so your team feels confident from day one."
+            }
+          ].map((faq, idx) => (
+            <div key={idx} className={`faq-item ${openFaqIndex === idx ? 'faq-item--open' : ''}`}>
+              <button 
+                className="faq-item__trigger"
+                onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                aria-expanded={openFaqIndex === idx}
+              >
+                <span className="faq-item__question">{faq.q}</span>
+                <span className="faq-item__icon"><Plus size={18} /></span>
+              </button>
+              <div className="faq-item__answer">
+                <p className="faq-item__answer-text">{faq.a}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </section>
+
       {/* 6. CONTACT & CONSULTATION */}
       <section id="contact-section" style={{ paddingTop: '8rem' }}>
         <motion.div 
@@ -1259,6 +1524,39 @@ const Dashboard = ({ theme }) => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* FLOATING CALENDLY POPUP BUTTON */}
+      <button 
+        className="calendly-float-btn" 
+        onClick={() => setShowCalendly(true)}
+        title="Book a 15-Minute Strategy Call"
+      >
+        <Calendar size={20} />
+        <span className="calendly-float-btn__label">Book a Call</span>
+      </button>
+
+      {/* Calendly Overlay Popup */}
+      {showCalendly && (
+        <div 
+          className="calendly-overlay" 
+          onClick={(e) => { if (e.target === e.currentTarget) setShowCalendly(false); }}
+        >
+          <div className="calendly-popup">
+            <button 
+              className="calendly-popup__close" 
+              onClick={() => setShowCalendly(false)}
+              title="Close"
+            >
+              <X size={18} />
+            </button>
+            <iframe 
+              src={siteData?.contact?.calendly || 'https://calendly.com'}
+              title="Schedule a Meeting"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      )}
 
     </div>
   );
