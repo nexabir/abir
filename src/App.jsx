@@ -6,6 +6,8 @@ import Admin from './pages/Admin';
 import Login from './pages/Login';
 import BlogPost from './pages/BlogPost';
 import ProjectDetail from './pages/ProjectDetail';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms';
 import Loader from './components/Loader';
 import { supabase } from './lib/supabaseClient';
 import { Navigate } from 'react-router-dom';
@@ -137,6 +139,22 @@ function App() {
           element={
             <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
               <ProjectDetail theme={theme} />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/privacy" 
+          element={
+            <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
+              <PrivacyPolicy theme={theme} />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/terms" 
+          element={
+            <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
+              <Terms theme={theme} />
             </Layout>
           } 
         />

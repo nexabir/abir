@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Share2 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import Loader from '../components/Loader';
+import DOMPurify from 'dompurify';
 
 const BlogPost = ({ theme }) => {
   const { id } = useParams();
@@ -109,7 +110,7 @@ const BlogPost = ({ theme }) => {
             color: 'var(--text-main)',
             opacity: 0.9
           }}
-          dangerouslySetInnerHTML={{ __html: blog.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content || '') }}
         />
 
         <div style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

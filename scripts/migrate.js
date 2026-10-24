@@ -7,9 +7,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// LOAD ENV (Hardcoded for this one-time script or use dotenv)
-const supabaseUrl = 'https://swfyalqcopygvzpvlfcl.supabase.co';
-const supabaseAnonKey = 'sb_publishable_VL6vP56l4txXVIKAtztNQQ_QUCI8LTm';
+// LOAD ENV from environment variables
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('❌ Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY environment variables.');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 

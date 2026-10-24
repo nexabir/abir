@@ -327,6 +327,22 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
                 </button>
               ))}
               <a 
+                href="/privacy" 
+                style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none' }}
+                onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
+                onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="/terms" 
+                style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none' }}
+                onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
+                onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+              >
+                Terms & Disclaimers
+              </a>
+              <a 
                 href="/admin" 
                 style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none' }}
                 onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
@@ -385,11 +401,23 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
           </div>
         </div>
 
+        {/* Portfolio & Legal Trademark Disclaimer */}
+        <div style={{ 
+          maxWidth: '1000px', 
+          margin: '0 auto 1.5rem', 
+          fontSize: '0.75rem', 
+          lineHeight: 1.6, 
+          color: 'var(--text-muted)', 
+          opacity: 0.85 
+        }}>
+          Legal Notice: Case studies, metrics, and ROI calculator outputs are illustrative analytical estimations. All brand names, client logos, and trademarks belong to their respective proprietors and are displayed under nominative fair use for historical engagement identification.
+        </div>
+
         {/* Bottom Bar */}
         <div style={{ 
           maxWidth: '1000px', 
           margin: '0 auto', 
-          paddingTop: '2rem', 
+          paddingTop: '1.5rem', 
           borderTop: '1px solid var(--border-color)', 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -402,8 +430,26 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
           <div>
             © {new Date().getFullYear()} Md. Abir Ul Islam. All rights reserved.
           </div>
-          <div>
-            Built with React, Vite & Supabase · Hosted on Cloudflare Pages
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <a 
+              href="/privacy" 
+              style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
+              onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+            >
+              Privacy Policy
+            </a>
+            <span>·</span>
+            <a 
+              href="/terms" 
+              style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
+              onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+            >
+              Terms & Disclaimers
+            </a>
+            <span>·</span>
+            <span>Cloudflare Edge Secured</span>
           </div>
         </div>
       </footer>

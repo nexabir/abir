@@ -241,7 +241,7 @@ const Dashboard = ({ theme }) => {
   const [projectView, setProjectView] = useState('spotlight');
 
   // Contact form state
-  const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '' });
+  const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '', botField: '' });
   const [sendingContact, setSendingContact] = useState(false);
   const [contactStatus, setContactStatus] = useState(null);
 
@@ -256,6 +256,17 @@ const Dashboard = ({ theme }) => {
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
+
+    // Anti-spam Honeypot Check: bots fill hidden inputs
+    if (contactForm.botField) {
+      setContactStatus({
+        type: 'success',
+        message: 'Thank you! Your message has been received.'
+      });
+      setContactForm({ name: '', email: '', company: '', message: '', botField: '' });
+      return;
+    }
+
     setSendingContact(true);
     setContactStatus(null);
     try {
@@ -293,7 +304,7 @@ const Dashboard = ({ theme }) => {
         type: 'success',
         message: 'Thank you! Your inquiry has been submitted and your email draft opened. I will review and reply within 4 hours.'
       });
-      setContactForm({ name: '', email: '', company: '', message: '' });
+      setContactForm({ name: '', email: '', company: '', message: '', botField: '' });
     } catch (err) {
       console.error('Contact form submission error:', err);
       setContactStatus({
@@ -1509,6 +1520,23 @@ const Dashboard = ({ theme }) => {
                   {contactStatus.message}
                 </div>
               )}
+              {/* Honeypot Spam Protection Field - Hidden from humans, bots autofill */}
+              <div style={{ display: 'none', position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                <input 
+                  type="text" 
+                  name="_gotcha" 
+                  tabIndex="-1" 
+                  autoComplete="off" 
+                  value={contactForm.botField || ''} 
+                  onChange={e => setContactForm({ ...contactForm, botField: e.target.value })} 
+                />
+              </div>
+
+              {/* Privacy and Non-Disclosure Notice */}
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: '0 0 0.5rem 0' }}>
+                🔒 Your information is confidential and will only be used to respond to your inquiry in accordance with our{' '}
+                <a href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Privacy Policy</a>. No spam, ever.
+              </p>
 
               <button 
                 type="submit" 
