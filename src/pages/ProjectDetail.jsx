@@ -237,19 +237,15 @@ const ProjectDetail = ({ theme }) => {
             </div>
             <div className="project-detail__metrics">
               {impactItems.map((metric, i) => (
-                <motion.div 
+                <div 
                   key={i} 
                   className="project-detail__metric"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  viewport={{ once: true }}
                 >
                   <div className="project-detail__metric-icon">
                     <CheckCircle size={16} />
                   </div>
                   <span>{metric}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
