@@ -4,7 +4,8 @@ import {
   Settings as SettingsIcon, Save, RefreshCw, Key, 
   FileText, Plus, Edit, Trash2, LogOut, Layout, 
   Image as ImageIcon, Check, X, AlertCircle, Type, 
-  Activity, Sliders, Globe, Briefcase, Code
+  Activity, Sliders, Globe, Briefcase, Code,
+  ChevronUp, ChevronDown, Target, Award, ExternalLink, FolderGit2
 } from 'lucide-react';
 
 import ReactQuill from 'react-quill-new';
@@ -351,49 +352,263 @@ const Admin = ({ theme }) => {
 
               {/* Featured Projects Manager */}
               <div className="glass-panel" style={{ padding: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                  <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px' }}><Code size={18} /> FEATURED_PROJECTS</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <h4 style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 700 }}>
+                      <Code size={20} /> FEATURED_CASE_STUDIES_MANAGER
+                    </h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '4px' }}>
+                      Controls spotlight projects, full case studies, metrics, problem/approach, and images on the live site.
+                    </p>
+                  </div>
                   <button 
                     onClick={() => {
                       const sections = siteContent?.sections || { skills: [], experience: [], projects: [] };
                       const current = sections?.projects || [];
-                      const updated = [...current, { title: "New Project", desc: "Project description", tags: ["React", "AI"], link: "#" }];
+                      const updated = [
+                        ...current, 
+                        { 
+                          title: "New Strategic Project", 
+                          impact_badge: "ROI: High",
+                          desc: "Executive summary of the initiative and its core business rationale.",
+                          problem: "Friction points or challenges identified within business operations.",
+                          approach: "Methodology, architecture, and technology stack implemented.",
+                          impact: ["25% Efficiency Increase", "Quantifiable financial outcome"],
+                          tags: ["Strategy", "Analytics", "Automation"],
+                          image: "",
+                          link: "#",
+                          github_link: "#"
+                        }
+                      ];
                       setSiteContent({...siteContent, sections: {...sections, projects: updated}});
                     }}
-                    className="btn" style={{ fontSize: '0.7rem', padding: '5px 12px' }}
+                    className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '8px 16px', borderRadius: '10px' }}
                   >
-                    <Plus size={14} /> ADD_PROJECT
+                    <Plus size={16} /> ADD_NEW_CASE_STUDY
                   </button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                  {(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : []).map((proj, idx) => (
-                    <div key={idx} style={{ padding: '1.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                        <input className="admin-input" value={proj?.title || ''} placeholder="Title" onChange={e => {
-                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].title = e.target.value;
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
-                        }} />
-                        <button onClick={() => {
-                          const updated = (Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : []).filter((_, i) => i !== idx);
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
-                        }} style={{ color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', marginLeft: '10px' }}><Trash2 size={16} /></button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  {(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : []).map((proj, idx) => {
+                    const projects = Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [];
+                    
+                    const updateProject = (field, value) => {
+                      const updated = [...projects];
+                      updated[idx] = { ...updated[idx], [field]: value };
+                      setSiteContent({
+                        ...siteContent, 
+                        sections: { ...siteContent.sections, projects: updated }
+                      });
+                    };
+
+                    const moveProject = (direction) => {
+                      const targetIdx = idx + direction;
+                      if (targetIdx < 0 || targetIdx >= projects.length) return;
+                      const updated = [...projects];
+                      const [moved] = updated.splice(idx, 1);
+                      updated.splice(targetIdx, 0, moved);
+                      setSiteContent({
+                        ...siteContent,
+                        sections: { ...siteContent.sections, projects: updated }
+                      });
+                    };
+
+                    const impactText = Array.isArray(proj?.impact) 
+                      ? proj.impact.join('\n') 
+                      : (Array.isArray(proj?.metrics) ? proj.metrics.join('\n') : '');
+
+                    return (
+                      <div key={idx} className="admin-project-card">
+                        {/* Header & Controls */}
+                        <div className="admin-project-card__header">
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <span className="admin-project-card__number">
+                              CASE STUDY {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>
+                              {proj?.title || 'Untitled Case Study'}
+                            </span>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <button
+                              title="Move Up"
+                              disabled={idx === 0}
+                              onClick={() => moveProject(-1)}
+                              style={{ 
+                                background: 'var(--bg-panel)', border: '1px solid var(--border-color)', 
+                                color: idx === 0 ? 'var(--text-muted)' : 'var(--text-main)', 
+                                borderRadius: '8px', padding: '6px 10px', cursor: idx === 0 ? 'not-allowed' : 'pointer' 
+                              }}
+                            >
+                              <ChevronUp size={16} />
+                            </button>
+                            <button
+                              title="Move Down"
+                              disabled={idx === projects.length - 1}
+                              onClick={() => moveProject(1)}
+                              style={{ 
+                                background: 'var(--bg-panel)', border: '1px solid var(--border-color)', 
+                                color: idx === projects.length - 1 ? 'var(--text-muted)' : 'var(--text-main)', 
+                                borderRadius: '8px', padding: '6px 10px', cursor: idx === projects.length - 1 ? 'not-allowed' : 'pointer' 
+                              }}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                            <button 
+                              title="Delete Case Study"
+                              onClick={() => {
+                                if (window.confirm(`Delete "${proj?.title || 'this project'}"?`)) {
+                                  const updated = projects.filter((_, i) => i !== idx);
+                                  setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
+                                }
+                              }} 
+                              style={{ 
+                                color: '#f87171', background: 'rgba(239, 68, 68, 0.1)', 
+                                border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', 
+                                padding: '6px 10px', cursor: 'pointer', marginLeft: '6px' 
+                              }}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Fields Grid */}
+                        <div className="admin-project-card__grid">
+                          <div className="admin-project-card__row">
+                            <div className="admin-field">
+                              <label>Project Title</label>
+                              <input 
+                                className="admin-input" 
+                                value={proj?.title || ''} 
+                                placeholder="e.g., Supply Chain Waste Optimization" 
+                                onChange={e => updateProject('title', e.target.value)} 
+                              />
+                            </div>
+                            <div className="admin-field">
+                              <label>Impact Badge (Headline Metric)</label>
+                              <input 
+                                className="admin-input" 
+                                value={proj?.impact_badge || ''} 
+                                placeholder="e.g., ROI: $2M+ or +12% Retention" 
+                                onChange={e => updateProject('impact_badge', e.target.value)} 
+                              />
+                            </div>
+                          </div>
+
+                          <div className="admin-field">
+                            <label>Executive Summary / Snippet</label>
+                            <textarea 
+                              className="admin-input" 
+                              style={{ height: '70px', fontSize: '0.85rem' }} 
+                              value={proj?.desc || ''} 
+                              placeholder="Concise overview displayed on the homepage cards..." 
+                              onChange={e => updateProject('desc', e.target.value)} 
+                            />
+                          </div>
+
+                          <div className="admin-project-card__row">
+                            <div className="admin-field">
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Target size={14} /> The Business Problem
+                              </label>
+                              <textarea 
+                                className="admin-input" 
+                                style={{ height: '90px', fontSize: '0.85rem' }} 
+                                value={proj?.problem || ''} 
+                                placeholder="Describe friction points, financial leaks, or operational barriers..." 
+                                onChange={e => updateProject('problem', e.target.value)} 
+                              />
+                            </div>
+                            <div className="admin-field">
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Code size={14} /> The Approach & Architecture
+                              </label>
+                              <textarea 
+                                className="admin-input" 
+                                style={{ height: '90px', fontSize: '0.85rem' }} 
+                                value={proj?.approach || ''} 
+                                placeholder="Describe the methodologies, frameworks, ETL, and strategy..." 
+                                onChange={e => updateProject('approach', e.target.value)} 
+                              />
+                            </div>
+                          </div>
+
+                          <div className="admin-field">
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <Award size={14} /> Measurable Impact / Metrics (One per line)
+                            </label>
+                            <textarea 
+                              className="admin-input" 
+                              style={{ height: '80px', fontSize: '0.85rem', fontFamily: 'monospace' }} 
+                              value={impactText} 
+                              placeholder={"20% Reduction in Inventory Waste\nAchieved $2M in annual operational savings\n98% Forecast accuracy"} 
+                              onChange={e => {
+                                const lines = e.target.value.split('\n').filter(l => l.trim().length > 0);
+                                updateProject('impact', lines);
+                              }} 
+                            />
+                          </div>
+
+                          <div className="admin-project-card__row">
+                            <div className="admin-field">
+                              <label>Project Thumbnail / Hero Image URL</label>
+                              <input 
+                                className="admin-input" 
+                                value={proj?.image || ''} 
+                                placeholder="https://images.unsplash.com/... or /project-preview.png" 
+                                onChange={e => updateProject('image', e.target.value)} 
+                              />
+                              {proj?.image && (
+                                <div style={{ marginTop: '6px', maxHeight: '100px', overflow: 'hidden', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                  <img src={proj.image} alt="Preview" style={{ width: '100%', height: '100px', objectFit: 'cover' }} onError={(e) => e.target.style.display = 'none'} />
+                                </div>
+                              )}
+                            </div>
+                            <div className="admin-field">
+                              <label>Tech Stack & Competency Tags (Comma Separated)</label>
+                              <input 
+                                className="admin-input" 
+                                value={Array.isArray(proj?.tags) ? proj.tags.join(', ') : ''} 
+                                placeholder="Python, SQL, Tableau, Predictive Modeling" 
+                                onChange={e => {
+                                  const tags = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                  updateProject('tags', tags);
+                                }} 
+                              />
+                            </div>
+                          </div>
+
+                          <div className="admin-project-card__row">
+                            <div className="admin-field">
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <ExternalLink size={14} /> Live Solution URL (or #)
+                              </label>
+                              <input 
+                                className="admin-input" 
+                                value={proj?.link || ''} 
+                                placeholder="https://your-dashboard-or-app.com" 
+                                onChange={e => updateProject('link', e.target.value)} 
+                              />
+                            </div>
+                            <div className="admin-field">
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <FolderGit2 size={14} /> Source Code / Repo URL (Optional)
+                              </label>
+                              <input 
+                                className="admin-input" 
+                                value={proj?.github_link || ''} 
+                                placeholder="https://github.com/nexabir/..." 
+                                onChange={e => updateProject('github_link', e.target.value)} 
+                              />
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
-                      <textarea className="admin-input" style={{ height: '60px', fontSize: '0.8rem', marginBottom: '10px' }} value={proj?.desc || ''} placeholder="Description" onChange={e => {
-                        const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].desc = e.target.value;
-                        setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
-                      }} />
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <input className="admin-input" value={Array.isArray(proj?.tags) ? proj.tags.join(', ') : ''} placeholder="Tags (React, AI)" onChange={e => {
-                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].tags = e.target.value.split(',').map(s => s.trim());
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
-                        }} />
-                        <input className="admin-input" value={proj?.link || ''} placeholder="Link" onChange={e => {
-                          const updated = [...(Array.isArray(siteContent?.sections?.projects) ? siteContent.sections.projects : [])]; updated[idx].link = e.target.value;
-                          setSiteContent({...siteContent, sections: {...siteContent.sections, projects: updated}});
-                        }} />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
               </div>

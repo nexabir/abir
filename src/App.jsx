@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import BlogPost from './pages/BlogPost';
+import ProjectDetail from './pages/ProjectDetail';
 import Loader from './components/Loader';
 import { supabase } from './lib/supabaseClient';
 import { Navigate } from 'react-router-dom';
@@ -128,6 +129,14 @@ function App() {
           element={
             <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
               <BlogPost theme={theme} />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/project/:index" 
+          element={
+            <Layout theme={theme} toggleTheme={toggleTheme} config={systemConfig}>
+              <ProjectDetail theme={theme} />
             </Layout>
           } 
         />

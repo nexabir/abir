@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, ArrowRight, Code, Link } from 'lucide-react';
+import { 
+  Download, ArrowRight, Code, Link, ExternalLink, 
+  LayoutGrid, ListFilter, Sparkles, Eye, ArrowUpRight, CheckCircle 
+} from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
@@ -72,6 +75,7 @@ const Dashboard = ({ theme }) => {
   const [loading, setLoading] = React.useState(true);
   const [selectedProject, setSelectedProject] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [projectView, setProjectView] = useState('spotlight');
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -327,72 +331,272 @@ const Dashboard = ({ theme }) => {
 
       {/* 4. PROJECTS */}
       <section id="projects-section" style={{ paddingTop: '8rem' }}>
-        <motion.div 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeUp}
-          style={{ marginBottom: '4rem' }}
-        >
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Featured <span className="text-accent">Projects</span></h2>
-        </motion.div>
+        <div className="section-header">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUp}
+          >
+            <h2 className="section-header__title">Strategic <span className="text-accent">Case Studies</span></h2>
+            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '1rem', maxWidth: '600px' }}>
+              Enterprise data initiatives architected to eliminate systemic friction, maximize operational efficiency, and deliver quantifiable ROI.
+            </p>
+          </motion.div>
 
-        <motion.div 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2.5rem' }}
-        >
-          { (Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => (
-            <motion.div 
-              key={index}
-              variants={fadeUp}
-              className="glass-panel"
-              style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
+          {/* View Mode Toggle: Spotlight vs Grid */}
+          <div className="view-toggle">
+            <button 
+              className={`view-toggle__btn ${projectView === 'spotlight' ? 'active' : ''}`}
+              onClick={() => setProjectView('spotlight')}
+              title="One-by-One Storytelling View"
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                 <h3 style={{ fontSize: '1.4rem', fontWeight: 600 }}>{project?.title}</h3>
-                 <span style={{ 
-                   fontSize: '0.7rem', 
-                   padding: '4px 10px', 
-                   background: 'var(--accent-glow)', 
-                   color: 'var(--accent)', 
-                   borderRadius: '12px', 
-                   fontWeight: 700,
-                   border: '1px solid var(--accent)'
-                 }}>
-                   {project?.impact_badge || 'High ROI'}
-                 </span>
-              </div>
-              
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
-                {project?.desc || project?.snippet}
-              </p>
+              <ListFilter size={14} /> Spotlight
+            </button>
+            <button 
+              className={`view-toggle__btn ${projectView === 'grid' ? 'active' : ''}`}
+              onClick={() => setProjectView('grid')}
+              title="Grid Overview"
+            >
+              <LayoutGrid size={14} /> Grid
+            </button>
+          </div>
+        </div>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
-                {(Array.isArray(project?.tags) ? project.tags : []).map((tag, tIndex) => (
-                  <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+        {/* SPOTLIGHT VIEW (ONE-BY-ONE STORYTELLING) */}
+        {projectView === 'spotlight' ? (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {(Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => {
+              const numStr = String(index + 1).padStart(2, '0');
+              const impactItems = project.impact || project.metrics || [];
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
-                <button 
-                  onClick={() => {
-                    setSelectedProject(project);
-                    setIsModalOpen(true);
-                  }} 
-                  className="btn btn-primary" 
-                  style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}
+              return (
+                <motion.article 
+                  key={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-60px" }}
+                  variants={fadeUp}
+                  className="spotlight-project"
                 >
-                  View Case Study
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                  {/* Number Watermark */}
+                  <div className="spotlight-project__number">{numStr}</div>
+
+                  {/* Left Column: Narrative & Meta */}
+                  <div className="spotlight-project__meta">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                      <span className="spotlight-project__badge featured-badge">
+                        {project?.impact_badge || 'Enterprise ROI'}
+                      </span>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                        PROJECT {numStr} OF {String(siteData?.sections?.projects?.length || 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    <h3 className="spotlight-project__title">
+                      {project?.title}
+                    </h3>
+
+                    <p className="spotlight-project__desc">
+                      {project?.desc || project?.snippet}
+                    </p>
+
+                    {/* Problem / Solution snapshot if available */}
+                    {project?.problem && (
+                      <div style={{ 
+                        padding: '1rem 1.25rem', 
+                        background: 'var(--bg-panel)', 
+                        borderRadius: '12px', 
+                        border: '1px solid var(--border-color)',
+                        fontSize: '0.9rem',
+                        lineHeight: 1.6
+                      }}>
+                        <strong style={{ color: 'var(--accent)', display: 'block', marginBottom: '4px', fontSize: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                          Challenge Solved:
+                        </strong>
+                        <span style={{ color: 'var(--text-muted)' }}>
+                          {project.problem.length > 160 ? project.problem.slice(0, 160) + '...' : project.problem}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Impact preview */}
+                    {impactItems.length > 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {impactItems.slice(0, 2).map((item, i) => (
+                          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+                            <CheckCircle size={14} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Tech Tags */}
+                    <div className="spotlight-project__tags">
+                      {(Array.isArray(project?.tags) ? project.tags : []).map((tag, tIndex) => (
+                        <span key={tIndex} className="spotlight-project__tag">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="spotlight-project__actions">
+                      <button 
+                        onClick={() => navigate(`/project/${index}`)} 
+                        className="btn btn-primary" 
+                        style={{ borderRadius: '50px', padding: '0.75rem 1.75rem' }}
+                      >
+                        Explore Case Study <ArrowUpRight size={16} />
+                      </button>
+
+                      <button 
+                        onClick={() => {
+                          setSelectedProject({ ...project, index });
+                          setIsModalOpen(true);
+                        }} 
+                        className="btn" 
+                        style={{ borderRadius: '50px', padding: '0.75rem 1.25rem' }}
+                        title="Quick Preview"
+                      >
+                        <Eye size={16} /> Quick View
+                      </button>
+
+                      {project?.link && project.link !== '#' && (
+                        <a 
+                          href={project.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn" 
+                          style={{ borderRadius: '50px', padding: '0.75rem 1.25rem' }}
+                          title="Live Demo"
+                        >
+                          <ExternalLink size={16} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Visual / Graphic Card */}
+                  <div 
+                    className="spotlight-project__visual"
+                    onClick={() => navigate(`/project/${index}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {project?.image ? (
+                      <img src={project.image} alt={project?.title} />
+                    ) : (
+                      <div className="spotlight-project__visual-placeholder">
+                        <div className="placeholder-icon">
+                          <Code size={30} />
+                        </div>
+                        <div className="placeholder-title">
+                          {project?.title}
+                        </div>
+                        <div className="placeholder-tags">
+                          {(Array.isArray(project?.tags) ? project.tags : []).slice(0, 3).map((tag, tIndex) => (
+                            <span key={tIndex} style={{ 
+                              fontSize: '0.7rem', 
+                              padding: '3px 10px', 
+                              borderRadius: '12px', 
+                              background: 'var(--accent-glow)',
+                              color: 'var(--accent)',
+                              fontWeight: 600
+                            }}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Hover Overlay */}
+                    <div className="spotlight-project__visual-overlay">
+                      <span style={{ 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        gap: '6px', 
+                        color: '#fff', 
+                        fontWeight: 600,
+                        fontSize: '0.9rem' 
+                      }}>
+                        Read Full Story <ArrowUpRight size={16} />
+                      </span>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        ) : (
+          /* GRID VIEW */
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="projects-grid"
+          >
+            {(Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => (
+              <motion.div 
+                key={index}
+                variants={fadeUp}
+                className="glass-panel"
+                style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', gap: '10px' }}>
+                   <h3 style={{ fontSize: '1.3rem', fontWeight: 600 }}>{project?.title}</h3>
+                   <span style={{ 
+                     fontSize: '0.7rem', 
+                     padding: '4px 10px', 
+                     background: 'var(--accent-glow)', 
+                     color: 'var(--accent)', 
+                     borderRadius: '12px', 
+                     fontWeight: 700,
+                     border: '1px solid var(--accent)',
+                     flexShrink: 0
+                   }}>
+                     {project?.impact_badge || 'ROI: High'}
+                   </span>
+                </div>
+                
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
+                  {project?.desc || project?.snippet}
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
+                  {(Array.isArray(project?.tags) ? project.tags : []).map((tag, tIndex) => (
+                    <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+                  <button 
+                    onClick={() => navigate(`/project/${index}`)} 
+                    className="btn btn-primary" 
+                    style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}
+                  >
+                    Case Study <ArrowUpRight size={14} />
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setSelectedProject({ ...project, index });
+                      setIsModalOpen(true);
+                    }} 
+                    className="btn" 
+                    style={{ borderRadius: '50px', padding: '0.6rem 1rem' }}
+                    title="Quick Preview"
+                  >
+                    <Eye size={16} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </section>
 
       {/* Project Detail Modal */}
