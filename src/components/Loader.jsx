@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 const Loader = ({ theme }) => {
   const [text, setText] = useState('');
@@ -32,12 +33,24 @@ const Loader = ({ theme }) => {
     };
   }, []);
 
-  return (
+  const bgColor = theme === 'light' ? '#f8fafc' : '#050505';
+
+  const loaderContent = (
     <div style={{
-      position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-      backgroundColor: 'var(--bg-color)', color: 'var(--accent)',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'monospace', zIndex: 9999
+      position: 'fixed', 
+      top: 0, 
+      left: 0, 
+      width: '100vw', 
+      height: '100vh',
+      backgroundColor: bgColor, 
+      color: 'var(--accent, #eab308)',
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      fontFamily: 'monospace', 
+      zIndex: 999999,
+      pointerEvents: 'all'
     }}>
       <div style={{ width: '300px' }}>
         <h2 style={{ fontSize: '1.2rem', marginBottom: '2rem', minHeight: '1.5rem', letterSpacing: '2px' }}>
@@ -70,6 +83,12 @@ const Loader = ({ theme }) => {
       </style>
     </div>
   );
+
+  if (typeof document !== 'undefined') {
+    return createPortal(loaderContent, document.body);
+  }
+
+  return loaderContent;
 };
 
 export default Loader;

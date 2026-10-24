@@ -251,7 +251,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
       )}
 
       {/* Main Content */}
-      <main style={{ position: 'relative', zIndex: 5, padding: '0 2rem', flex: 1 }}>
+      <main style={{ position: 'relative', zIndex: 5, padding: '0 2rem', flex: 1, minHeight: 'calc(100vh - 120px)' }}>
         {children}
       </main>
 
