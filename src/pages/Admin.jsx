@@ -15,8 +15,25 @@ import { supabase } from '../lib/supabaseClient';
 
 const defaultServices = [
   {
+    title: "SME Web Services & Custom Web Dashboards",
+    tier: "Offer A • Web Engineering",
+    badge: "Built for SMEs Worldwide",
+    price: "$950 – $2,400",
+    period: "project-based",
+    desc: "Bespoke, high-converting modern websites and interactive live web dashboards built specifically for small-to-medium businesses globally.",
+    timeframe: "Delivered in 7 to 14 business days",
+    deliverables: [
+      "Custom responsive business website or client portal built with modern web tech (React, Vite, fast CDN)",
+      "Interactive live web dashboard embedding real-time operational metrics and sales telemetry",
+      "Mobile-first, SEO-optimized architecture with automated lead capture & CRM contact routing",
+      "Admin CMS / database connection for seamless metric updates without touching code"
+    ],
+    ctaText: "Build Your Web Service",
+    featured: true
+  },
+  {
     title: "Rapid BI & Analytics Audit",
-    tier: "Offer A • Quick Win",
+    tier: "Offer B • Quick Win",
     badge: "3-5 Days Turnaround",
     price: "$450 – $750",
     period: "fixed fee",
@@ -31,8 +48,8 @@ const defaultServices = [
     featured: false
   },
   {
-    title: "Custom Dashboard & Data Pipeline",
-    tier: "Offer B • Core Engagement",
+    title: "Custom Power BI & Data Pipeline",
+    tier: "Offer C • Core BI Engagement",
     badge: "Most Popular",
     price: "$1,200 – $2,800",
     period: "project-based",
@@ -44,19 +61,19 @@ const defaultServices = [
       "Interactive Loom video documentation, staff training, and 30-day post-delivery hypercare"
     ],
     ctaText: "Discuss Your Dashboard",
-    featured: true
+    featured: false
   },
   {
-    title: "Fractional Analytics Partner",
-    tier: "Offer C • Advisory Retainer",
+    title: "Fractional Analytics & Web Partner",
+    tier: "Offer D • Advisory Retainer",
     badge: "Dedicated Partner",
-    price: "$800 – $1,500",
+    price: "$800 – $1,600",
     period: "per month",
-    desc: "Ongoing decision support, reporting automation, and custom deep-dive analysis without full-time employee overhead.",
+    desc: "Ongoing decision support, web dashboard maintenance, reporting automation, and custom deep-dive analysis without full-time employee overhead.",
     timeframe: "Month-to-month flexibility • 10-20 hrs/mo",
     deliverables: [
       "Bi-weekly executive KPI reviews & proactive growth bottleneck identification",
-      "Continuous data model maintenance, new platform connectors, and metric updates",
+      "Continuous web dashboard and data model maintenance, new platform connectors, and metric updates",
       "Priority response on ad-hoc analytical queries and board/investor presentation decks"
     ],
     ctaText: "Explore Partnership",

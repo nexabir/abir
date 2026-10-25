@@ -30,8 +30,25 @@ const staggerContainer = {
 
 const defaultServices = [
   {
+    title: "SME Web Services & Custom Web Dashboards",
+    tier: "Offer A • Web Engineering",
+    badge: "Built for SMEs Worldwide",
+    price: "$950 – $2,400",
+    period: "project-based",
+    desc: "Bespoke, high-converting modern websites and interactive live web dashboards built specifically for small-to-medium businesses globally.",
+    timeframe: "Delivered in 7 to 14 business days",
+    deliverables: [
+      "Custom responsive business website or client portal built with modern web tech (React, Vite, fast CDN)",
+      "Interactive live web dashboard embedding real-time operational metrics and sales telemetry",
+      "Mobile-first, SEO-optimized architecture with automated lead capture & CRM contact routing",
+      "Admin CMS / database connection for seamless metric updates without touching code"
+    ],
+    ctaText: "Build Your Web Service",
+    featured: true
+  },
+  {
     title: "Rapid BI & Analytics Audit",
-    tier: "Offer A • Quick Win",
+    tier: "Offer B • Quick Win",
     badge: "3-5 Days Turnaround",
     price: "$450 – $750",
     period: "fixed fee",
@@ -46,8 +63,8 @@ const defaultServices = [
     featured: false
   },
   {
-    title: "Custom Dashboard & Data Pipeline",
-    tier: "Offer B • Core Engagement",
+    title: "Custom Power BI & Data Pipeline",
+    tier: "Offer C • Core BI Engagement",
     badge: "Most Popular",
     price: "$1,200 – $2,800",
     period: "project-based",
@@ -59,19 +76,19 @@ const defaultServices = [
       "Interactive Loom video documentation, staff training, and 30-day post-delivery hypercare"
     ],
     ctaText: "Discuss Your Dashboard",
-    featured: true
+    featured: false
   },
   {
-    title: "Fractional Analytics Partner",
-    tier: "Offer C • Advisory Retainer",
+    title: "Fractional Analytics & Web Partner",
+    tier: "Offer D • Advisory Retainer",
     badge: "Dedicated Partner",
-    price: "$800 – $1,500",
+    price: "$800 – $1,600",
     period: "per month",
-    desc: "Ongoing decision support, reporting automation, and custom deep-dive analysis without full-time employee overhead.",
+    desc: "Ongoing decision support, web dashboard maintenance, reporting automation, and custom deep-dive analysis without full-time employee overhead.",
     timeframe: "Month-to-month flexibility • 10-20 hrs/mo",
     deliverables: [
       "Bi-weekly executive KPI reviews & proactive growth bottleneck identification",
-      "Continuous data model maintenance, new platform connectors, and metric updates",
+      "Continuous web dashboard and data model maintenance, new platform connectors, and metric updates",
       "Priority response on ad-hoc analytical queries and board/investor presentation decks"
     ],
     ctaText: "Explore Partnership",
@@ -150,14 +167,27 @@ const Dashboard = ({ theme }) => {
   const navigate = useNavigate();
   const [siteData, setSiteData] = React.useState({
     hero: { 
-      badge: 'Data & Analytics Consultant',
-      title: 'Turning Fragmented Data into Clear Growth Decisions', 
-      subtitle: 'I help growing businesses and performance marketing agencies turn scattered ad spend, sales, and operational data into automated Power BI dashboards, actionable insights, and reliable monthly reports.', 
-      intro: 'Bridging the gap between raw data, executive visibility, and measurable revenue growth.',
+      badge: 'Web Services & Analytics Consultant for SMEs Worldwide',
+      title: 'High-Converting Websites, Web Dashboards & Automated Analytics for Growing SMEs', 
+      subtitle: 'I build custom web services (modern websites, interactive web dashboards) and automated business intelligence systems that help growing SMEs and agencies all over the world scale with speed and clarity.', 
+      intro: 'Engineering modern web platforms, executive dashboards, and actionable growth analytics for SMEs worldwide.',
       cv_url: 'CV of Md. Abir Ul Islam.pdf'
     },
     sections: { 
-      skills: [], 
+      skills: [
+        {
+          category: "Web Services & Development",
+          items: ["Modern Websites", "Custom Web Dashboards", "React / Vite", "HTML5 & Vanilla CSS", "JavaScript", "REST APIs", "Cloudflare Pages"]
+        },
+        {
+          category: "BI & Performance Analytics",
+          items: ["Power BI", "SQL", "Python Data Analytics", "Marketing Attribution", "Unit Economics", "Sales Forecasting", "Excel VBA"]
+        },
+        {
+          category: "SME Solutions & Strategy",
+          items: ["Client Portals", "Executive Reporting", "Lead Automation", "Process Optimization", "E-Commerce Metrics", "SME Operations"]
+        }
+      ], 
       experience: [], 
       services: defaultServices,
       clients: defaultClients,
@@ -601,7 +631,7 @@ const Dashboard = ({ theme }) => {
             Strategic <span className="text-accent">Engagement Models</span>
           </h2>
           <p style={{ color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
-            Productized consulting packages tailored for marketing agencies, e-commerce brands, and scaling B2B teams looking for automated clarity.
+            Productized web services and analytics packages tailored for growing SMEs, e-commerce brands, and scaling agencies worldwide.
           </p>
         </motion.div>
 
@@ -1294,7 +1324,15 @@ const Dashboard = ({ theme }) => {
         >
           {[
             {
-              q: "We already use Excel and Google Sheets. Why do we need a Power BI dashboard?",
+              q: "Do you build custom websites and web dashboards for SMEs worldwide?",
+              a: "Yes! I engineer custom web services — including high-converting business websites, interactive client portals, and bespoke web analytics dashboards — for growing SMEs, startups, and agencies across North America, the UK, Europe, Australia, and worldwide. Engagements are managed asynchronously with fast turnarounds and scheduled video strategy calls."
+            },
+            {
+              q: "What is the difference between a custom web dashboard and a Power BI report?",
+              a: "Power BI is an enterprise analytics platform ideal for internal financial modeling and cross-channel marketing attribution. A custom web dashboard is a fast, responsive, web-native application that can be accessed from any browser, embedded into your website or client portal, and customized with your exact brand styling without recurring per-user Microsoft licenses."
+            },
+            {
+              q: "We already use Excel and Google Sheets. Why do we need an automated dashboard or web portal?",
               a: "Excel is powerful for ad-hoc analysis but breaks down when you need real-time, multi-source reporting across ad platforms, CRMs, and e-commerce backends. Power BI automates data refresh, eliminates copy-paste errors, and gives your team interactive drill-down views that spreadsheets simply can't replicate. You keep your spreadsheets — I build the layer above them."
             },
             {
@@ -1495,14 +1533,14 @@ const Dashboard = ({ theme }) => {
 
               <div>
                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                  Your Data Challenge / Project Scope *
+                  Your Project Scope / Web & Data Needs *
                 </label>
                 <textarea 
                   required 
                   rows={4} 
                   className="contact-input" 
                   style={{ resize: 'vertical' }}
-                  placeholder="Tell me about your current tools (Meta, Google, Shopify, Excel) and what dashboards or metrics you need..."
+                  placeholder="Tell me about your business, whether you need a modern website, custom interactive web dashboard, or automated analytics reporting system..."
                   value={contactForm.message}
                   onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
                 />

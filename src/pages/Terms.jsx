@@ -66,7 +66,7 @@ const Terms = () => {
               <FileCheck size={20} /> 1. Nature of Engagement
             </h2>
             <p style={{ color: 'var(--text-muted)' }}>
-              All advisory engagements, Power BI dashboard builds, and monthly retainers conducted by <strong>Md. Abir Ul Islam</strong> are independent consulting engagements. Specific deliverables, delivery milestones, pricing terms, and service-level agreements (SLAs) are formalized through distinct Statements of Work (SOW) executed between the client and consultant prior to engagement commencement.
+              All advisory engagements, custom web services and website builds, interactive web dashboard development, Power BI solutions, and monthly retainers conducted by <strong>Md. Abir Ul Islam</strong> are independent consulting engagements. Specific deliverables, delivery milestones, pricing terms, and service-level agreements (SLAs) are formalized through distinct Statements of Work (SOW) executed between the client and consultant prior to engagement commencement.
             </p>
           </section>
 

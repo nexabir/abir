@@ -272,7 +272,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
               Md. Abir <span className="text-accent">Ul Islam</span>
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Business Analyst & Strategy Planner helping growing businesses and performance agencies turn scattered data into automated KPI dashboards, actionable insights, and reliable monthly reports.
+              Web Services & Performance Analytics Consultant helping small-to-medium enterprises (SMEs) and growing agencies worldwide build high-converting modern websites, custom interactive web dashboards, and automated KPI reporting systems.
             </p>
             
             {/* Status Indicator */}
@@ -295,7 +295,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
                 background: '#22c55e',
                 boxShadow: '0 0 8px #22c55e'
               }} />
-              Available for US, UK & Global Remote Engagements
+              Available for Global SME Engagements & Remote Projects
             </div>
           </div>
 
@@ -359,7 +359,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
               Get In Touch
             </h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-              Need help structuring recurring client reporting or building custom Power BI dashboards? Reach out directly.
+              Need a modern website, custom interactive web dashboard, or automated client reporting for your business? Reach out directly.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <a 

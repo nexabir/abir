@@ -66,7 +66,7 @@ const PrivacyPolicy = () => {
               <Eye size={20} /> 1. Data Controller Overview
             </h2>
             <p style={{ color: 'var(--text-muted)' }}>
-              This Privacy Policy explains how <strong>Md. Abir Ul Islam</strong> ("I", "me", or "nexabir.com") collects, uses, and safeguards information when you visit this website, submit inquiries, or schedule business intelligence consultations. I am committed to respecting your digital privacy and handling personal information with strict confidentiality.
+              This Privacy Policy explains how <strong>Md. Abir Ul Islam</strong> ("I", "me", or "nexabir.com") collects, uses, and safeguards information when you visit this website, submit inquiries, or schedule web services, web dashboard development, or business analytics consultations. I am committed to respecting your digital privacy and handling personal information with strict confidentiality.
             </p>
           </section>
 
