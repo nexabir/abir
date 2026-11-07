@@ -1,0 +1,471 @@
+[
+  {
+    "name": "abir2022",
+    "full_name": "abir2022/abir2022",
+    "description": "Who I am, what I build, and what the numbers say — profile README.",
+    "html_url": "https://github.com/abir2022/abir2022",
+    "homepage": null,
+    "language": null,
+    "topics": [
+      "portfolio",
+      "profile-readme"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-07T05:12:09Z",
+    "updated_at": "2026-11-07T05:44:36Z"
+  },
+  {
+    "name": "strategic-financial-dashboard",
+    "full_name": "abir2022/strategic-financial-dashboard",
+    "description": "Multi-company strategic financial dashboard (static Chart.js demo)",
+    "html_url": "https://github.com/abir2022/strategic-financial-dashboard",
+    "homepage": "https://strategic-financial-dashboard-pi.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "business-intelligence",
+      "chartjs",
+      "dashboard",
+      "data-visualization",
+      "financial-analysis"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-06T10:40:28Z",
+    "updated_at": "2026-11-07T05:28:58Z"
+  },
+  {
+    "name": "ops-flash-report",
+    "full_name": "abir2022/ops-flash-report",
+    "description": "Full-stack ops flash reporting platform: Vite web, Python ETL, Supabase, edge worker (demo)",
+    "html_url": "https://github.com/abir2022/ops-flash-report",
+    "homepage": null,
+    "language": "TypeScript",
+    "topics": [
+      "dashboard",
+      "etl",
+      "postgres",
+      "python",
+      "react",
+      "supabase",
+      "typescript",
+      "vite"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-06T11:16:13Z",
+    "updated_at": "2026-11-07T05:28:56Z"
+  },
+  {
+    "name": "marketing-budget-control-tower",
+    "full_name": "abir2022/marketing-budget-control-tower",
+    "description": "Marketing budget and expense control tower (synthetic FY data)",
+    "html_url": "https://github.com/abir2022/marketing-budget-control-tower",
+    "homepage": "https://marketing-budget-control-tower.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "budgeting",
+      "chartjs",
+      "dashboard",
+      "finance",
+      "marketing-analytics"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-06T10:40:06Z",
+    "updated_at": "2026-11-07T05:28:51Z"
+  },
+  {
+    "name": "customer-insights-dashboard",
+    "full_name": "abir2022/customer-insights-dashboard",
+    "description": "B2B customer research and segmentation dashboard (synthetic demo data)",
+    "html_url": "https://github.com/abir2022/customer-insights-dashboard",
+    "homepage": "https://customer-insights-dashboard-gold.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "b2b",
+      "chartjs",
+      "customer-insights",
+      "dashboard",
+      "segmentation"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:35Z",
+    "updated_at": "2026-11-07T05:28:43Z"
+  },
+  {
+    "name": "business-recovery-dashboard",
+    "full_name": "abir2022/business-recovery-dashboard",
+    "description": "Business-unit loss recovery and turnaround analytics dashboard (static demo)",
+    "html_url": "https://github.com/abir2022/business-recovery-dashboard",
+    "homepage": "https://business-recovery-dashboard.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "business-intelligence",
+      "chartjs",
+      "dashboard",
+      "financial-analysis",
+      "turnaround"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:13Z",
+    "updated_at": "2026-11-07T05:28:38Z"
+  },
+  {
+    "name": "nexabir-demo",
+    "full_name": "abir2022/nexabir-demo",
+    "description": "A standalone, fictional Nexabir showcase for desktop and mobile.",
+    "html_url": "https://github.com/abir2022/nexabir-demo",
+    "homepage": "https://abir2022.github.io/nexabir-demo/",
+    "language": null,
+    "topics": [
+      "demo",
+      "github-pages",
+      "portfolio",
+      "product-showcase"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-11-07T03:58:17Z",
+    "updated_at": "2026-11-07T05:28:28Z"
+  },
+  {
+    "name": "Rivers-of-Bangladesh",
+    "full_name": "abir2022/Rivers-of-Bangladesh",
+    "description": "Interactive 3D river map with CesiumJS/KML-KMZ, historical data, a React blog/forum, auth and an admin dashboard.",
+    "html_url": "https://github.com/abir2022/Rivers-of-Bangladesh",
+    "homepage": "https://rivers-of-bangladesh-six.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "3d",
+      "bangladesh",
+      "cesium",
+      "gis",
+      "mapping",
+      "react",
+      "supabase"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-05-30T11:01:20Z",
+    "updated_at": "2026-11-07T05:27:52Z"
+  },
+  {
+    "name": "Mrittika",
+    "full_name": "abir2022/Mrittika",
+    "description": "Mrittika — A modern content-driven web platform with a secure local admin panel for managing products, categories, blogs, site settings, and publishing updates directly to GitHub.",
+    "html_url": "https://github.com/abir2022/Mrittika",
+    "homepage": "https://mrittika-six.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "admin-panel",
+      "cms",
+      "github-api",
+      "json",
+      "static-site",
+      "vercel"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-08-21T10:00:43Z",
+    "updated_at": "2026-11-07T05:23:09Z"
+  },
+  {
+    "name": "ignite-lab",
+    "full_name": "abir2022/ignite-lab",
+    "description": "Virtual training lab: courses, live sessions, an interactive 3D drill-lab module and role-based teacher accounts on Supabase.",
+    "html_url": "https://github.com/abir2022/ignite-lab",
+    "homepage": null,
+    "language": "JavaScript",
+    "topics": [
+      "3d",
+      "edtech",
+      "react",
+      "supabase",
+      "tailwindcss",
+      "vite"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-05-15T17:09:05Z",
+    "updated_at": "2026-11-07T05:23:04Z"
+  },
+  {
+    "name": "nexabir-services",
+    "full_name": "abir2022/nexabir-services",
+    "description": "Service business storefront: tiered catalogue, cart, checkout, order tracking, client and admin dashboards (React + Supabase).",
+    "html_url": "https://github.com/abir2022/nexabir-services",
+    "homepage": null,
+    "language": "JavaScript",
+    "topics": [
+      "ecommerce",
+      "netlify",
+      "react",
+      "storefront",
+      "supabase",
+      "vite"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-04-11T20:36:06Z",
+    "updated_at": "2026-11-07T05:22:55Z"
+  },
+  {
+    "name": "nexabir-productivity",
+    "full_name": "abir2022/nexabir-productivity",
+    "description": "Personal productivity command-center PWA (demo data)",
+    "html_url": "https://github.com/abir2022/nexabir-productivity",
+    "homepage": "https://nexabir-productivity.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "dashboard",
+      "local-first",
+      "productivity",
+      "pwa",
+      "react"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T11:14:32Z",
+    "updated_at": "2026-11-07T05:22:45Z"
+  },
+  {
+    "name": "agro-marketing-analytics",
+    "full_name": "abir2022/agro-marketing-analytics",
+    "description": "Agro-feed strategic marketing analysis dashboard with synthetic market data",
+    "html_url": "https://github.com/abir2022/agro-marketing-analytics",
+    "homepage": "https://agro-marketing-analytics.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "agritech",
+      "chartjs",
+      "dashboard",
+      "data-visualization",
+      "marketing-analytics"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:24Z",
+    "updated_at": "2026-11-07T05:22:40Z"
+  },
+  {
+    "name": "campaign-tracker",
+    "full_name": "abir2022/campaign-tracker",
+    "description": "Engineering campaign and initiative tracker dashboard (demo data)",
+    "html_url": "https://github.com/abir2022/campaign-tracker",
+    "homepage": "https://campaign-tracker-nine-alpha.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "chartjs",
+      "dashboard",
+      "operations",
+      "project-management"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T11:12:47Z",
+    "updated_at": "2026-11-07T05:22:30Z"
+  },
+  {
+    "name": "field-officer-portal",
+    "full_name": "abir2022/field-officer-portal",
+    "description": "Field officer performance and review portal (UI-only demo, fictional data)",
+    "html_url": "https://github.com/abir2022/field-officer-portal",
+    "homepage": "https://field-officer-portal.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "chartjs",
+      "dashboard",
+      "performance-management",
+      "sales-ops"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:40:17Z",
+    "updated_at": "2026-11-07T05:22:21Z"
+  },
+  {
+    "name": "quarterly-marketing-review",
+    "full_name": "abir2022/quarterly-marketing-review",
+    "description": "Quarterly marketing performance review app (static Vercel-ready demo)",
+    "html_url": "https://github.com/abir2022/quarterly-marketing-review",
+    "homepage": "https://quarterly-marketing-review.vercel.app",
+    "language": "JavaScript",
+    "topics": [
+      "business-intelligence",
+      "chartjs",
+      "dashboard",
+      "marketing-analytics"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:45Z",
+    "updated_at": "2026-11-07T05:22:12Z"
+  },
+  {
+    "name": "price-elasticity-cockpit",
+    "full_name": "abir2022/price-elasticity-cockpit",
+    "description": "Interactive price-elasticity simulation cockpit (synthetic demo data)",
+    "html_url": "https://github.com/abir2022/price-elasticity-cockpit",
+    "homepage": "https://price-elasticity-cockpit.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "chartjs",
+      "dashboard",
+      "elasticity",
+      "pricing-strategy",
+      "simulation"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:03Z",
+    "updated_at": "2026-11-07T05:22:07Z"
+  },
+  {
+    "name": "steel-price-intelligence-cockpit",
+    "full_name": "abir2022/steel-price-intelligence-cockpit",
+    "description": "Single-file steel price intelligence cockpit with synthetic demo data",
+    "html_url": "https://github.com/abir2022/steel-price-intelligence-cockpit",
+    "homepage": "https://steel-price-intelligence-cockpit.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "chartjs",
+      "dashboard",
+      "data-visualization",
+      "market-intelligence",
+      "pricing"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:38:48Z",
+    "updated_at": "2026-11-07T05:22:03Z"
+  },
+  {
+    "name": "revenue-leakage-auditor",
+    "full_name": "abir2022/revenue-leakage-auditor",
+    "description": "Revenue leakage detection dashboard across business units (demo data)",
+    "html_url": "https://github.com/abir2022/revenue-leakage-auditor",
+    "homepage": "https://revenue-leakage-auditor.vercel.app",
+    "language": "HTML",
+    "topics": [
+      "business-intelligence",
+      "chartjs",
+      "dashboard",
+      "data-analysis",
+      "revenue-assurance"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-11-06T10:39:56Z",
+    "updated_at": "2026-11-07T05:21:48Z"
+  },
+  {
+    "name": "Excel-Student-Performance-EDA",
+    "full_name": "abir2022/Excel-Student-Performance-EDA",
+    "description": "200 students, four predictors: study hours correlate 0.78 with exam score and the model explains 84% of variance (Excel + Python).",
+    "html_url": "https://github.com/abir2022/Excel-Student-Performance-EDA",
+    "homepage": null,
+    "language": null,
+    "topics": [
+      "correlation",
+      "data-analysis",
+      "eda",
+      "excel",
+      "pandas",
+      "python",
+      "statistics"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2025-09-16T14:49:59Z",
+    "updated_at": "2026-11-07T05:21:44Z"
+  },
+  {
+    "name": "zomato-restaurant-eda",
+    "full_name": "abir2022/zomato-restaurant-eda",
+    "description": "9,551 Zomato restaurants: 22.5% of listings are unrated and 2,139 of those are in India — why average-rating-by-country misleads.",
+    "html_url": "https://github.com/abir2022/zomato-restaurant-eda",
+    "homepage": null,
+    "language": "Jupyter Notebook",
+    "topics": [
+      "data-analysis",
+      "eda",
+      "jupyter-notebook",
+      "matplotlib",
+      "pandas",
+      "python",
+      "seaborn"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2025-03-30T21:04:12Z",
+    "updated_at": "2026-11-07T05:21:39Z"
+  },
+  {
+    "name": "fast-food-sales-analysis",
+    "full_name": "abir2022/fast-food-sales-analysis",
+    "description": "1,000 fast-food orders: three menu items carry 64.6% of revenue, and 11.6% of orders have no payment record (pandas EDA).",
+    "html_url": "https://github.com/abir2022/fast-food-sales-analysis",
+    "homepage": null,
+    "language": "Jupyter Notebook",
+    "topics": [
+      "business-intelligence",
+      "data-analysis",
+      "eda",
+      "jupyter-notebook",
+      "pandas",
+      "python",
+      "retail-analytics"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2025-03-29T14:31:54Z",
+    "updated_at": "2026-11-07T05:21:34Z"
+  },
+  {
+    "name": "misaiagent",
+    "full_name": "abir2022/misaiagent",
+    "description": "Natural-language search over a department's teacher and course data — Supabase rows in, grounded answers out (Groq + edge functions).",
+    "html_url": "https://github.com/abir2022/misaiagent",
+    "homepage": "https://misaiagent.vercel.app",
+    "language": "JavaScript",
+    "topics": [
+      "ai-agent",
+      "edge-functions",
+      "groq",
+      "llm",
+      "pwa",
+      "react",
+      "supabase",
+      "vite"
+    ],
+    "stars": 1,
+    "forks": 0,
+    "created_at": "2026-04-19T18:14:48Z",
+    "updated_at": "2026-11-07T05:21:29Z"
+  },
+  {
+    "name": "Heart-Plus",
+    "full_name": "abir2022/Heart-Plus",
+    "description": "ECG triage and prescription workflow prototype — Cloudflare Workers + D1 + R2 + Workers AI. Educational demo, not a medical device.",
+    "html_url": "https://github.com/abir2022/Heart-Plus",
+    "homepage": "https://heart-plus-nine.vercel.app",
+    "language": "JavaScript",
+    "topics": [
+      "cloudflare-workers",
+      "d1",
+      "ecg",
+      "healthtech",
+      "react",
+      "typescript",
+      "vite",
+      "workers-ai"
+    ],
+    "stars": 0,
+    "forks": 0,
+    "created_at": "2026-05-08T00:27:23Z",
+    "updated_at": "2026-11-07T05:21:25Z"
+  }
+]

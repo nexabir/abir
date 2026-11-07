@@ -385,7 +385,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
                 <ArrowUpRight size={16} /> linkedin.com/in/md-abir-ul-islam
               </a>
               <a 
-                href="https://github.com/nexabir" 
+                href="https://github.com/abir2022" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 style={{ 
@@ -395,7 +395,7 @@ const Layout = ({ children, theme, toggleTheme, config }) => {
                 onMouseOver={(e) => e.target.style.color = 'var(--accent)'}
                 onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
               >
-                <FolderGit2 size={16} /> github.com/nexabir
+                <FolderGit2 size={16} /> github.com/abir2022
               </a>
             </div>
           </div>

@@ -5,13 +5,16 @@ import {
   LayoutGrid, ListFilter, Sparkles, Eye, ArrowUpRight, CheckCircle,
   Mail, Calendar, Send, ShieldCheck, Clock, Zap, TrendingUp, Check,
   Plus, Users, Target, DollarSign, Timer, BarChart3, Calculator, X,
-  HelpCircle, MessageSquareQuote
+  HelpCircle, MessageSquareQuote, FolderGit2, BookOpen, Terminal, 
+  Search, Tag, Filter, Layers
 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import CompetencyRadar from '../components/CompetencyRadar';
 import ProjectModal from '../components/ProjectModal';
+import { allProjects, projectCategories } from '../data/projectsData';
+import { allBlogs } from '../data/blogsData';
 
 
 
@@ -191,84 +194,26 @@ const Dashboard = ({ theme }) => {
       experience: [], 
       services: defaultServices,
       clients: defaultClients,
-      projects: [
-        {
-          title: "Multi-Channel Agency Performance & Client Reporting Hub",
-          impact_badge: "75% Time Saved",
-          problem: "Growing performance marketing agencies lose 15+ billable hours per account each month manually extracting ad spend, leads, and conversion metrics across fragmented platforms into spreadsheets, causing delayed reporting and human calculation errors.",
-          approach: "Architected a normalized Power BI & Excel data model connecting multi-channel ad spend, Cost Per Lead (CPL), CAC, and ROAS into automated client-ready dashboards with executive summary commentary and budget pacing threshold alerts.",
-          impact: [
-            "75% reduction in recurring monthly client reporting turnaround time",
-            "100% elimination of manual CSV copy-paste errors across 4 ad networks",
-            "Empowered account managers to conduct proactive strategy reviews, improving client retention by 22%"
-          ],
-          desc: "End-to-end automated reporting architecture consolidating Meta, Google Ads, and GA4 into client-ready executive performance dashboards.",
-          tags: ["Power BI", "Marketing Analytics", "Multi-Channel Attribution", "Executive Reporting", "ETL Automation"],
-          image: "/assets/projects/agency_reporting.jpg",
-          link: "#",
-          github_link: "https://github.com/nexabir"
-        },
-        {
-          title: "E-Commerce Revenue Velocity & SKU Profitability Command Center",
-          impact_badge: "+$220K Net Margin",
-          problem: "A scaling D2C e-commerce brand generated $1.8M in top-line GMV but experienced declining net cash flow due to hidden product return costs, heavy discounting, and escalating ad costs masked by blended revenue reports.",
-          approach: "Engineered a cohort analysis and contribution margin framework (CM2/CM3) linking Shopify order data, returns, landed COGS, and shipping costs to evaluate true SKU profitability and customer lifetime value (LTV:CAC).",
-          impact: [
-            "Identified 14 unprofitable 'hero' SKUs draining $18,500/month in net ad spend",
-            "Increased Average Order Value (AOV) by 18% through data-backed product bundling strategies",
-            "Reduced dead stock by 34% by flagging slow-moving variants 45 days earlier"
-          ],
-          desc: "Comprehensive unit economics and contribution margin model revealing true SKU profitability, customer cohort retention, and inventory velocity.",
-          tags: ["E-Commerce Analytics", "Unit Economics", "Power BI / Excel", "SKU Profitability", "Shopify BI"],
-          image: "/assets/projects/ecom_profitability.jpg",
-          link: "#",
-          github_link: "https://github.com/nexabir"
-        },
-        {
-          title: "B2B Sales Pipeline Velocity & Churn Early-Warning Engine",
-          impact_badge: "92% Forecast Accuracy",
-          problem: "Sales leadership struggled with inaccurate quarterly revenue forecasting (>35% deal slippage), while customer success teams were blindsided by enterprise client cancellations with no prior warning signals.",
-          approach: "Developed a weighted pipeline forecasting and customer health score algorithm. Model evaluates stage duration bottlenecks, stakeholder touchpoints, and trailing 30-day engagement trends to flag at-risk renewals.",
-          impact: [
-            "Achieved 92% quarterly forecast accuracy for executive board presentations",
-            "Early-warning indicators surfaced 85% of at-risk accounts 4 weeks prior to renewal deadlines",
-            "Accelerated sales velocity by 19 days through stage bottleneck remediation"
-          ],
-          desc: "Executive sales pipeline and account health intelligence system tracking deal velocity, win probability, and proactive churn risk detection.",
-          tags: ["Sales Intelligence", "Pipeline Forecasting", "Churn Prevention", "Executive BI", "SQL / Tableau"],
-          image: "/assets/projects/b2b_sales_pipeline.jpg",
-          link: "#",
-          github_link: "https://github.com/nexabir"
-        },
-        {
-          title: "Automated Financial Consolidation & 13-Week Cash Runway Suite",
-          impact_badge: "Close Cycle: 5 Days → 4 Hrs",
-          problem: "Monthly financial close across multiple operating units took 5 full days of manual ledger consolidation from disparate banking and accounting systems, delaying strategic capital allocation.",
-          approach: "Built an automated ETL data pipeline in Python and Advanced Excel VBA to consolidate multi-entity trial balances, calculate rolling 13-week cash runway, analyze budget vs. actual variances, and generate executive PDF summaries.",
-          impact: [
-            "Compressed monthly consolidation and close from 5 business days to under 4 hours",
-            "Saved 160+ departmental hours monthly across accounting and operations",
-            "Provided executive leadership with real-time rolling 13-week liquidity visibility"
-          ],
-          desc: "Automated multi-entity financial consolidation ETL pipeline and rolling cash flow forecasting suite for corporate decision-makers.",
-          tags: ["Financial Modeling", "ETL Automation", "Executive Dashboards", "Excel VBA / Python", "KPI Reporting"],
-          image: "/assets/projects/financial_consolidation.jpg",
-          link: "#",
-          github_link: "https://github.com/nexabir"
-        }
-      ] 
+      hidePricing: false,
+      projects: allProjects
     },
     contact: {
       email: 'nexabir@gmail.com',
       calendly: 'https://calendly.com/nexabir',
-      linkedin: 'https://bd.linkedin.com/in/md-abir-ul-islam'
+      linkedin: 'https://bd.linkedin.com/in/md-abir-ul-islam',
+      github: 'https://github.com/abir2022'
     }
   });
-  const [blogs, setBlogs] = React.useState([]);
+  const [blogs, setBlogs] = React.useState(allBlogs);
   const [loading, setLoading] = React.useState(true);
   const [selectedProject, setSelectedProject] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [projectView, setProjectView] = useState('spotlight');
+  const [projectView, setProjectView] = useState('spotlight'); // 'spotlight' | 'grid' | 'terminal'
+  const [projectCategory, setProjectCategory] = useState('All Projects');
+  const [projectSearch, setProjectSearch] = useState('');
+  const [blogCategory, setBlogCategory] = useState('All Insights');
+  const [blogSearch, setBlogSearch] = useState('');
+  const [showAllBlogs, setShowAllBlogs] = useState(false);
 
   // Contact form state
   const [contactForm, setContactForm] = useState({ name: '', email: '', company: '', message: '', botField: '' });
@@ -384,7 +329,7 @@ const Dashboard = ({ theme }) => {
               : prev.sections.services,
             projects: (Array.isArray(loadedProjects) && loadedProjects.length > 0)
               ? loadedProjects
-              : prev.sections.projects
+              : allProjects
           }
         }));
         
@@ -395,10 +340,11 @@ const Dashboard = ({ theme }) => {
           .order('timestamp', { ascending: false });
         
         if (blogError) throw blogError;
-        setBlogs(blogsData || []);
+        setBlogs((Array.isArray(blogsData) && blogsData.length > 0) ? blogsData : allBlogs);
 
       } catch (err) {
         console.error('Dashboard fetch failed, using defaults:', err.message);
+        setBlogs(allBlogs);
       } finally {
         setLoading(false);
       }
@@ -426,6 +372,49 @@ const Dashboard = ({ theme }) => {
       <button onClick={() => window.location.reload()} className="btn" style={{ marginTop: '1rem' }}>Retry Sync</button>
     </div>
   );
+
+  const allCurrentProjects = Array.isArray(siteData?.sections?.projects) && siteData.sections.projects.length > 0
+    ? siteData.sections.projects
+    : allProjects;
+
+  const filteredProjects = allCurrentProjects.filter(p => {
+    const matchesCat = projectCategory === 'All Projects' || p.category === projectCategory;
+    const searchLower = projectSearch.toLowerCase().trim();
+    const matchesSearch = !searchLower || (
+      (p.title && p.title.toLowerCase().includes(searchLower)) ||
+      (p.desc && p.desc.toLowerCase().includes(searchLower)) ||
+      (p.problem && p.problem.toLowerCase().includes(searchLower)) ||
+      (Array.isArray(p.tags) && p.tags.some(t => t.toLowerCase().includes(searchLower)))
+    );
+    return matchesCat && matchesSearch;
+  });
+
+  const spotlightProjects = (projectCategory !== 'All Projects' || projectSearch)
+    ? filteredProjects
+    : filteredProjects.filter(p => p.featured);
+
+  const currentBlogs = Array.isArray(blogs) && blogs.length > 0 ? blogs : allBlogs;
+  const blogCategoriesList = [
+    'All Insights',
+    'Strategic Finance & BI',
+    'Pricing & Econometrics',
+    'AI Agents & Modern Web',
+    'Operations & Portals',
+    'Data Science & EDA'
+  ];
+
+  const filteredBlogs = currentBlogs.filter(b => {
+    const matchesCat = blogCategory === 'All Insights' || b.category === blogCategory;
+    const searchLower = blogSearch.toLowerCase().trim();
+    const matchesSearch = !searchLower || (
+      (b.title && b.title.toLowerCase().includes(searchLower)) ||
+      (b.snippet && b.snippet.toLowerCase().includes(searchLower)) ||
+      (b.content && b.content.toLowerCase().includes(searchLower))
+    );
+    return matchesCat && matchesSearch;
+  });
+
+  const displayedBlogs = showAllBlogs ? filteredBlogs : filteredBlogs.slice(0, 6);
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '10rem' }}>
@@ -624,14 +613,17 @@ const Dashboard = ({ theme }) => {
               textTransform: 'uppercase',
               backdropFilter: 'blur(10px)'
             }}>
-              Transparent Scopes & Pricing
+              {Boolean(siteData?.sections?.hidePricing) ? "Tailored Scopes & Direct Inquiry" : "Transparent Scopes & Pricing"}
             </span>
           </div>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>
             Strategic <span className="text-accent">Engagement Models</span>
           </h2>
           <p style={{ color: 'var(--text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.05rem', lineHeight: 1.6 }}>
-            Productized web services and analytics packages tailored for growing SMEs, e-commerce brands, and scaling agencies worldwide.
+            {Boolean(siteData?.sections?.hidePricing)
+              ? "Bespoke web engineering and high-impact analytics advisory engagements customized to your organization's exact strategic objectives."
+              : "Productized web services and analytics packages tailored for growing SMEs, e-commerce brands, and scaling agencies worldwide."
+            }
           </p>
         </motion.div>
 
@@ -666,10 +658,21 @@ const Dashboard = ({ theme }) => {
 
               <h3 className="service-card__title">{service.title}</h3>
 
-              <div className="service-card__pricing">
-                <span className="service-card__price">{service.price}</span>
-                {service.period && <span className="service-card__period">/ {service.period}</span>}
-              </div>
+              {Boolean(siteData?.sections?.hidePricing) ? (
+                <div className="service-card__pricing" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="service-card__price" style={{ fontSize: '1.25rem', color: 'var(--accent)' }}>
+                    Tailored Scope
+                  </span>
+                  <span className="service-card__period" style={{ fontSize: '0.85rem', opacity: 0.85 }}>
+                    • Direct Inquiry
+                  </span>
+                </div>
+              ) : (
+                <div className="service-card__pricing">
+                  <span className="service-card__price">{service.price}</span>
+                  {service.period && <span className="service-card__period">/ {service.period}</span>}
+                </div>
+              )}
 
               <p className="service-card__desc">{service.desc}</p>
 
@@ -696,14 +699,16 @@ const Dashboard = ({ theme }) => {
                     contactEl.scrollIntoView({ behavior: 'smooth' });
                     setContactForm(prev => ({
                       ...prev,
-                      message: `Hi Abir, I'm interested in discussing the "${service.title}" (${service.price}). Here are our requirements: `
+                      message: Boolean(siteData?.sections?.hidePricing)
+                        ? `Hi Abir, I'd like to discuss our requirements for the "${service.title}" engagement. Here is an overview of our project scope: `
+                        : `Hi Abir, I'm interested in discussing the "${service.title}" (${service.price}). Here are our requirements: `
                     }));
                   }
                 }}
                 className={`btn ${service.featured ? 'btn-primary' : ''}`}
                 style={{ width: '100%', justifyContent: 'center', borderRadius: '50px', padding: '0.9rem' }}
               >
-                {service.ctaText || 'Get Started'} <ArrowRight size={16} />
+                {Boolean(siteData?.sections?.hidePricing) ? 'Contact with Me' : (service.ctaText || 'Get Started')} <ArrowRight size={16} />
               </button>
             </motion.div>
           ))}
@@ -954,7 +959,7 @@ const Dashboard = ({ theme }) => {
         </motion.div>
       </section>
 
-      {/* 4. PROJECTS */}
+      {/* 4. PROJECTS & INNOVATION HUB */}
       <section id="projects-section" style={{ paddingTop: '8rem' }}>
         <div className="section-header">
           <motion.div 
@@ -963,41 +968,134 @@ const Dashboard = ({ theme }) => {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeUp}
           >
-            <h2 className="section-header__title">Strategic <span className="text-accent">Case Studies</span></h2>
-            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '1rem', maxWidth: '600px' }}>
-              Enterprise data initiatives architected to eliminate systemic friction, maximize operational efficiency, and deliver quantifiable ROI.
+            <div style={{ marginBottom: '1rem' }}>
+              <span style={{ 
+                padding: '6px 18px', 
+                borderRadius: '30px', 
+                border: '1px solid var(--border-color)', 
+                color: 'var(--accent)', 
+                fontSize: '0.85rem', 
+                fontWeight: 600,
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                backdropFilter: 'blur(10px)'
+              }}>
+                Applied Engineering & Strategic Impact
+              </span>
+            </div>
+            <h2 className="section-header__title">Strategic <span className="text-accent">Case Studies & Innovation Hub</span></h2>
+            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '1.05rem', maxWidth: '650px', lineHeight: 1.6 }}>
+              {allCurrentProjects.length} enterprise initiatives spanning corporate finance consolidation, econometric pricing simulation, edge AI retrieval agents, and full-stack web applications.
             </p>
           </motion.div>
 
-          {/* View Mode Toggle: Spotlight vs Grid */}
-          <div className="view-toggle">
+          {/* View Mode Switcher: Spotlight vs Grid vs Terminal */}
+          <div className="view-toggle" style={{ flexWrap: 'wrap', gap: '6px' }}>
             <button 
               className={`view-toggle__btn ${projectView === 'spotlight' ? 'active' : ''}`}
               onClick={() => setProjectView('spotlight')}
-              title="One-by-One Storytelling View"
+              title="Curated Storytelling View"
             >
               <ListFilter size={14} /> Spotlight
             </button>
             <button 
               className={`view-toggle__btn ${projectView === 'grid' ? 'active' : ''}`}
               onClick={() => setProjectView('grid')}
-              title="Grid Overview"
+              title="Project Matrix Overview"
             >
-              <LayoutGrid size={14} /> Grid
+              <LayoutGrid size={14} /> Matrix Grid
+            </button>
+            <button 
+              className={`view-toggle__btn ${projectView === 'terminal' ? 'active' : ''}`}
+              onClick={() => setProjectView('terminal')}
+              title="Cyber Analyst Terminal Table"
+            >
+              <Terminal size={14} /> Terminal
             </button>
           </div>
         </div>
 
-        {/* SPOTLIGHT VIEW (ONE-BY-ONE STORYTELLING) */}
-        {projectView === 'spotlight' ? (
+        {/* Multi-Category Filter Bar */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          overflowX: 'auto', 
+          paddingBottom: '1rem', 
+          marginBottom: '1.5rem',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
+          {projectCategories.map((cat) => {
+            const count = cat === 'All Projects'
+              ? allCurrentProjects.length
+              : allCurrentProjects.filter(p => p.category === cat).length;
+            const isActive = projectCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setProjectCategory(cat)}
+                className={`btn ${isActive ? 'btn-primary' : ''}`}
+                style={{
+                  borderRadius: '30px',
+                  fontSize: '0.82rem',
+                  padding: '0.45rem 1.1rem',
+                  whiteSpace: 'nowrap',
+                  fontWeight: isActive ? 700 : 500
+                }}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Live Search & Counter */}
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
+            <input 
+              type="text"
+              placeholder="Filter by keyword, tech (React, Python, Groq, CesiumJS, SQL)..."
+              value={projectSearch}
+              onChange={(e) => setProjectSearch(e.target.value)}
+              className="admin-input"
+              style={{ 
+                width: '100%', 
+                paddingLeft: '2.6rem', 
+                borderRadius: '50px', 
+                background: 'var(--bg-panel)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
+                fontSize: '0.9rem'
+              }}
+            />
+            <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent)' }} />
+            {projectSearch && (
+              <button 
+                onClick={() => setProjectSearch('')}
+                style={{ 
+                  position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', 
+                  background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' 
+                }}
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+            Showing {filteredProjects.length} of {allCurrentProjects.length} projects
+          </span>
+        </div>
+
+        {/* 1. SPOTLIGHT VIEW (ONE-BY-ONE STORYTELLING) */}
+        {projectView === 'spotlight' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {(Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => {
+            {spotlightProjects.length > 0 ? spotlightProjects.map((project, index) => {
               const numStr = String(index + 1).padStart(2, '0');
               const impactItems = project.impact || project.metrics || [];
 
               return (
                 <motion.article 
-                  key={index}
+                  key={project.id || index}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-60px" }}
@@ -1009,12 +1107,25 @@ const Dashboard = ({ theme }) => {
 
                   {/* Left Column: Narrative & Meta */}
                   <div className="spotlight-project__meta">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                       <span className="spotlight-project__badge featured-badge">
                         {project?.impact_badge || 'Enterprise ROI'}
                       </span>
+                      {project?.category && (
+                        <span style={{ 
+                          fontSize: '0.75rem', 
+                          padding: '3px 10px', 
+                          borderRadius: '12px', 
+                          background: 'var(--bg-panel)',
+                          border: '1px solid var(--border-color)',
+                          color: 'var(--accent)', 
+                          fontWeight: 600 
+                        }}>
+                          {project.category}
+                        </span>
+                      )}
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                        PROJECT {numStr} OF {String(siteData?.sections?.projects?.length || 1).padStart(2, '0')}
+                        PROJECT {numStr} OF {String(spotlightProjects.length).padStart(2, '0')}
                       </span>
                     </div>
 
@@ -1040,7 +1151,7 @@ const Dashboard = ({ theme }) => {
                           Challenge Solved:
                         </strong>
                         <span style={{ color: 'var(--text-muted)' }}>
-                          {project.problem.length > 160 ? project.problem.slice(0, 160) + '...' : project.problem}
+                          {project.problem.length > 170 ? project.problem.slice(0, 170) + '...' : project.problem}
                         </span>
                       </div>
                     )}
@@ -1067,13 +1178,13 @@ const Dashboard = ({ theme }) => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="spotlight-project__actions">
+                    <div className="spotlight-project__actions" style={{ flexWrap: 'wrap', gap: '0.6rem' }}>
                       <button 
-                        onClick={() => navigate(`/project/${index}`)} 
+                        onClick={() => navigate(`/project/${project.id || index}`)} 
                         className="btn btn-primary" 
-                        style={{ borderRadius: '50px', padding: '0.75rem 1.75rem' }}
+                        style={{ borderRadius: '50px', padding: '0.7rem 1.5rem', fontSize: '0.88rem' }}
                       >
-                        Explore Case Study <ArrowUpRight size={16} />
+                        Explore Case Study <ArrowUpRight size={15} />
                       </button>
 
                       <button 
@@ -1082,10 +1193,10 @@ const Dashboard = ({ theme }) => {
                           setIsModalOpen(true);
                         }} 
                         className="btn" 
-                        style={{ borderRadius: '50px', padding: '0.75rem 1.25rem' }}
+                        style={{ borderRadius: '50px', padding: '0.7rem 1.2rem', fontSize: '0.88rem' }}
                         title="Quick Preview"
                       >
-                        <Eye size={16} /> Quick View
+                        <Eye size={15} /> Quick View
                       </button>
 
                       {project?.link && project.link !== '#' && (
@@ -1094,11 +1205,35 @@ const Dashboard = ({ theme }) => {
                           target="_blank" 
                           rel="noopener noreferrer" 
                           className="btn" 
-                          style={{ borderRadius: '50px', padding: '0.75rem 1.25rem' }}
-                          title="Live Demo"
+                          style={{ borderRadius: '50px', padding: '0.7rem 1.2rem', fontSize: '0.88rem' }}
+                          title="Launch Live Application"
                         >
-                          <ExternalLink size={16} />
+                          <ExternalLink size={15} /> Live Demo
                         </a>
+                      )}
+
+                      {project?.github_link && (
+                        <a 
+                          href={project.github_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="btn" 
+                          style={{ borderRadius: '50px', padding: '0.7rem 1.2rem', fontSize: '0.88rem' }}
+                          title="View Source on GitHub"
+                        >
+                          <FolderGit2 size={15} /> GitHub Code
+                        </a>
+                      )}
+
+                      {project?.blog_id && (
+                        <button 
+                          onClick={() => navigate(`/blog/${project.blog_id}`)}
+                          className="btn" 
+                          style={{ borderRadius: '50px', padding: '0.7rem 1.2rem', fontSize: '0.88rem' }}
+                          title="Read Architectural Deep-Dive"
+                        >
+                          <BookOpen size={15} style={{ color: 'var(--accent)' }} /> Blog Post
+                        </button>
                       )}
                     </div>
                   </div>
@@ -1106,7 +1241,7 @@ const Dashboard = ({ theme }) => {
                   {/* Right Column: Visual / Graphic Card */}
                   <div 
                     className="spotlight-project__visual"
-                    onClick={() => navigate(`/project/${index}`)}
+                    onClick={() => navigate(`/project/${project.id || index}`)}
                     style={{ cursor: 'pointer' }}
                   >
                     {project?.image ? (
@@ -1146,16 +1281,29 @@ const Dashboard = ({ theme }) => {
                         fontWeight: 600,
                         fontSize: '0.9rem' 
                       }}>
-                        Read Full Story <ArrowUpRight size={16} />
+                        Read Case Study Story <ArrowUpRight size={16} />
                       </span>
                     </div>
                   </div>
                 </motion.article>
               );
-            })}
+            }) : (
+              <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)', border: '1px dashed var(--border-color)', borderRadius: '16px' }}>
+                <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>No projects match your current filter criteria.</p>
+                <button 
+                  onClick={() => { setProjectCategory('All Projects'); setProjectSearch(''); }} 
+                  className="btn btn-primary"
+                  style={{ borderRadius: '50px' }}
+                >
+                  Reset Project Filters
+                </button>
+              </div>
+            )}
           </div>
-        ) : (
-          /* GRID VIEW */
+        )}
+
+        {/* 2. MATRIX GRID VIEW */}
+        {projectView === 'grid' && (
           <motion.div 
             initial="hidden" 
             whileInView="visible" 
@@ -1163,63 +1311,190 @@ const Dashboard = ({ theme }) => {
             variants={staggerContainer}
             className="projects-grid"
           >
-            {(Array.isArray(siteData?.sections?.projects) ? siteData.sections.projects : []).map((project, index) => (
+            {filteredProjects.length > 0 ? filteredProjects.map((project, index) => (
               <motion.div 
-                key={index}
+                key={project.id || index}
                 variants={fadeUp}
                 className="glass-panel"
-                style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
+                style={{ padding: '2rem', display: 'flex', flexDirection: 'column', borderRadius: '24px' }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', gap: '10px' }}>
-                   <h3 style={{ fontSize: '1.3rem', fontWeight: 600 }}>{project?.title}</h3>
-                   <span style={{ 
-                     fontSize: '0.7rem', 
-                     padding: '4px 10px', 
-                     background: 'var(--accent-glow)', 
-                     color: 'var(--accent)', 
-                     borderRadius: '12px', 
-                     fontWeight: 700,
-                     border: '1px solid var(--accent)',
-                     flexShrink: 0
-                   }}>
-                     {project?.impact_badge || 'ROI: High'}
-                   </span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '10px' }}>
+                  <span style={{ 
+                    fontSize: '0.72rem', 
+                    padding: '3px 10px', 
+                    borderRadius: '12px', 
+                    background: 'var(--bg-panel)',
+                    border: '1px solid var(--border-color)',
+                    color: 'var(--accent)', 
+                    fontWeight: 700 
+                  }}>
+                    {project.category || 'Strategic Project'}
+                  </span>
+                  <span style={{ 
+                    fontSize: '0.7rem', 
+                    padding: '3px 10px', 
+                    background: 'var(--accent-glow)', 
+                    color: 'var(--accent)', 
+                    borderRadius: '12px', 
+                    fontWeight: 700,
+                    border: '1px solid var(--accent)',
+                    flexShrink: 0
+                  }}>
+                    {project?.impact_badge || 'ROI: High'}
+                  </span>
                 </div>
+
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.75rem' }}>
+                  {project?.title}
+                </h3>
                 
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '2rem' }}>
+                <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '1.5rem' }}>
                   {project?.desc || project?.snippet}
                 </p>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
-                  {(Array.isArray(project?.tags) ? project.tags : []).map((tag, tIndex) => (
-                    <span key={tIndex} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', background: 'rgba(0,0,0,0.1)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
+                  {(Array.isArray(project?.tags) ? project.tags : []).slice(0, 4).map((tag, tIndex) => (
+                    <span key={tIndex} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '15px', background: 'rgba(0,0,0,0.15)', border: '1px solid var(--border-color)' }}>
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: 'auto' }}>
                   <button 
-                    onClick={() => navigate(`/project/${index}`)} 
+                    onClick={() => navigate(`/project/${project.id || index}`)} 
                     className="btn btn-primary" 
-                    style={{ flex: 1, justifyContent: 'center', borderRadius: '50px' }}
+                    style={{ flex: 1, justifyContent: 'center', borderRadius: '50px', fontSize: '0.82rem', padding: '0.55rem 1rem' }}
                   >
-                    Case Study <ArrowUpRight size={14} />
+                    Case Study <ArrowUpRight size={13} />
                   </button>
-                  <button 
-                    onClick={() => {
-                      setSelectedProject({ ...project, index });
-                      setIsModalOpen(true);
-                    }} 
-                    className="btn" 
-                    style={{ borderRadius: '50px', padding: '0.6rem 1rem' }}
-                    title="Quick Preview"
-                  >
-                    <Eye size={16} />
-                  </button>
+                  {project.link && project.link !== '#' && (
+                    <a 
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn" 
+                      style={{ borderRadius: '50px', padding: '0.55rem 0.9rem', fontSize: '0.82rem' }}
+                      title="Launch Live App"
+                    >
+                      <ExternalLink size={14} /> Demo
+                    </a>
+                  )}
+                  {project.github_link && (
+                    <a 
+                      href={project.github_link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn" 
+                      style={{ borderRadius: '50px', padding: '0.55rem 0.9rem', fontSize: '0.82rem' }}
+                      title="View GitHub Code"
+                    >
+                      <FolderGit2 size={14} /> Code
+                    </a>
+                  )}
+                  {project.blog_id && (
+                    <button 
+                      onClick={() => navigate(`/blog/${project.blog_id}`)}
+                      className="btn" 
+                      style={{ borderRadius: '50px', padding: '0.55rem 0.9rem', fontSize: '0.82rem' }}
+                      title="Read Blog Post"
+                    >
+                      <BookOpen size={14} style={{ color: 'var(--accent)' }} /> Blog
+                    </button>
+                  )}
                 </div>
               </motion.div>
-            ))}
+            )) : (
+              <div style={{ gridColumn: '1 / -1', padding: '3rem', textAlign: 'center', color: 'var(--text-muted)', border: '1px dashed var(--border-color)', borderRadius: '16px' }}>
+                <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>No projects match your current filter criteria.</p>
+                <button 
+                  onClick={() => { setProjectCategory('All Projects'); setProjectSearch(''); }} 
+                  className="btn btn-primary"
+                  style={{ borderRadius: '50px' }}
+                >
+                  Reset Filters
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* 3. TERMINAL DATA-TABLE VIEW */}
+        {projectView === 'terminal' && (
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUp}
+            className="glass-panel"
+            style={{ 
+              padding: '1.5rem', 
+              borderRadius: '20px', 
+              overflowX: 'auto',
+              fontFamily: 'monospace, monospace',
+              border: '1px solid var(--border-color)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem', color: 'var(--accent)', fontSize: '0.85rem' }}>
+              <Terminal size={16} />
+              <span>TERMINAL_TELEMETRY // INDEXED_PROJECTS: {filteredProjects.length}</span>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>#</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>INITIATIVE_NAME</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>CATEGORY</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>IMPACT_METRIC</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>LIVE_DEPLOYMENT</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>GITHUB_REPO</th>
+                  <th style={{ padding: '0.75rem 0.5rem' }}>CASE_STUDY</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProjects.map((p, pIdx) => (
+                  <tr 
+                    key={p.id || pIdx} 
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'background 0.2s ease' }}
+                    onMouseOver={(e) => e.currentTarget.style.background = 'var(--bg-panel)'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <td style={{ padding: '0.75rem 0.5rem', color: 'var(--accent)' }}>{String(pIdx + 1).padStart(2, '0')}</td>
+                    <td style={{ padding: '0.75rem 0.5rem', fontWeight: 600, color: 'var(--text-main)' }}>{p.title}</td>
+                    <td style={{ padding: '0.75rem 0.5rem', color: 'var(--text-muted)' }}>{p.category}</td>
+                    <td style={{ padding: '0.75rem 0.5rem' }}>
+                      <span style={{ padding: '2px 8px', borderRadius: '6px', background: 'var(--accent-glow)', color: 'var(--accent)', fontSize: '0.75rem', fontWeight: 700 }}>
+                        {p.impact_badge}
+                      </span>
+                    </td>
+                    <td style={{ padding: '0.75rem 0.5rem' }}>
+                      {p.link && p.link !== '#' ? (
+                        <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                          <ExternalLink size={13} /> Live Demo
+                        </a>
+                      ) : (
+                        <span style={{ color: 'var(--text-muted)', opacity: 0.5 }}>Local/Arch</span>
+                      )}
+                    </td>
+                    <td style={{ padding: '0.75rem 0.5rem' }}>
+                      {p.github_link ? (
+                        <a href={p.github_link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-main)', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}>
+                          <FolderGit2 size={13} /> Code
+                        </a>
+                      ) : '-'}
+                    </td>
+                    <td style={{ padding: '0.75rem 0.5rem' }}>
+                      <button 
+                        onClick={() => navigate(`/project/${p.id || pIdx}`)} 
+                        style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        Inspect →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </motion.div>
         )}
       </section>
@@ -1234,53 +1509,199 @@ const Dashboard = ({ theme }) => {
 
 
 
-      {/* 5. INSIGHTS / BLOG */}
+      {/* 5. INSIGHTS / BLOG SECTION */}
       <section id="blog-section" style={{ paddingTop: '8rem' }}>
+        <div className="section-header">
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUp}
+          >
+            <div style={{ marginBottom: '1rem' }}>
+              <span style={{ 
+                padding: '6px 18px', 
+                borderRadius: '30px', 
+                border: '1px solid var(--border-color)', 
+                color: 'var(--accent)', 
+                fontSize: '0.85rem', 
+                fontWeight: 600,
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                backdropFilter: 'blur(10px)'
+              }}>
+                Knowledge Base & Case Studies
+              </span>
+            </div>
+            <h2 className="section-header__title">Project Insights & <span className="text-accent">Architectural Breakdowns</span></h2>
+            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '1.05rem', maxWidth: '650px', lineHeight: 1.6 }}>
+              Comprehensive engineering and business analytics deep-dives for every project, exploring mathematical modeling, architecture decisions, and quantifiable business ROI.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Blog Category Filter Pills */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          overflowX: 'auto', 
+          paddingBottom: '1rem', 
+          marginBottom: '1.5rem',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
+          {blogCategoriesList.map((cat) => {
+            const count = cat === 'All Insights'
+              ? currentBlogs.length
+              : currentBlogs.filter(b => b.category === cat).length;
+            const isActive = blogCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setBlogCategory(cat)}
+                className={`btn ${isActive ? 'btn-primary' : ''}`}
+                style={{
+                  borderRadius: '30px',
+                  fontSize: '0.82rem',
+                  padding: '0.45rem 1.1rem',
+                  whiteSpace: 'nowrap',
+                  fontWeight: isActive ? 700 : 500
+                }}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Blog Search Bar */}
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
+            <input 
+              type="text"
+              placeholder="Search insights by topic, problem, or technology..."
+              value={blogSearch}
+              onChange={(e) => setBlogSearch(e.target.value)}
+              className="admin-input"
+              style={{ 
+                width: '100%', 
+                paddingLeft: '2.6rem', 
+                borderRadius: '50px', 
+                background: 'var(--bg-panel)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
+                fontSize: '0.9rem'
+              }}
+            />
+            <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent)' }} />
+            {blogSearch && (
+              <button 
+                onClick={() => setBlogSearch('')}
+                style={{ 
+                  position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', 
+                  background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' 
+                }}
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+            Showing {filteredBlogs.length} of {currentBlogs.length} deep-dives
+          </span>
+        </div>
+
+        {/* Blog Posts Grid */}
         <motion.div 
           initial="hidden" 
           whileInView="visible" 
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeUp}
-          style={{ marginBottom: '4rem' }}
+          viewport={{ once: true }} 
+          variants={staggerContainer} 
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}
         >
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Latest <span className="text-accent">Insights</span></h2>
-        </motion.div>
-
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {blogs && blogs.length > 0 ? blogs.map((blog, index) => (
+          {displayedBlogs.length > 0 ? displayedBlogs.map((blog, index) => (
             <motion.div 
               key={blog.id || index}
               variants={fadeUp}
               onClick={() => navigate(`/blog/${blog.id}`)}
+              className="glass-panel"
               style={{ 
                 padding: '2rem', 
-                borderBottom: '1px solid var(--border-color)',
+                borderRadius: '24px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1rem',
                 cursor: 'pointer',
-                transition: 'background 0.3s ease'
+                position: 'relative'
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'var(--bg-panel)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <h4 style={{ fontSize: '1.3rem', fontWeight: 600 }}>{blog.title}</h4>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  {new Date(blog.timestamp).toLocaleDateString()}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ 
+                  fontSize: '0.72rem', 
+                  padding: '3px 10px', 
+                  borderRadius: '12px', 
+                  background: 'var(--accent-glow)',
+                  color: 'var(--accent)', 
+                  fontWeight: 700 
+                }}>
+                  {blog.category || 'Case Study'}
+                </span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Calendar size={13} /> {new Date(blog.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
-              <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>{blog.snippet}</p>
-              <span style={{ color: 'var(--accent)', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                Read Article <ArrowRight size={14} />
-              </span>
+
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 700, lineHeight: 1.35, marginBottom: '0.75rem', color: 'var(--text-main)' }}>
+                {blog.title}
+              </h4>
+
+              <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: 1.6, flex: 1, marginBottom: '1.5rem' }}>
+                {blog.snippet}
+              </p>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {blog.live_link && (
+                    <span style={{ fontSize: '0.7rem', color: 'var(--accent)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                      <ExternalLink size={12} /> Demo
+                    </span>
+                  )}
+                  {blog.github_link && (
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                      <FolderGit2 size={12} /> Code
+                    </span>
+                  )}
+                </div>
+                <span style={{ color: 'var(--accent)', fontSize: '0.88rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  Read Deep-Dive <ArrowRight size={14} />
+                </span>
+              </div>
             </motion.div>
           )) : (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', border: '1px dashed var(--border-color)', borderRadius: '12px' }}>
-              No articles published yet.
+            <div style={{ gridColumn: '1 / -1', padding: '3rem', textAlign: 'center', color: 'var(--text-muted)', border: '1px dashed var(--border-color)', borderRadius: '16px' }}>
+              <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>No articles match your current filter criteria.</p>
+              <button 
+                onClick={() => { setBlogCategory('All Insights'); setBlogSearch(''); }} 
+                className="btn btn-primary"
+                style={{ borderRadius: '50px' }}
+              >
+                Reset Insights Filter
+              </button>
             </div>
           )}
         </motion.div>
+
+        {/* Expand / Collapse All Blogs Button */}
+        {filteredBlogs.length > 6 && (
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <button 
+              onClick={() => setShowAllBlogs(prev => !prev)}
+              className="btn btn-primary"
+              style={{ borderRadius: '50px', padding: '0.8rem 2.2rem', fontSize: '0.95rem' }}
+            >
+              {showAllBlogs ? 'Show Fewer Articles' : `View All ${filteredBlogs.length} Project Deep-Dives`} <ArrowRight size={16} />
+            </button>
+          </div>
+        )}
       </section>
 
       {/* 5.5 FAQ SECTION — OBJECTION KILLER */}

@@ -184,12 +184,24 @@ const ProjectModal = ({ isOpen, onClose, project, theme }) => {
                 <button 
                   onClick={() => {
                     onClose();
-                    navigate(`/project/${project.index}`);
+                    navigate(`/project/${project.id || project.index}`);
                   }}
                   className="btn btn-primary" 
                   style={{ borderRadius: '50px', padding: '0.75rem 1.75rem' }}
                 >
-                  <BookOpen size={16} /> Open Full Case Study Page
+                  <BookOpen size={16} /> Open Full Case Study
+                </button>
+              )}
+              {project.blog_id && (
+                <button 
+                  onClick={() => {
+                    onClose();
+                    navigate(`/blog/${project.blog_id}`);
+                  }}
+                  className="btn" 
+                  style={{ borderRadius: '50px', padding: '0.75rem 1.5rem' }}
+                >
+                  <BookOpen size={16} style={{ color: 'var(--accent)' }} /> Read Blog Deep-Dive
                 </button>
               )}
               {project.link && project.link !== '#' && (
