@@ -451,12 +451,12 @@ const Dashboard = ({ theme }) => {
           <motion.h1 
             variants={fadeUp}
             style={{ 
-              fontSize: 'clamp(2.5rem, 5.5vw, 4.2rem)', 
-              fontWeight: 800, 
-              lineHeight: 1.15, 
-              marginBottom: '1.5rem', 
+              fontSize: 'clamp(1.6rem, 3.2vw, 2.4rem)', 
+              fontWeight: 700, 
+              lineHeight: 1.25, 
+              marginBottom: '1.25rem', 
               color: 'var(--text-main)',
-              letterSpacing: '-0.03em'
+              letterSpacing: '-0.02em'
             }}
           >
             {siteData?.hero?.title || 'Turning Fragmented Data into Clear Growth Decisions'}
@@ -465,11 +465,11 @@ const Dashboard = ({ theme }) => {
           <motion.p 
             variants={fadeUp}
             style={{ 
-              fontSize: '1.15rem', 
+              fontSize: '1rem', 
               color: 'var(--text-muted)', 
-              maxWidth: '680px', 
-              margin: '0 auto 3rem auto',
-              lineHeight: 1.6 
+              maxWidth: '600px', 
+              margin: '0 auto 2.5rem auto',
+              lineHeight: 1.65 
             }}
           >
             {siteData?.hero?.subtitle || siteData?.hero?.intro || 'I help growing businesses and performance marketing agencies turn scattered ad spend, sales, and operational data into automated Power BI dashboards, actionable insights, and reliable monthly reports.'}
